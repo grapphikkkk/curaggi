@@ -31,4 +31,6 @@ export const router = createBrowserRouter([
     path: "/thank-you",
     Component: ThankYou,
   },
-]);
+], {
+  basename: "/curaggi",
+});
