@@ -18,24 +18,18 @@ interface Shape {
 
 function generateRandomShapes(): Shape[] {
   const colors = [
-    "var(--curaggi-coral)",
-    "var(--curaggi-coral-light)",
-    "var(--curaggi-coral-dark)",
-    "var(--curaggi-amber)",
-    "var(--curaggi-amber-light)",
-    "var(--curaggi-amber-dark)",
-    "var(--curaggi-teal)",
-    "var(--curaggi-teal-light)",
-    "var(--curaggi-teal-dark)",
-    "var(--curaggi-violet)",
-    "var(--curaggi-violet-light)",
-    "var(--curaggi-violet-dark)",
-    "var(--curaggi-lime)",
-    "var(--curaggi-lime-light)",
-    "var(--curaggi-lime-dark)",
-    "var(--curaggi-blue)",
-    "var(--curaggi-blue-light)",
-    "var(--curaggi-blue-dark)",
+    "var(--neutral-950)",
+    "var(--neutral-900)",
+    "var(--neutral-800)",
+    "var(--neutral-700)",
+    "var(--neutral-600)",
+    "var(--neutral-500)",
+    "var(--neutral-400)",
+    "var(--neutral-300)",
+    "var(--neutral-950)",
+    "var(--neutral-900)",
+    "var(--neutral-800)",
+    "var(--neutral-700)",
   ];
 
   const shapes: Shape[] = [];
