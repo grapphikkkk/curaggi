@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 
 interface Shape {
   id: number;
@@ -36,7 +36,11 @@ function generateRandomShapes(): Shape[] {
   const shapeCount = 32;
 
   for (let i = 0; i < shapeCount; i++) {
-    const sizeVariations = [40, 60, 90, 120, 160, 200, 250, 300, 350, 420];
+    // モバイル（640px以下）とデスクトップで異なるサイズを使用
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 640;
+    const sizeVariations = isMobile 
+      ? [40, 60, 90, 120, 160, 200, 250]
+      : [40, 60, 90, 120, 160, 200, 250, 300, 350, 420];
     const typeOptions: Array<"blob" | "circle" | "polygon" | "triangle" | "hexagon" | "line" | "gradient-mesh"> = [
       "blob",
       "circle",
@@ -81,9 +85,11 @@ function generateRandomShapes(): Shape[] {
 function GeometricShape({
   shape,
   scrollY,
+  isMobile,
 }: {
   shape: Shape;
   scrollY: any;
+  isMobile: boolean;
 }) {
   // ShortContext セクション到達時のしきい値
   const TRIGGER_SCROLL = 500;
@@ -104,21 +110,24 @@ function GeometricShape({
   
   const rotate = useTransform(scrollY, [0, 800], [shape.rotation || 0, (shape.rotation || 0) + 360]);
   
+  // モバイルかデスクトップかで異なる初期分散値
+  const initialDispersion = isMobile ? (shape.randomOffset - 0.5) * 150 : 0;
+  
   // TRIGGER_SCROLL 以後、段階的に左右に強く分散
   const x = useTransform(
     scrollY,
     [0, 500, 550, 600, 650, 700, 750, 800, 850, 900],
     [
-      0,
-      0,
-      (shape.randomOffset - 0.5) * 200,
-      (shape.randomOffset - 0.5) * 400,
-      (shape.randomOffset - 0.5) * 600,
-      (shape.randomOffset - 0.5) * 900,
-      (shape.randomOffset - 0.5) * 1200,
-      (shape.randomOffset - 0.5) * 1500,
-      (shape.randomOffset - 0.5) * 1800,
-      (shape.randomOffset - 0.5) * 2000
+      initialDispersion,
+      initialDispersion,
+      initialDispersion + (shape.randomOffset - 0.5) * 200,
+      initialDispersion + (shape.randomOffset - 0.5) * 400,
+      initialDispersion + (shape.randomOffset - 0.5) * 600,
+      initialDispersion + (shape.randomOffset - 0.5) * 900,
+      initialDispersion + (shape.randomOffset - 0.5) * 1200,
+      initialDispersion + (shape.randomOffset - 0.5) * 1500,
+      initialDispersion + (shape.randomOffset - 0.5) * 1800,
+      initialDispersion + (shape.randomOffset - 0.5) * 2000
     ]
   );
 
@@ -283,6 +292,17 @@ function GeometricShape({
 export function BackgroundShapes() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // モバイルサイズを判定
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const shapes = useMemo(() => generateRandomShapes(), []);
 
@@ -302,7 +322,7 @@ export function BackgroundShapes() {
       aria-hidden="true"
     >
       {shapes.map((shape) => (
-        <GeometricShape key={shape.id} shape={shape} scrollY={scrollY} />
+        <GeometricShape key={shape.id} shape={shape} scrollY={scrollY} isMobile={isMobile} />
       ))}
     </div>
   );

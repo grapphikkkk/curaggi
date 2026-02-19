@@ -1,6 +1,17 @@
 import { BackgroundShapes } from "./BackgroundShapes";
+import { useState, useEffect } from "react";
 
 export function Hero() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   return (
     <section
       style={{
@@ -47,7 +58,7 @@ export function Hero() {
           <h1
             style={{
               fontFamily: "var(--font-display), var(--font-jp)",
-              fontSize: "clamp(2.5rem, 8vw, 4.5rem)",
+              fontSize: isMobile ? "clamp(2rem, 7vw, 3.5rem)" : "clamp(2.5rem, 8vw, 4.5rem)",
               fontWeight: 700,
               color: "var(--neutral-900)",
               lineHeight: "var(--leading-tight)",
