@@ -42,7 +42,7 @@ function generateRandomShapes(): Shape[] {
   const shapeCount = 32;
 
   for (let i = 0; i < shapeCount; i++) {
-    const sizeVariations = [40, 60, 90, 120, 160, 200, 250, 300, 350, 420, 520, 600];
+    const sizeVariations = [40, 60, 90, 120, 160, 200, 250, 300, 350, 420];
     const typeOptions: Array<"blob" | "circle" | "polygon" | "triangle" | "hexagon" | "line" | "gradient-mesh"> = [
       "blob",
       "circle",
@@ -101,20 +101,31 @@ function GeometricShape({
     [0, 400 + shape.randomOffset * 200]
   );
   
-  // 最初は拡大なし（scale=1）、TRIGGER_SCROLL (500px) 以後に 0.1 に縮小
+  // 最初は拡大なし（scale=1）、TRIGGER_SCROLL (500px) 以後に 0.1 に段階的に縮小
   const scale = useTransform(
     scrollY,
-    [0, TRIGGER_SCROLL, TRIGGER_SCROLL + 400],
-    [1, 1, 0.1]
+    [0, 500, 550, 600, 650, 700, 750, 800, 850, 900],
+    [1, 1, 0.95, 0.85, 0.75, 0.6, 0.4, 0.25, 0.15, 0.1]
   );
   
   const rotate = useTransform(scrollY, [0, 800], [shape.rotation || 0, (shape.rotation || 0) + 360]);
   
-  // TRIGGER_SCROLL 以後、左右に強く分散
+  // TRIGGER_SCROLL 以後、段階的に左右に強く分散
   const x = useTransform(
     scrollY,
-    [0, TRIGGER_SCROLL, TRIGGER_SCROLL + 400],
-    [0, 0, (shape.randomOffset - 0.5) * 600]
+    [0, 500, 550, 600, 650, 700, 750, 800, 850, 900],
+    [
+      0,
+      0,
+      (shape.randomOffset - 0.5) * 200,
+      (shape.randomOffset - 0.5) * 400,
+      (shape.randomOffset - 0.5) * 600,
+      (shape.randomOffset - 0.5) * 900,
+      (shape.randomOffset - 0.5) * 1200,
+      (shape.randomOffset - 0.5) * 1500,
+      (shape.randomOffset - 0.5) * 1800,
+      (shape.randomOffset - 0.5) * 2000
+    ]
   );
 
   const getPatternId = () => `pattern-${shape.id}`;
