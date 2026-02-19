@@ -124,7 +124,7 @@ export function Footer() {
                   lineHeight: "var(--leading-relaxed)",
                 }}
               >
-                あきらめなくてよい<br />世界をつくる
+                あきらめなくていい<br />世界をつくる
               </p>
             </div>
           </div>

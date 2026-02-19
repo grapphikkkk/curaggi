@@ -11,6 +11,7 @@ export function Hero() {
         justifyContent: "center",
         overflow: "hidden",
         paddingTop: "80px",
+        zIndex: 2,
       }}
     >
       <BackgroundShapes />
@@ -54,7 +55,7 @@ export function Hero() {
               marginBottom: "var(--space-8)",
             }}
           >
-            あきらめなくてよい
+            あきらめなくていい
             <br />
             世界をつくる
           </h1>

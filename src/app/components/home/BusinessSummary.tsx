@@ -18,7 +18,15 @@ export function BusinessSummary() {
   ];
 
   return (
-    <section className="section" style={{ background: "var(--white)" }}>
+    <section 
+      className="section" 
+      style={{ 
+        background: "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(10px)",
+        position: "relative",
+        zIndex: 2,
+      }}
+    >
       <div className="container">
         <div
           style={{

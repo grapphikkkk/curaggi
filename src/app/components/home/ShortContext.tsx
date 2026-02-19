@@ -1,6 +1,6 @@
 export function ShortContext() {
   return (
-    <section className="section">
+    <section className="section" style={{ position: "relative", zIndex: 2 }}>
       <div className="container">
         <div
           style={{
@@ -20,7 +20,7 @@ export function ShortContext() {
               marginBottom: "var(--space-12)",
             }}
           >
-            「"選べない"を、当たり前にしない。」
+            「選べない」を、当たり前にしない。
           </h2>
 
           <div
