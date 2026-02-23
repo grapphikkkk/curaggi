@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
 import { useRef, useMemo, useState, useEffect } from "react";
 
 interface Shape {
@@ -9,7 +9,7 @@ interface Shape {
   startY: number;
   duration: number;
   opacity: number;
-  type: "blob" | "circle" | "polygon" | "triangle" | "hexagon" | "line" | "gradient-mesh";
+  type: "blob" | "triangle" | "line";
   rotation?: number;
   randomOffset: number;
   strokeWidth?: number;
@@ -41,14 +41,10 @@ function generateRandomShapes(): Shape[] {
     const sizeVariations = isMobile 
       ? [40, 60, 90, 120, 160, 200, 250]
       : [40, 60, 90, 120, 160, 200, 250, 300, 350, 420];
-    const typeOptions: Array<"blob" | "circle" | "polygon" | "triangle" | "hexagon" | "line" | "gradient-mesh"> = [
+    const typeOptions: Array<"blob" | "triangle" | "line"> = [
       "blob",
-      "circle",
-      "polygon",
       "triangle",
-      "hexagon",
       "line",
-      "gradient-mesh",
     ];
     const patternOptions: Array<"gradient" | "mesh" | "dots" | "stripes" | "none"> = [
       "gradient",
@@ -102,38 +98,103 @@ function GeometricShape({
   );
   
   // 最初は拡大なし（scale=1）、TRIGGER_SCROLL (500px) 以後に 0.1 に段階的に縮小
+  // ポイント数を20個に増やしてスムーズにする
   const scale = useTransform(
     scrollY,
-    [0, 500, 550, 600, 650, 700, 750, 800, 850, 900],
-    [1, 1, 0.95, 0.85, 0.75, 0.6, 0.4, 0.25, 0.15, 0.1]
+    [0, 500, 520, 540, 560, 580, 600, 620, 640, 660, 680, 700, 720, 740, 760, 780, 800, 820, 840, 900],
+    [1, 1, 0.98, 0.95, 0.92, 0.88, 0.85, 0.80, 0.75, 0.70, 0.65, 0.6, 0.55, 0.50, 0.40, 0.30, 0.20, 0.15, 0.12, 0.1]
   );
   
-  const rotate = useTransform(scrollY, [0, 800], [shape.rotation || 0, (shape.rotation || 0) + 360]);
+  // 形が不規則に変わるロジック（0-1で変形度を制御）
+  // ポイント数を増やしてスムーズにする
+  const morphShape = useTransform(scrollY, [0, 500, 600, 700, 800, 900], [0, 0.2, 0.4, 0.6, 0.8, 1]);
+  
+  // morphShape の値を state で監視
+  const [morphValue, setMorphValue] = useState(0);
+  
+  useMotionValueEvent(morphShape, "change", (latest) => {
+    setMorphValue(latest);
+  });
   
   // モバイルかデスクトップかで異なる初期分散値
   const initialDispersion = isMobile ? (shape.randomOffset - 0.5) * 150 : 0;
   
   // TRIGGER_SCROLL 以後、段階的に左右に強く分散
+  // 【テスト用 - かくつきを確認するため一時的に無効化】
+  // 元のコード：
+  // const x = useTransform(
+  //   scrollY,
+  //   [0, 500, 550, 600, 650, 700, 750, 800, 850, 900],
+  //   [
+  //     initialDispersion,
+  //     initialDispersion,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 200,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 400,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 600,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 900,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 1200,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 1500,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 1800,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 2000
+  //   ]
+  // );
+  
+  // 左右の分散を元に戻す
+  // ポイント数を20個に増やしてスムーズにする
   const x = useTransform(
     scrollY,
-    [0, 500, 550, 600, 650, 700, 750, 800, 850, 900],
+    [0, 500, 520, 540, 560, 580, 600, 620, 640, 660, 680, 700, 720, 740, 760, 780, 800, 820, 840, 900],
     [
       initialDispersion,
       initialDispersion,
-      initialDispersion + (shape.randomOffset - 0.5) * 200,
+      initialDispersion + (shape.randomOffset - 0.5) * 90,
+      initialDispersion + (shape.randomOffset - 0.5) * 150,
+      initialDispersion + (shape.randomOffset - 0.5) * 220,
+      initialDispersion + (shape.randomOffset - 0.5) * 310,
       initialDispersion + (shape.randomOffset - 0.5) * 400,
+      initialDispersion + (shape.randomOffset - 0.5) * 500,
       initialDispersion + (shape.randomOffset - 0.5) * 600,
+      initialDispersion + (shape.randomOffset - 0.5) * 710,
+      initialDispersion + (shape.randomOffset - 0.5) * 820,
       initialDispersion + (shape.randomOffset - 0.5) * 900,
+      initialDispersion + (shape.randomOffset - 0.5) * 1000,
+      initialDispersion + (shape.randomOffset - 0.5) * 1100,
       initialDispersion + (shape.randomOffset - 0.5) * 1200,
+      initialDispersion + (shape.randomOffset - 0.5) * 1350,
       initialDispersion + (shape.randomOffset - 0.5) * 1500,
+      initialDispersion + (shape.randomOffset - 0.5) * 1650,
       initialDispersion + (shape.randomOffset - 0.5) * 1800,
       initialDispersion + (shape.randomOffset - 0.5) * 2000
     ]
   );
 
-  const getPatternId = () => `pattern-${shape.id}`;
+  // すべての図形タイプのバリエーション定義
+  const shapeVariations = {
+    blob: [
+      // 複雑で流動的、有機的な図形
+      "45% 55% 20% 80% / 30% 70% 60% 40%",
+      "30% 70% 45% 55% / 50% 50% 30% 70%",
+      "60% 40% 35% 65% / 70% 30% 45% 55%",
+      "50% 50% 25% 75% / 40% 60% 50% 50%",
+      "40% 60% 50% 50% / 60% 40% 35% 65%",
+      "65% 35% 30% 70% / 50% 50% 40% 60%",
+      "35% 65% 60% 40% / 35% 65% 55% 45%",
+    ],
+    triangle: [
+      // 大きい二等辺三角形
+      "polygon(50% 0%, 100% 85%, 0% 85%)",
+      "polygon(50% 5%, 95% 90%, 5% 90%)",
+      "polygon(50% 10%, 100% 80%, 0% 80%)",
+    ],
+    line: [
+      // 直線のバリエーション（スクロール時に長さが変わる）
+      "0%",
+      "50%",
+      "100%",
+    ],
+  };
 
-  const getShapeStyle = () => {
+  const getShapeStyle = (morphVal: number = 0) => {
     const baseStyle: any = {
       position: "absolute",
       width: `${shape.size}px`,
@@ -193,64 +254,33 @@ function GeometricShape({
     }
 
     switch (shape.type) {
-      case "circle":
-        return {
-          ...baseStyle,
-          borderRadius: "50%",
-        };
       case "line":
+        // スクロール時に長さが伸び縮みする直線
+        const lineVariations = shapeVariations.line;
+        const lineIndex = Math.floor(((morphVal * 10) + (shape.id * 1.5)) % lineVariations.length);
+        const lineWidthPercent = parseFloat(lineVariations[lineIndex]);
+        const lineWidth = (shape.size * 2) * (lineWidthPercent / 100);
         return {
           ...baseStyle,
-          width: `${shape.size * 2}px`,
+          width: `${lineWidth}px`,
           height: shape.strokeWidth,
           borderRadius: `${shape.strokeWidth / 2}px`,
           background: shape.color,
         };
       case "triangle":
+        const triangleVariations = shapeVariations.triangle;
+        const triangleIndex = Math.floor(((morphVal * 10) + (shape.id * 2.1)) % triangleVariations.length);
         return {
           ...baseStyle,
-          clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)",
-        };
-      case "hexagon":
-        return {
-          ...baseStyle,
-          clipPath:
-            "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-        };
-      case "polygon":
-        const polygonTypes = [
-          "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)", // Diamond
-          "polygon(50% 0%, 100% 0%, 100% 100%, 0% 100%)", // Square
-          "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)", // Pentagon
-          "polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)", // Trapezoid
-        ];
-        return {
-          ...baseStyle,
-          clipPath:
-            polygonTypes[shape.id % polygonTypes.length],
-        };
-      case "gradient-mesh":
-        return {
-          ...baseStyle,
-          background: `
-            linear-gradient(45deg, ${shape.color} 0%, rgba(255,255,255,0.1) 50%, ${shape.color} 100%),
-            linear-gradient(135deg, rgba(255,255,255,0.2) 0%, ${shape.color} 50%, rgba(255,255,255,0.1) 100%)
-          `,
-          borderRadius: "50%",
+          clipPath: triangleVariations[triangleIndex] || "polygon(50% 0%, 100% 85%, 0% 85%)",
         };
       case "blob":
       default:
-        const blobShapes = [
-          "60% 40% 30% 70% / 60% 30% 70% 40%",
-          "30% 60% 70% 40% / 50% 60% 30% 60%",
-          "40% 60% 50% 50% / 60% 40% 60% 40%",
-          "75% 25% 35% 55% / 55% 45% 55% 35%",
-          "35% 75% 55% 45% / 70% 35% 55% 45%",
-        ];
+        const blobVariations = shapeVariations.blob;
+        const blobIndex = Math.floor(((morphVal * 10) + (shape.id * 2.7)) % blobVariations.length);
         return {
           ...baseStyle,
-          borderRadius:
-            blobShapes[shape.id % blobShapes.length],
+          borderRadius: blobVariations[blobIndex] || "45% 55% 20% 80% / 30% 70% 60% 40%",
         };
     }
   };
@@ -262,29 +292,30 @@ function GeometricShape({
   return (
     <motion.div
       style={{
-        ...getShapeStyle(),
+        ...getShapeStyle(morphValue),
         y,
         x,
         scale,
-        rotate,
+        rotate: shape.rotation || 0,
       }}
-      animate={{
-        x: [0, pathX, -pathX, 0],
-        y: [0, pathY, -pathY, 0],
-      }}
-      transition={{
-        x: {
-          duration: shape.duration,
-          repeat: Infinity,
-          ease: "easeInOut",
-        },
-        y: {
-          duration: shape.duration * 1.3,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: shape.randomOffset * 2,
-        },
-      }}
+      // 【テスト用 - 自動的な移動を一時的に無効化】
+      // animate={{
+      //   x: [0, pathX, -pathX, 0],
+      //   y: [0, pathY, -pathY, 0],
+      // }}
+      // transition={{
+      //   x: {
+      //     duration: shape.duration,
+      //     repeat: Infinity,
+      //     ease: "easeInOut",
+      //   },
+      //   y: {
+      //     duration: shape.duration * 1.3,
+      //     repeat: Infinity,
+      //     ease: "easeInOut",
+      //     delay: shape.randomOffset * 2,
+      //   },
+      // }}
     />
   );
 }
