@@ -17,110 +17,24 @@ export function ShortContext() {
               color: "var(--neutral-900)",
               lineHeight: "var(--leading-tight)",
               letterSpacing: "var(--tracking-tight)",
-              marginBottom: "var(--space-12)",
+              marginBottom: "var(--space-8)",
             }}
           >
-            「選べない」を、当たり前にしない。
+            社名"Curaggi"の由来
           </h2>
 
-          <div
+          <p
             style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--space-8)",
+              fontFamily: "var(--font-body), var(--font-jp)",
+              fontSize: "16px",
+              color: "var(--neutral-700)",
+              lineHeight: "var(--leading-relaxed)",
               textAlign: "left",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: "var(--space-4)",
-              }}
-            >
-              <div
-                style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  background: "var(--curaggi-coral)",
-                  marginTop: "var(--space-2)",
-                  flexShrink: 0,
-                }}
-                aria-hidden="true"
-              />
-              <p
-                style={{
-                  fontFamily: "var(--font-body), var(--font-jp)",
-                  fontSize: "var(--text-lg)",
-                  color: "var(--neutral-700)",
-                  lineHeight: "var(--leading-relaxed)",
-                }}
-              >
-                知らないことが、選択肢を狭めることがある
-              </p>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: "var(--space-4)",
-              }}
-            >
-              <div
-                style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  background: "var(--curaggi-teal)",
-                  marginTop: "var(--space-2)",
-                  flexShrink: 0,
-                }}
-                aria-hidden="true"
-              />
-              <p
-                style={{
-                  fontFamily: "var(--font-body), var(--font-jp)",
-                  fontSize: "var(--text-lg)",
-                  color: "var(--neutral-700)",
-                  lineHeight: "var(--leading-relaxed)",
-                }}
-              >
-                周囲の前提が、勇気を奪うことがある
-              </p>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: "var(--space-4)",
-              }}
-            >
-              <div
-                style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  background: "var(--curaggi-amber)",
-                  marginTop: "var(--space-2)",
-                  flexShrink: 0,
-                }}
-                aria-hidden="true"
-              />
-              <p
-                style={{
-                  fontFamily: "var(--font-body), var(--font-jp)",
-                  fontSize: "var(--text-lg)",
-                  color: "var(--neutral-700)",
-                  lineHeight: "var(--leading-relaxed)",
-                }}
-              >
-                だからこそ「見える化」と「設計」が効く
-              </p>
-            </div>
-          </div>
+            代表のアナザースカイであるマルタ語 Kuraġġ、そしてイタリア語 coraggio。
+            どちらも"勇気"を意味し、その響きと想いを重ねた言葉です。
+          </p>
         </div>
       </div>
     </section>

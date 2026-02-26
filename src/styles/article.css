@@ -1,0 +1,241 @@
+/* ============================================
+   CURAGGI ARTICLE STYLES
+   Note風の記事レイアウト
+   ============================================ */
+
+/* ── Article Container ── */
+.article {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4);
+}
+
+/* ── Article Header ── */
+.article__header {
+  margin-bottom: var(--space-10);
+  padding-bottom: var(--space-8);
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.article__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.article__date {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--neutral-500);
+}
+
+.article__title {
+  font-family: var(--font-display), var(--font-jp);
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--neutral-900);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: 0;
+}
+
+/* ── Article Body ── */
+.article__body {
+  font-family: var(--font-body), var(--font-jp);
+  font-size: 16px;
+  color: var(--neutral-800);
+  line-height: 1.9;
+}
+
+.article__body h2 {
+  font-family: var(--font-display), var(--font-jp);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-3);
+  border-bottom: 2px solid var(--neutral-200);
+  line-height: var(--leading-snug);
+}
+
+.article__body h3 {
+  font-family: var(--font-display), var(--font-jp);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--neutral-900);
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-4);
+  line-height: var(--leading-snug);
+}
+
+.article__body p {
+  margin-bottom: var(--space-6);
+}
+
+.article__body blockquote {
+  margin: var(--space-8) 0;
+  padding: var(--space-6) var(--space-8);
+  border-left: 4px solid var(--curaggi-coral);
+  background: rgba(255, 107, 107, 0.04);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: italic;
+  color: var(--neutral-700);
+}
+
+.article__body ul,
+.article__body ol {
+  margin: var(--space-6) 0;
+  padding-left: var(--space-8);
+}
+
+.article__body li {
+  margin-bottom: var(--space-3);
+  line-height: 1.8;
+}
+
+.article__body ul li {
+  list-style-type: disc;
+}
+
+.article__body ol li {
+  list-style-type: decimal;
+}
+
+.article__body hr {
+  border: none;
+  height: 1px;
+  background: var(--neutral-200);
+  margin: var(--space-12) 0;
+}
+
+.article__body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: var(--space-8) 0;
+}
+
+.article__body strong {
+  font-weight: 600;
+  color: var(--neutral-900);
+}
+
+/* ── Tags Section ── */
+.article__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-10);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--neutral-200);
+}
+
+/* ── Action Bar (Like & Share) ── */
+.article__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  margin-top: var(--space-10);
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--neutral-200);
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.article__like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--neutral-600);
+  background: var(--neutral-50);
+  border: 1.5px solid var(--neutral-200);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-5);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  line-height: 1;
+}
+
+.article__like-btn:hover {
+  border-color: var(--curaggi-coral);
+  color: var(--curaggi-coral);
+  background: rgba(255, 107, 107, 0.06);
+}
+
+.article__like-btn--active {
+  border-color: var(--curaggi-coral);
+  color: var(--curaggi-coral);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.article__share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--neutral-600);
+  background: var(--neutral-50);
+  border: 1.5px solid var(--neutral-200);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-5);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  line-height: 1;
+}
+
+.article__share-btn:hover {
+  border-color: var(--curaggi-teal);
+  color: var(--curaggi-teal);
+  background: rgba(38, 198, 218, 0.06);
+}
+
+.article__share-btn--copied {
+  border-color: var(--success);
+  color: var(--success);
+  background: var(--success-bg);
+}
+
+/* ── Related Articles ── */
+.article__related {
+  margin-top: var(--space-12);
+}
+
+.article__related-title {
+  font-family: var(--font-display), var(--font-jp);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--neutral-900);
+  margin-bottom: var(--space-6);
+}
+
+.article__related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+/* ── Back Link ── */
+.article__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--neutral-600);
+  text-decoration: none;
+  margin-bottom: var(--space-8);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.article__back:hover {
+  color: var(--neutral-900);
+}

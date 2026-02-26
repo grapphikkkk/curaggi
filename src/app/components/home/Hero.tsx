@@ -39,6 +39,7 @@ export function Hero() {
         {/* Vision */}
         <div
           style={{
+            marginTop: "150px",
             marginBottom: "var(--space-12)",
           }}
         >
@@ -75,7 +76,7 @@ export function Hero() {
         {/* Mission */}
         <div
           style={{
-            marginBottom: "var(--space-16)",
+            marginBottom: "var(--space-24)",
           }}
         >
           <div
@@ -110,17 +111,27 @@ export function Hero() {
         <p
           style={{
             fontFamily: "var(--font-body), var(--font-jp)",
-            fontSize: "clamp(1rem, 2.5vw, 1.125rem)",
+            fontSize: "16px",
             color: "var(--neutral-700)",
             lineHeight: "var(--leading-relaxed)",
             maxWidth: "640px",
             margin: "0 auto",
+            textAlign: "left",
           }}
         >
-          生まれや環境によって、選択肢が狭まってしまう人がいる。
-          <br />
-          Curaggiはデザインの力で、選べる未来と踏み出す勇気を増やします。
+          知らず知らずのうちに、選択肢を失ってしまう場面がある。<br/><br/>
+          日常の中では、使いにくさや複雑さという壁によって、本来享受できたはずの体験にたどり着けず、その手前で諦めてしまうことがある。
+          さらに視野を広げれば、環境や立場、置かれた状況によって、そもそも選択肢の存在を知らないまま、未来の幅を狭めてしまう人がいる。<br/><br/> 
+          デザインの力で、本来ひらかれていたはずの選択肢を取り戻し、自ら選び取れる可能性を増やしていきたい。選択肢を持つことが、一歩先へ進む勇気になる。 
+          
         </p>
+
+        {/* Service Link Button */}
+        <div style={{ marginTop: "var(--space-12)", textAlign: "center" }}>
+          <a href="/curaggi/service" className="btn btn--gradient btn--lg">
+            事業領域へ
+          </a>
+        </div>
       </div>
     </section>
   );

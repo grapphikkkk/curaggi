@@ -32,7 +32,7 @@ export function Company() {
                   lineHeight: "var(--leading-relaxed)",
                 }}
               >
-                選択肢と勇気をデザインする
+                会社のご案内
               </p>
             </div>
           </div>

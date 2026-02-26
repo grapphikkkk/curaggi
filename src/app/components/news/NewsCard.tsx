@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { isNewArticle } from "./articles";
 
 interface NewsCardProps {
   title: string;
@@ -9,6 +10,8 @@ interface NewsCardProps {
 }
 
 export function NewsCard({ title, date, category, summary, slug }: NewsCardProps) {
+  const isNew = isNewArticle(date);
+
   return (
     <article className="card">
       <div className="card__body">
@@ -18,11 +21,17 @@ export function NewsCard({ title, date, category, summary, slug }: NewsCardProps
             alignItems: "center",
             gap: "var(--space-3)",
             marginBottom: "var(--space-3)",
+            flexWrap: "wrap",
           }}
         >
           <span className={`tag ${category === "News" ? "tag--coral" : "tag--teal"}`}>
             {category}
           </span>
+          {isNew && (
+            <span className="tag tag--coral" style={{ fontWeight: 700 }}>
+              NEW
+            </span>
+          )}
           <time
             style={{
               fontSize: "var(--text-xs)",

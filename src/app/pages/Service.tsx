@@ -6,38 +6,33 @@ import { DesignThinkingApproach } from "../components/service/DesignThinkingAppr
 export function Service() {
   const services = [
     {
-      title: "UXデザイン",
-      description: "ユーザー中心の体験設計により、使いやすく価値あるサービスを実現します。",
-      color: "coral" as const,
-    },
-    {
-      title: "デザインリサーチ",
-      description: "当事者の声を深く聴き、真のニーズを発見するリサーチを実施します。",
-      color: "teal" as const,
-    },
-    {
-      title: "デザインプロセス設計",
-      description: "組織に適したデザインプロセスを構築し、持続可能な体制を支援します。",
+      title: "サービスデザイン",
+      description: "リサーチ・コンセプト設計・トーン＆マナーの定義など、実装の前段階となる設計フェーズの支援をします。",
       color: "violet" as const,
     },
     {
-      title: "デザインシンキング研修 / セミナー",
-      description: "デザイン思考の実践的な研修で、チームの創造力を引き出します。",
+      title: "爆速プロトタイピング",
+      description: "スピード感を重視したプロトタイピングで、アイデアの可視化・検証を早期に実現します。",
+      color: "coral" as const,
+    },
+    {
+      title: "UXUI改善支援",
+      description: "ただ見た目が良いWEBやAppではなく全体の構造・導線設計から改善の支援をします",
+      color: "teal" as const,
+    },  
+    {
+      title: "デザイン思考セミナー",
+      description: "デザイン思考のアプローチを実戦形式で学び、デザイン組織強化に貢献します。",
       color: "amber" as const,
     },
     {
-      title: "コミュニティ設計",
-      description: "人と人がつながり、支え合えるコミュニティの仕組みをデザインします。",
-      color: "lime" as const,
-    },
-    {
       title: "自社開発プロダクト",
-      description: "社会課題解決に向けた独自のプロダクト・サービスを開発します。",
+      description: "Curaggi独自のプロダクト・サービスを開発します。",
       color: "blue" as const,
     },
     {
       title: "社会課題解決デザイン",
-      description: "制度や構造の課題に対し、デザインの力で新しい選択肢を生み出します。",
+      description: "社会課題に対し、デザインの力で新しい選択肢を生み出します。",
       color: "coral" as const,
     },
   ];
@@ -72,7 +67,7 @@ export function Service() {
                   margin: "0 auto",
                 }}
               >
-                デザインの力で、選択肢と勇気を増やす
+                事業領域のご案内
               </p>
             </div>
 

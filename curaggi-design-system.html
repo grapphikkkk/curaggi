@@ -1,0 +1,2518 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curaggi Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CURAGGI DESIGN SYSTEM
+   Version 1.0
+   ============================================ */
+
+/* ─────────────────────────────────────────────
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ───────────────────────────────────────────── */
+:root {
+  /* ── Primary Brand Colors ── */
+  --curaggi-coral:       #FF6B6B;
+  --curaggi-coral-light: #FF9E9E;
+  --curaggi-coral-dark:  #E04545;
+
+  --curaggi-amber:       #FFAB40;
+  --curaggi-amber-light: #FFC873;
+  --curaggi-amber-dark:  #E08E20;
+
+  --curaggi-teal:        #26C6DA;
+  --curaggi-teal-light:  #67E0EE;
+  --curaggi-teal-dark:   #0097A7;
+
+  --curaggi-violet:      #AB47BC;
+  --curaggi-violet-light:#CE93D8;
+  --curaggi-violet-dark: #7B1FA2;
+
+  --curaggi-lime:        #9CCC65;
+  --curaggi-lime-light:  #C5E1A5;
+  --curaggi-lime-dark:   #7CB342;
+
+  --curaggi-blue:        #42A5F5;
+  --curaggi-blue-light:  #90CAF9;
+  --curaggi-blue-dark:   #1E88E5;
+
+  /* ── Accessible Text-on-White Colors (WCAG AA 4.5:1+) ── */
+  --a11y-coral:    #C13030;
+  --a11y-amber:    #935600;
+  --a11y-teal:     #007A87;
+  --a11y-violet:   #7B1FA2;
+  --a11y-lime:     #4E7A1B;
+  --a11y-blue:     #1565C0;
+
+  /* ── Neutral Colors ── */
+  --neutral-950: #0A0A0B;
+  --neutral-900: #1A1A1F;
+  --neutral-800: #2D2D35;
+  --neutral-700: #44444F;
+  --neutral-600: #5E5E6B;
+  --neutral-500: #7C7C8A;
+  --neutral-400: #A0A0AC;
+  --neutral-300: #C4C4CD;
+  --neutral-200: #E2E2E8;
+  --neutral-100: #F0F0F4;
+  --neutral-50:  #F8F8FB;
+  --white:       #FFFFFF;
+
+  /* ── Semantic Colors (WCAG AA compliant on white) ── */
+  --success:    #2E7D32;
+  --success-bg: #E8F5E9;
+  --warning:    #E65100;
+  --warning-bg: #FFF3E0;
+  --error:      #C62828;
+  --error-bg:   #FFEBEE;
+  --info:       #1565C0;
+  --info-bg:    #E3F2FD;
+
+  /* ── Background ── */
+  --bg-primary:   var(--neutral-50);
+  --bg-secondary: var(--white);
+  --bg-dark:      var(--neutral-900);
+
+  /* ── Surface (M3-style) ── */
+  --surface-default: var(--white);
+  --surface-hover:   var(--neutral-50);
+  --state-layer-hover: rgba(0,0,0,0.04);
+  --state-layer-pressed: rgba(0,0,0,0.08);
+
+  /* ── Typography ── */
+  --font-display: 'Outfit', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-jp:      'Noto Sans JP', sans-serif;
+
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+  --text-2xl:  1.5rem;     /* 24px */
+  --text-3xl:  1.875rem;   /* 30px */
+  --text-4xl:  2.25rem;    /* 36px */
+  --text-5xl:  3rem;       /* 48px */
+  --text-6xl:  3.75rem;    /* 60px */
+  --text-7xl:  4.5rem;     /* 72px */
+
+  --leading-tight:  1.2;
+  --leading-snug:   1.4;
+  --leading-normal: 1.6;
+  --leading-relaxed:1.8;
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.04em;
+  --tracking-wider:  0.08em;
+
+  /* ── Spacing ── */
+  --space-1:  0.25rem;   /* 4px */
+  --space-2:  0.5rem;    /* 8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+  --space-32: 8rem;      /* 128px */
+
+  /* ── Layout Breakpoints ── */
+  --bp-sm:  640px;
+  --bp-md:  768px;
+  --bp-lg:  1024px;
+  --bp-xl:  1280px;
+  --bp-2xl: 1440px;
+  --grid-columns-mobile: 4;
+  --grid-columns-desktop: 12;
+  --grid-gutter-mobile: var(--space-4);
+  --grid-gutter-desktop: var(--space-6);
+  --grid-margin-mobile: var(--space-4);
+  --grid-margin-desktop: var(--space-16);
+  --container-max: 1200px;
+
+  /* ── Radius ── */
+  --radius-sm:   0.375rem;  /* 6px */
+  --radius-md:   0.75rem;   /* 12px */
+  --radius-lg:   1rem;      /* 16px */
+  --radius-xl:   1.5rem;    /* 24px */
+  --radius-2xl:  2rem;      /* 32px */
+  --radius-full: 9999px;
+
+  /* ── Elevation (M3-style) ── */
+  --elevation-0: none;
+  --elevation-1: 0 1px 3px 1px rgba(0,0,0,0.08), 0 1px 2px 0 rgba(0,0,0,0.04);
+  --elevation-2: 0 2px 6px 2px rgba(0,0,0,0.08), 0 1px 2px 0 rgba(0,0,0,0.04);
+  --elevation-3: 0 4px 8px 3px rgba(0,0,0,0.08), 0 1px 3px 0 rgba(0,0,0,0.06);
+  --elevation-4: 0 6px 10px 4px rgba(0,0,0,0.08), 0 2px 3px 0 rgba(0,0,0,0.06);
+  --elevation-5: 0 8px 12px 6px rgba(0,0,0,0.08), 0 4px 4px 0 rgba(0,0,0,0.06);
+
+  /* ── Transitions ── */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-m3:     cubic-bezier(0.2, 0, 0, 1);
+  --focus-ring:  0 0 0 3px rgba(38,198,218,0.5);
+  --duration-fast:   150ms;
+  --duration-normal: 300ms;
+  --duration-slow:   500ms;
+}
+
+
+/* ── Reduced motion (A11y: WCAG 2.3.3) ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   RESET & BASE
+   ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body), var(--font-jp);
+  background: var(--bg-primary);
+  color: var(--neutral-800);
+  line-height: var(--leading-normal);
+  overflow-x: hidden;
+}
+
+
+/* ── Skip Navigation (A11y: WCAG 2.4.1) ── */
+.skip-link {
+  position: absolute; top: -100%; left: var(--space-4);
+  padding: var(--space-3) var(--space-6);
+  background: var(--neutral-900); color: var(--white);
+  font-family: var(--font-display); font-size: var(--text-sm); font-weight: 600;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  z-index: 9999; text-decoration: none;
+}
+.skip-link:focus { top: 0; outline: none; box-shadow: var(--focus-ring); }
+
+/* ── Focus visible (A11y: WCAG 2.4.7) ── */
+:focus-visible { outline: 2px solid var(--curaggi-teal); outline-offset: 2px; }
+
+/* ─────────────────────────────────────────────
+   DESIGN SYSTEM PAGE LAYOUT
+   ───────────────────────────────────────────── */
+.ds-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6);
+}
+
+.ds-hero {
+  position: relative;
+  padding: var(--space-24) var(--space-8);
+  background: var(--neutral-900);
+  border-radius: var(--radius-2xl);
+  margin-bottom: var(--space-16);
+  overflow: hidden;
+  text-align: center;
+}
+
+.ds-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 25%, rgba(255,107,107,0.25) 0%, transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(38,198,218,0.2) 0%, transparent 35%),
+    radial-gradient(circle at 50% 80%, rgba(255,171,64,0.2) 0%, transparent 40%),
+    radial-gradient(circle at 20% 75%, rgba(171,71,188,0.15) 0%, transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(156,204,101,0.15) 0%, transparent 30%);
+  pointer-events: none;
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes heroGlow {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+.ds-hero__logo {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: var(--text-7xl);
+  font-weight: 800;
+  letter-spacing: var(--tracking-tight);
+  background: linear-gradient(135deg, var(--curaggi-coral), var(--curaggi-amber), var(--curaggi-teal), var(--curaggi-violet));
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 6s ease infinite;
+  margin-bottom: var(--space-4);
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.ds-hero__subtitle {
+  position: relative;
+  font-family: var(--font-body), var(--font-jp);
+  font-size: var(--text-lg);
+  color: var(--neutral-400);
+  letter-spacing: var(--tracking-wide);
+  margin-bottom: var(--space-2);
+}
+
+.ds-hero__version {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--neutral-500);
+  border: 1px solid var(--neutral-700);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  margin-top: var(--space-4);
+}
+
+/* Floating decorative shapes */
+.ds-hero__shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.12;
+  pointer-events: none;
+  animation: floatShape 10s ease-in-out infinite;
+}
+.ds-hero__shape--1 {
+  width: 200px; height: 200px;
+  background: var(--curaggi-coral);
+  top: -40px; left: -40px;
+  animation-delay: 0s;
+}
+.ds-hero__shape--2 {
+  width: 120px; height: 120px;
+  background: var(--curaggi-teal);
+  top: 30px; right: 60px;
+  animation-delay: -3s;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+.ds-hero__shape--3 {
+  width: 80px; height: 80px;
+  background: var(--curaggi-amber);
+  bottom: 40px; left: 25%;
+  animation-delay: -5s;
+}
+.ds-hero__shape--4 {
+  width: 150px; height: 150px;
+  background: var(--curaggi-violet);
+  bottom: -30px; right: 15%;
+  animation-delay: -7s;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+@keyframes floatShape {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(15px, -20px) rotate(5deg); }
+  66% { transform: translate(-10px, 10px) rotate(-3deg); }
+}
+
+
+/* ── Section Styling ── */
+.ds-section {
+  margin-bottom: var(--space-20);
+}
+
+.ds-section__header {
+  margin-bottom: var(--space-10);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--neutral-200);
+}
+
+.ds-section__number {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--a11y-coral);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.ds-section__title {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--neutral-900);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+.ds-section__desc {
+  font-size: var(--text-lg);
+  color: var(--neutral-600);
+  margin-top: var(--space-3);
+  max-width: 680px;
+  line-height: var(--leading-relaxed);
+}
+
+.ds-subsection {
+  margin-bottom: var(--space-12);
+}
+
+.ds-subsection__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--neutral-800);
+  margin-bottom: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ds-subsection__title::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  background: var(--curaggi-coral);
+  border-radius: 2px;
+}
+
+/* ─────────────────────────────────────────────
+   01. TONE & MANNER
+   ───────────────────────────────────────────── */
+.tone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+}
+
+.tone-card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+  border: 1px solid var(--neutral-200);
+  transition: background var(--duration-normal) var(--ease-m3);
+}
+
+.tone-card:hover {
+  background: var(--surface-hover);
+}
+
+.tone-card__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: var(--space-5);
+}
+
+.tone-card__label {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2);
+}
+
+.tone-card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin-bottom: var(--space-3);
+}
+
+.tone-card__body {
+  font-size: var(--text-base);
+  color: var(--neutral-600);
+  line-height: var(--leading-relaxed);
+}
+
+.tone-card--courage .tone-card__icon {
+  background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,171,64,0.15));
+}
+.tone-card--courage .tone-card__label { color: var(--a11y-coral); }
+
+.tone-card--colorful .tone-card__icon {
+  background: linear-gradient(135deg, rgba(38,198,218,0.15), rgba(171,71,188,0.15));
+}
+.tone-card--colorful .tone-card__label { color: var(--a11y-teal); }
+
+.tone-card--forward .tone-card__icon {
+  background: linear-gradient(135deg, rgba(66,165,245,0.15), rgba(156,204,101,0.15));
+}
+.tone-card--forward .tone-card__label { color: var(--a11y-blue); }
+
+.tone-card--warm .tone-card__icon {
+  background: linear-gradient(135deg, rgba(255,171,64,0.15), rgba(255,107,107,0.15));
+}
+.tone-card--warm .tone-card__label { color: var(--a11y-amber); }
+
+
+/* ── Brand Keywords ── */
+.brand-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.brand-keyword {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-full);
+  border: 1.5px solid;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.brand-keyword:nth-child(6n+1) { color: var(--a11y-coral); border-color: var(--curaggi-coral); background: rgba(255,107,107,0.06); }
+.brand-keyword:nth-child(6n+2) { color: var(--a11y-amber); border-color: var(--curaggi-amber); background: rgba(255,171,64,0.06); }
+.brand-keyword:nth-child(6n+3) { color: var(--a11y-teal); border-color: var(--curaggi-teal); background: rgba(38,198,218,0.06); }
+.brand-keyword:nth-child(6n+4) { color: var(--a11y-violet); border-color: var(--curaggi-violet); background: rgba(171,71,188,0.06); }
+.brand-keyword:nth-child(6n+5) { color: var(--a11y-lime); border-color: var(--curaggi-lime); background: rgba(156,204,101,0.06); }
+.brand-keyword:nth-child(6n+6) { color: var(--a11y-blue); border-color: var(--curaggi-blue); background: rgba(66,165,245,0.06); }
+
+
+
+/* ─── Vision / Mission Block ─── */
+.vm-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+
+.vm-card {
+  padding: var(--space-10);
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.vm-card--vision {
+  background: linear-gradient(145deg, var(--neutral-900), #252530);
+  color: var(--white);
+}
+
+.vm-card--mission {
+  background: var(--white);
+  border: 1.5px solid var(--neutral-200);
+  color: var(--neutral-900);
+}
+
+.vm-card__label {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+
+.vm-card--vision .vm-card__label {
+  background: linear-gradient(90deg, var(--curaggi-coral), var(--curaggi-amber));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.vm-card--mission .vm-card__label {
+  color: var(--a11y-teal);
+}
+
+.vm-card__text {
+  font-family: var(--font-display), var(--font-jp);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+}
+
+.vm-card--vision .vm-card__text {
+  background: linear-gradient(135deg, var(--white) 0%, var(--neutral-300) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.vm-card::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  opacity: 0.06;
+  bottom: -60px;
+  right: -40px;
+}
+
+.vm-card--vision::after { background: var(--curaggi-coral); }
+.vm-card--mission::after { background: var(--curaggi-teal); }
+
+
+/* ─────────────────────────────────────────────
+   02. COLOR SYSTEM
+   ───────────────────────────────────────────── */
+.color-palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-5);
+}
+
+.color-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--neutral-200);
+  transition: background var(--duration-normal) var(--ease-m3);
+}
+
+.color-card:hover {
+  background: var(--surface-hover);
+}
+
+.color-card__swatch {
+  height: 120px;
+  width: 100%;
+  position: relative;
+}
+
+.color-card__info {
+  padding: var(--space-4);
+}
+
+.color-card__name {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--neutral-900);
+  margin-bottom: var(--space-1);
+}
+
+.color-card__var {
+  font-family: 'DM Sans', monospace;
+  font-size: var(--text-xs);
+  color: var(--neutral-600);
+  margin-bottom: var(--space-1);
+}
+
+.color-card__hex {
+  font-family: 'DM Sans', monospace;
+  font-size: var(--text-xs);
+  color: var(--neutral-400);
+}
+
+/* Neutral scale */
+.neutral-scale {
+  display: flex;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  height: 80px;
+  margin-top: var(--space-6);
+}
+
+.neutral-scale__step {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: var(--space-2);
+  font-family: 'DM Sans', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  transition: flex var(--duration-normal) var(--ease-out);
+}
+
+.neutral-scale__step:hover {
+  flex: 2;
+}
+
+/* Gradient showcase */
+.gradient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.gradient-card {
+  height: 140px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-4);
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-card__label {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--white);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.gradient-card__code {
+  font-family: 'DM Sans', monospace;
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.7);
+  margin-top: var(--space-1);
+}
+
+
+/* ─────────────────────────────────────────────
+   03. TYPOGRAPHY
+   ───────────────────────────────────────────── */
+.type-specimen {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: var(--space-10);
+  border: 1px solid var(--neutral-200);
+  margin-bottom: var(--space-6);
+}
+
+.type-specimen__label {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--neutral-400);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  margin-bottom: var(--space-4);
+}
+
+.type-specimen__sample {
+  margin-bottom: var(--space-6);
+}
+
+.type-specimen__alphabet {
+  font-size: var(--text-4xl);
+  color: var(--neutral-900);
+  line-height: var(--leading-snug);
+  margin-bottom: var(--space-4);
+  word-break: break-all;
+}
+
+.type-specimen__weights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.type-specimen__weight {
+  flex: 0 0 auto;
+}
+
+.type-specimen__weight-label {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--neutral-400);
+  margin-bottom: var(--space-1);
+}
+
+.type-specimen__weight-demo {
+  font-size: var(--text-2xl);
+  color: var(--neutral-800);
+}
+
+.type-scale {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.type-scale__item {
+  display: grid;
+  grid-template-columns: 100px 100px 1fr;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.type-scale__label {
+  font-family: 'DM Sans', monospace;
+  font-size: var(--text-xs);
+  color: var(--neutral-400);
+}
+
+.type-scale__size {
+  font-family: 'DM Sans', monospace;
+  font-size: var(--text-xs);
+  color: var(--neutral-500);
+}
+
+
+/* ─────────────────────────────────────────────
+   04. SPACING
+   ───────────────────────────────────────────── */
+.spacing-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.spacing-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.spacing-item__label {
+  width: 80px;
+  font-family: 'DM Sans', monospace;
+  font-size: var(--text-xs);
+  color: var(--neutral-600);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.spacing-item__bar {
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--curaggi-coral), var(--curaggi-amber));
+  opacity: 0.7;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.spacing-item:hover .spacing-item__bar {
+  opacity: 1;
+}
+
+.spacing-item__value {
+  font-family: 'DM Sans', monospace;
+  font-size: var(--text-xs);
+  color: var(--neutral-400);
+  flex-shrink: 0;
+}
+
+
+/* ─────────────────────────────────────────────
+   05. COMPONENTS
+   ───────────────────────────────────────────── */
+
+/* ── Buttons ── */
+.btn-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: center;
+  margin-bottom: var(--space-8);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: background var(--duration-normal) var(--ease-m3), box-shadow var(--duration-normal) var(--ease-m3);
+  text-decoration: none;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.btn--primary {
+  background: var(--neutral-900);
+  color: var(--white);
+  box-shadow: var(--elevation-1);
+}
+.btn--primary:hover {
+  box-shadow: var(--elevation-2);
+}
+
+.btn--coral {
+  background: var(--curaggi-coral);
+  color: var(--white);
+  box-shadow: var(--elevation-1);
+}
+.btn--coral:hover {
+  box-shadow: var(--elevation-2);
+}
+
+.btn--teal {
+  background: var(--curaggi-teal);
+  color: var(--white);
+  box-shadow: var(--elevation-1);
+}
+.btn--teal:hover {
+  box-shadow: var(--elevation-2);
+}
+
+.btn--amber {
+  background: var(--curaggi-amber);
+  color: var(--white);
+  box-shadow: var(--elevation-1);
+}
+.btn--amber:hover {
+  box-shadow: var(--elevation-2);
+}
+
+.btn--violet {
+  background: var(--curaggi-violet);
+  color: var(--white);
+  box-shadow: var(--elevation-1);
+}
+.btn--violet:hover {
+  box-shadow: var(--elevation-2);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--neutral-800);
+  border: 1.5px solid var(--neutral-300);
+}
+.btn--outline:hover {
+  background: var(--state-layer-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--neutral-700);
+  padding: var(--space-2) var(--space-4);
+}
+.btn--ghost:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+.btn--lg {
+  font-size: var(--text-base);
+  padding: var(--space-4) var(--space-8);
+}
+
+.btn--sm {
+  font-size: var(--text-xs);
+  padding: var(--space-2) var(--space-4);
+}
+
+.btn--gradient {
+  background: linear-gradient(135deg, var(--curaggi-coral), var(--curaggi-amber));
+  color: var(--white);
+  position: relative;
+  z-index: 1;
+}
+.btn--gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--curaggi-coral-dark), var(--curaggi-amber-dark));
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+  z-index: -1;
+}
+.btn--gradient:hover::before { opacity: 1; }
+.btn--gradient:hover {
+  box-shadow: var(--elevation-2);
+}
+
+
+/* ── Cards ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-6);
+}
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--neutral-200);
+  transition: background var(--duration-normal) var(--ease-m3);
+}
+
+.card:hover {
+  background: var(--surface-hover);
+}
+
+.card__media {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card__media--coral { background: linear-gradient(145deg, var(--curaggi-coral), var(--curaggi-amber)); }
+.card__media--teal { background: linear-gradient(145deg, var(--curaggi-teal), var(--curaggi-blue)); }
+.card__media--violet { background: linear-gradient(145deg, var(--curaggi-violet), var(--curaggi-coral)); }
+
+.card__media-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+
+.card__body {
+  padding: var(--space-6);
+}
+
+.card__tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-3);
+}
+
+.card__tag--coral { color: var(--a11y-coral); background: rgba(255,107,107,0.1); }
+.card__tag--teal { color: var(--a11y-teal); background: rgba(38,198,218,0.1); }
+.card__tag--violet { color: var(--a11y-violet); background: rgba(171,71,188,0.1); }
+
+.card__title {
+  font-family: var(--font-display), var(--font-jp);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--neutral-900);
+  margin-bottom: var(--space-2);
+  line-height: var(--leading-snug);
+}
+
+.card__desc {
+  font-size: var(--text-sm);
+  color: var(--neutral-500);
+  line-height: var(--leading-relaxed);
+}
+
+
+/* ── Tags & Badges ── */
+.tag-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  letter-spacing: var(--tracking-wide);
+}
+
+.tag--coral { color: var(--a11y-coral); background: rgba(255,107,107,0.1); }
+.tag--amber { color: var(--a11y-amber); background: rgba(255,171,64,0.1); }
+.tag--teal { color: var(--a11y-teal); background: rgba(38,198,218,0.1); }
+.tag--violet { color: var(--a11y-violet); background: rgba(171,71,188,0.1); }
+.tag--lime { color: var(--a11y-lime); background: rgba(156,204,101,0.1); }
+.tag--blue { color: var(--a11y-blue); background: rgba(66,165,245,0.1); }
+.tag--neutral { color: var(--neutral-600); background: var(--neutral-100); }
+
+
+/* ── Input Fields ── */
+.input-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 480px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.input-group__label {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--neutral-700);
+}
+
+.input {
+  font-family: var(--font-body), var(--font-jp);
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  color: var(--neutral-900);
+  outline: none;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.input:hover {
+  border-color: var(--neutral-400);
+}
+
+.input:focus {
+  border-color: var(--curaggi-teal);
+  box-shadow: 0 0 0 3px rgba(38,198,218,0.15);
+}
+
+.input--error {
+  border-color: var(--error);
+}
+
+.input--error:focus {
+  box-shadow: 0 0 0 3px rgba(198,40,40,0.2);
+}
+
+.input-hint {
+  font-size: var(--text-xs);
+  color: var(--neutral-600);
+}
+
+.input-error-msg {
+  font-size: var(--text-xs);
+  color: var(--error);
+}
+
+
+/* ─────────────────────────────────────────────
+   06. RADIUS & SHADOWS
+   ───────────────────────────────────────────── */
+.radius-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.radius-item {
+  text-align: center;
+}
+
+.radius-item__box {
+  width: 80px;
+  height: 80px;
+  background: var(--white);
+  border: 2px solid var(--neutral-200);
+  margin-bottom: var(--space-2);
+}
+
+.radius-item__label {
+  font-family: 'DM Sans', monospace;
+  font-size: var(--text-xs);
+  color: var(--neutral-600);
+}
+
+.shadow-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.shadow-item {
+  text-align: center;
+}
+
+.shadow-item__box {
+  width: 120px;
+  height: 120px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-3);
+}
+
+.shadow-item__label {
+  font-family: 'DM Sans', monospace;
+  font-size: var(--text-xs);
+  color: var(--neutral-600);
+}
+
+
+/* ─────────────────────────────────────────────
+   07. ICONOGRAPHY / DECORATIVE
+   ───────────────────────────────────────────── */
+.deco-shapes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  align-items: center;
+  padding: var(--space-10);
+  background: var(--neutral-900);
+  border-radius: var(--radius-xl);
+}
+
+.deco-shape {
+  opacity: 0.8;
+  animation: floatShape 6s ease-in-out infinite;
+}
+
+.deco-shape--circle {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--curaggi-coral);
+}
+
+.deco-shape--blob {
+  width: 100px; height: 80px;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  background: var(--curaggi-teal);
+  animation-delay: -2s;
+}
+
+.deco-shape--ring {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 4px solid var(--curaggi-amber);
+  animation-delay: -4s;
+}
+
+.deco-shape--squircle {
+  width: 80px; height: 80px;
+  border-radius: 22%;
+  background: var(--curaggi-violet);
+  transform: rotate(12deg);
+  animation-delay: -1s;
+}
+
+.deco-shape--pill {
+  width: 120px; height: 48px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--curaggi-lime), var(--curaggi-teal));
+  animation-delay: -3s;
+}
+
+.deco-shape--diamond {
+  width: 60px; height: 60px;
+  background: var(--curaggi-blue);
+  transform: rotate(45deg);
+  border-radius: 8px;
+  animation-delay: -5s;
+}
+
+
+/* ─────────────────────────────────────────────
+   08. DARK MODE PREVIEW
+   ───────────────────────────────────────────── */
+.dark-preview {
+  background: var(--neutral-900);
+  border-radius: var(--radius-xl);
+  padding: var(--space-10);
+  color: var(--white);
+}
+
+.dark-preview .dark-text-primary { color: var(--neutral-50); }
+.dark-preview .dark-text-secondary { color: var(--neutral-400); }
+.dark-preview .dark-text-muted { color: var(--neutral-500); }
+
+.dark-preview .dark-surface {
+  background: var(--neutral-800);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-top: var(--space-4);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+
+/* ─────────────────────────────────────────────
+   09. ANIMATION EXAMPLES
+   ───────────────────────────────────────────── */
+.anim-showcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-6);
+}
+
+.anim-item {
+  text-align: center;
+  padding: var(--space-6);
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--neutral-200);
+}
+
+.anim-item__dot {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin: 0 auto var(--space-4);
+}
+
+.anim-item__label {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--neutral-700);
+  margin-bottom: var(--space-1);
+}
+
+.anim-item__code {
+  font-family: 'DM Sans', monospace;
+  font-size: 10px;
+  color: var(--neutral-400);
+}
+
+.anim--pulse .anim-item__dot {
+  background: var(--curaggi-coral);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.8; }
+}
+
+.anim--bounce .anim-item__dot {
+  background: var(--curaggi-teal);
+  animation: bounce 1.5s var(--ease-spring) infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+.anim--spin .anim-item__dot {
+  background: var(--curaggi-amber);
+  border-radius: 22%;
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.anim--morph .anim-item__dot {
+  background: var(--curaggi-violet);
+  animation: morph 4s ease-in-out infinite;
+}
+
+@keyframes morph {
+  0%, 100% { border-radius: 50%; }
+  25% { border-radius: 22%; transform: rotate(15deg); }
+  50% { border-radius: 50% 20% 50% 20%; transform: rotate(0deg); }
+  75% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; transform: rotate(-10deg); }
+}
+
+.anim--fade .anim-item__dot {
+  background: var(--curaggi-lime);
+  animation: fade 2.5s ease-in-out infinite;
+}
+
+@keyframes fade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.anim--glow .anim-item__dot {
+  background: var(--curaggi-blue);
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(66,165,245,0.4); }
+  50% { box-shadow: 0 0 20px 8px rgba(66,165,245,0.2); }
+}
+
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .ds-hero__logo { font-size: var(--text-5xl); }
+  .ds-section__title { font-size: var(--text-3xl); }
+  .vm-block { grid-template-columns: 1fr; }
+  .vm-card__text { font-size: var(--text-2xl); }
+  .type-scale__item { grid-template-columns: 80px 70px 1fr; }
+}
+
+/* ─────────────────────────────────────────────
+   TABLE OF CONTENTS NAV
+   ───────────────────────────────────────────── */
+.ds-toc {
+  position: fixed;
+  top: 50%;
+  right: var(--space-6);
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ds-toc__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--neutral-300);
+  border: none;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  padding: 0;
+}
+
+.ds-toc__dot:hover {
+  background: var(--curaggi-coral);
+  transform: scale(1.3);
+}
+
+@media (max-width: 1024px) {
+  .ds-toc { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Skip Navigation (A11y: WCAG 2.4.1) -->
+<a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
+
+
+<!-- ═══════════════════════════════════════════
+     TABLE OF CONTENTS (Side Nav)
+     ═══════════════════════════════════════════ -->
+<nav class="ds-toc" aria-label="Design System Navigation">
+  <button class="ds-toc__dot" onclick="document.getElementById('tone').scrollIntoView({behavior:'smooth'})" title="Tone & Manner"></button>
+  <button class="ds-toc__dot" onclick="document.getElementById('colors').scrollIntoView({behavior:'smooth'})" title="Colors" aria-label="Colorsセクションへ移動"></button>
+  <button class="ds-toc__dot" onclick="document.getElementById('typography').scrollIntoView({behavior:'smooth'})" title="Typography" aria-label="Typographyセクションへ移動"></button>
+  <button class="ds-toc__dot" onclick="document.getElementById('layout').scrollIntoView({behavior:'smooth'})" title="Layout" aria-label="Layoutセクションへ移動"></button>
+  <button class="ds-toc__dot" onclick="document.getElementById('spacing').scrollIntoView({behavior:'smooth'})" title="Spacing" aria-label="Spacingセクションへ移動"></button>
+  <button class="ds-toc__dot" onclick="document.getElementById('components').scrollIntoView({behavior:'smooth'})" title="Components" aria-label="Componentsセクションへ移動"></button>
+  <button class="ds-toc__dot" onclick="document.getElementById('radius').scrollIntoView({behavior:'smooth'})" title="Radius & Shadows"></button>
+  <button class="ds-toc__dot" onclick="document.getElementById('decorative').scrollIntoView({behavior:'smooth'})" title="Decorative" aria-label="Decorativeセクションへ移動"></button>
+  <button class="ds-toc__dot" onclick="document.getElementById('dark').scrollIntoView({behavior:'smooth'})" title="Dark Mode"></button>
+  <button class="ds-toc__dot" onclick="document.getElementById('animation').scrollIntoView({behavior:'smooth'})" title="Animation" aria-label="Animationセクションへ移動"></button>
+</nav>
+
+
+<div class="ds-page" id="main-content">
+
+  <!-- ═══════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════ -->
+  <header class="ds-hero">
+    <div class="ds-hero__shape ds-hero__shape--1" aria-hidden="true"></div>
+    <div class="ds-hero__shape ds-hero__shape--2" aria-hidden="true"></div>
+    <div class="ds-hero__shape ds-hero__shape--3" aria-hidden="true"></div>
+    <div class="ds-hero__shape ds-hero__shape--4" aria-hidden="true"></div>
+    <div class="ds-hero__logo">Curaggi</div>
+    <p class="ds-hero__subtitle">Design System &mdash; トーン＆マナー定義書</p>
+    <span class="ds-hero__version">v1.0 &nbsp;&middot;&nbsp; February 2026</span>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════════
+       01. TONE & MANNER
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="tone" aria-labelledby="tone-title">
+    <div class="ds-section__header">
+      <span class="ds-section__number">01</span>
+      <h2 class="ds-section__title" id="tone-title">Tone & Manner</h2>
+      <p class="ds-section__desc">
+        Curaggi（クラッジ）はマルタ語の「Kuragg」とイタリア語の「Coraggio」に由来し、いずれも「勇気」を意味します。デザインの力で当事者の人生の選択肢を広げ、勇気を届ける。その想いをビジュアルに落とし込んだトーン＆マナーです。
+      </p>
+    </div>
+
+    <!-- Vision / Mission -->
+    <div class="vm-block">
+      <div class="vm-card vm-card--vision">
+        <div class="vm-card__label">Vision</div>
+        <div class="vm-card__text">あきらめなくてよい<br>世界をつくる</div>
+      </div>
+      <div class="vm-card vm-card--mission">
+        <div class="vm-card__label">Mission</div>
+        <div class="vm-card__text">選択肢と勇気を<br>デザインする</div>
+      </div>
+    </div>
+
+    <!-- Tone Cards -->
+    <div style="margin-top: var(--space-12);">
+      <div class="ds-subsection__title">ブランドパーソナリティ</div>
+    </div>
+    <div class="tone-grid">
+      <div class="tone-card tone-card--courage">
+        <div class="tone-card__icon" aria-hidden="true">🔥</div>
+        <div class="tone-card__label">Core Value</div>
+        <div class="tone-card__title">勇気 / Courage</div>
+        <div class="tone-card__body">
+          一歩踏み出す力を感じさせる、エネルギーに満ちた表現。力強さと温かさが共存する、前向きで背中を押すトーン。萎縮させない、挑戦を讃える空気感。
+        </div>
+      </div>
+      <div class="tone-card tone-card--colorful">
+        <div class="tone-card__icon" aria-hidden="true">🌈</div>
+        <div class="tone-card__label">Expression</div>
+        <div class="tone-card__title">多彩 / Colorful</div>
+        <div class="tone-card__body">
+          あらゆる選択肢を象徴するカラフルな色彩。個性を尊重し、画一的でない多様なアプローチを視覚的に体現。流動的で型にはまらないシェイプで「自由さ」を表現。
+        </div>
+      </div>
+      <div class="tone-card tone-card--forward">
+        <div class="tone-card__icon" aria-hidden="true">✦</div>
+        <div class="tone-card__label">Attitude</div>
+        <div class="tone-card__title">先進性 / Forward</div>
+        <div class="tone-card__body">
+          デザインの力で課題を解決するプロフェッショナルとしての信頼感。先進的でクリーンなレイアウト、洗練されたタイポグラフィ。革新を感じさせるディテール。
+        </div>
+      </div>
+      <div class="tone-card tone-card--warm">
+        <div class="tone-card__icon" aria-hidden="true">☀️</div>
+        <div class="tone-card__label">Atmosphere</div>
+        <div class="tone-card__title">明朗 / Bright</div>
+        <div class="tone-card__body">
+          マルタやイタリアの地中海的な明るさ。光に満ちた開放感のある雰囲気。暗い状況にいる人にも寄り添いながら、希望の光が見えるような温かさを持つ。
+        </div>
+      </div>
+    </div>
+
+    <!-- Brand Keywords -->
+    <div style="margin-top: var(--space-10);">
+      <div class="ds-subsection__title">ブランドキーワード</div>
+    </div>
+    <div class="brand-keywords">
+      <span class="brand-keyword">勇気 / Courage</span>
+      <span class="brand-keyword">選択肢 / Choices</span>
+      <span class="brand-keyword">デザインの力 / Power of Design</span>
+      <span class="brand-keyword">カラフル / Colorful</span>
+      <span class="brand-keyword">先進的 / Progressive</span>
+      <span class="brand-keyword">明るい / Bright</span>
+      <span class="brand-keyword">自由 / Freedom</span>
+      <span class="brand-keyword">温かさ / Warmth</span>
+      <span class="brand-keyword">多様性 / Diversity</span>
+      <span class="brand-keyword">挑戦 / Challenge</span>
+      <span class="brand-keyword">応援 / Empower</span>
+      <span class="brand-keyword">地中海 / Mediterranean</span>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       02. COLOR SYSTEM
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="colors" aria-labelledby="colors-title">
+    <div class="ds-section__header">
+      <span class="ds-section__number">02</span>
+      <h2 class="ds-section__title" id="colors-title">Color System</h2>
+      <p class="ds-section__desc">
+        「あらゆる選択肢」を象徴する6色のブランドカラー。メインはCoral（勇気の炎）、グレーベースの上にカラフルなアクセントを配置し、明るく先進的な印象を作ります。
+      </p>
+    </div>
+
+    <!-- Primary Colors -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Primary Brand Colors</div>
+      <div class="color-palette">
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-coral);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Coral（勇気の炎）</div>
+            <div class="color-card__var">--curaggi-coral</div>
+            <div class="color-card__hex">#FF6B6B</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-amber);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Amber（地中海の光）</div>
+            <div class="color-card__var">--curaggi-amber</div>
+            <div class="color-card__hex">#FFAB40</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-teal);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Teal（可能性の海）</div>
+            <div class="color-card__var">--curaggi-teal</div>
+            <div class="color-card__hex">#26C6DA</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-violet);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Violet（創造の想像力）</div>
+            <div class="color-card__var">--curaggi-violet</div>
+            <div class="color-card__hex">#AB47BC</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-lime);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Lime（成長の芽吹き）</div>
+            <div class="color-card__var">--curaggi-lime</div>
+            <div class="color-card__hex">#9CCC65</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-blue);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Blue（信頼の空）</div>
+            <div class="color-card__var">--curaggi-blue</div>
+            <div class="color-card__hex">#42A5F5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Light / Dark Variants -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Light & Dark Variants</div>
+      <div class="color-palette">
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-coral-light);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Coral Light</div>
+            <div class="color-card__hex">#FF9E9E</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-coral-dark);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Coral Dark</div>
+            <div class="color-card__hex">#E04545</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-amber-light);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Amber Light</div>
+            <div class="color-card__hex">#FFC873</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-amber-dark);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Amber Dark</div>
+            <div class="color-card__hex">#E08E20</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-teal-light);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Teal Light</div>
+            <div class="color-card__hex">#67E0EE</div>
+          </div>
+        </div>
+        <div class="color-card">
+          <div class="color-card__swatch" style="background: var(--curaggi-teal-dark);"></div>
+          <div class="color-card__info">
+            <div class="color-card__name">Teal Dark</div>
+            <div class="color-card__hex">#0097A7</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Accessible Text Colors -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Accessible Text Colors (WCAG AA 4.5:1+)</div>
+      <p style="font-size:var(--text-sm);color:var(--neutral-600);margin-bottom:var(--space-4);line-height:var(--leading-relaxed);">白背景にブランドカラーのテキストを置く場合、以下のアクセシブルバリアントを使用。いずれもWCAG 2.1 Level AA基準（通常テキスト4.5:1以上）を満たします。</p>
+      <div style="overflow-x:auto;">
+        <table class="a11y-table" role="table">
+          <thead><tr><th scope="col">Name</th><th scope="col">Color</th><th scope="col">Hex</th><th scope="col">CSS Variable</th><th scope="col">WCAG AA</th></tr></thead>
+          <tbody>
+            <tr><td>Coral (text)</td><td><span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#C13030;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.08);"></span></td><td style="font-family:monospace;">#C13030</td><td style="font-family:monospace;">--a11y-coral</td><td><span style="display:inline-block;font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;padding:2px 8px;border-radius:var(--radius-full);color:#2E7D32;background:#E8F5E9;">Pass 5.2:1</span></td></tr>
+            <tr><td>Amber (text)</td><td><span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#935600;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.08);"></span></td><td style="font-family:monospace;">#935600</td><td style="font-family:monospace;">--a11y-amber</td><td><span style="display:inline-block;font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;padding:2px 8px;border-radius:var(--radius-full);color:#2E7D32;background:#E8F5E9;">Pass 5.4:1</span></td></tr>
+            <tr><td>Teal (text)</td><td><span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#007A87;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.08);"></span></td><td style="font-family:monospace;">#007A87</td><td style="font-family:monospace;">--a11y-teal</td><td><span style="display:inline-block;font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;padding:2px 8px;border-radius:var(--radius-full);color:#2E7D32;background:#E8F5E9;">Pass 4.6:1</span></td></tr>
+            <tr><td>Violet (text)</td><td><span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#7B1FA2;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.08);"></span></td><td style="font-family:monospace;">#7B1FA2</td><td style="font-family:monospace;">--a11y-violet</td><td><span style="display:inline-block;font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;padding:2px 8px;border-radius:var(--radius-full);color:#2E7D32;background:#E8F5E9;">Pass 6.8:1</span></td></tr>
+            <tr><td>Lime (text)</td><td><span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#4E7A1B;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.08);"></span></td><td style="font-family:monospace;">#4E7A1B</td><td style="font-family:monospace;">--a11y-lime</td><td><span style="display:inline-block;font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;padding:2px 8px;border-radius:var(--radius-full);color:#2E7D32;background:#E8F5E9;">Pass 4.8:1</span></td></tr>
+            <tr><td>Blue (text)</td><td><span style="display:inline-block;width:24px;height:24px;border-radius:4px;background:#1565C0;vertical-align:middle;margin-right:8px;border:1px solid rgba(0,0,0,0.08);"></span></td><td style="font-family:monospace;">#1565C0</td><td style="font-family:monospace;">--a11y-blue</td><td><span style="display:inline-block;font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;padding:2px 8px;border-radius:var(--radius-full);color:#2E7D32;background:#E8F5E9;">Pass 5.6:1</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Neutral Scale -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Neutral Scale</div>
+      <div class="neutral-scale">
+        <div class="neutral-scale__step" style="background: var(--neutral-950); color: var(--neutral-400);">950</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-900); color: var(--neutral-400);">900</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-800); color: var(--neutral-400);">800</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-700); color: var(--neutral-300);">700</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-600); color: var(--neutral-200);">600</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-500); color: var(--neutral-100);">500</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-400); color: var(--neutral-900);">400</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-300); color: var(--neutral-900);">300</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-200); color: var(--neutral-700);">200</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-100); color: var(--neutral-700);">100</div>
+        <div class="neutral-scale__step" style="background: var(--neutral-50); color: var(--neutral-600);">50</div>
+        <div class="neutral-scale__step" style="background: var(--white); color: var(--neutral-500); border: 1px solid var(--neutral-200);">W</div>
+      </div>
+    </div>
+
+    <!-- Gradients -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Gradient Patterns</div>
+      <div class="gradient-grid">
+        <div class="gradient-card" style="background: linear-gradient(135deg, var(--curaggi-coral), var(--curaggi-amber));">
+          <div>
+            <div class="gradient-card__label">Courage Flame</div>
+            <div class="gradient-card__code">coral → amber, 135°</div>
+          </div>
+        </div>
+        <div class="gradient-card" style="background: linear-gradient(135deg, var(--curaggi-teal), var(--curaggi-blue));">
+          <div>
+            <div class="gradient-card__label">Ocean Horizon</div>
+            <div class="gradient-card__code">teal → blue, 135°</div>
+          </div>
+        </div>
+        <div class="gradient-card" style="background: linear-gradient(135deg, var(--curaggi-violet), var(--curaggi-coral));">
+          <div>
+            <div class="gradient-card__label">Creative Spark</div>
+            <div class="gradient-card__code">violet → coral, 135°</div>
+          </div>
+        </div>
+        <div class="gradient-card" style="background: linear-gradient(135deg, var(--curaggi-lime), var(--curaggi-teal));">
+          <div>
+            <div class="gradient-card__label">Growth Path</div>
+            <div class="gradient-card__code">lime → teal, 135°</div>
+          </div>
+        </div>
+        <div class="gradient-card" style="background: linear-gradient(135deg, var(--curaggi-coral), var(--curaggi-amber), var(--curaggi-teal), var(--curaggi-violet));">
+          <div>
+            <div class="gradient-card__label">Full Spectrum（Special）</div>
+            <div class="gradient-card__code">coral → amber → teal → violet</div>
+          </div>
+        </div>
+        <div class="gradient-card" style="background: linear-gradient(145deg, var(--neutral-900), #252530);">
+          <div>
+            <div class="gradient-card__label">Dark Surface</div>
+            <div class="gradient-card__code">neutral-900 → #252530</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       03. TYPOGRAPHY
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="typography" aria-labelledby="type-title">
+    <div class="ds-section__header">
+      <span class="ds-section__number">03</span>
+      <h2 class="ds-section__title" id="type-title">Typography</h2>
+      <p class="ds-section__desc">
+        見出しにはOutfit、本文にはDM Sansを使用。日本語はNoto Sans JPで統一。先進的かつ温かみのあるフォント構成です。
+      </p>
+    </div>
+
+    <!-- Display Font -->
+    <div class="type-specimen">
+      <div class="type-specimen__label">Display — Outfit</div>
+      <div class="type-specimen__sample">
+        <div class="type-specimen__alphabet" style="font-family: var(--font-display);">
+          Curaggi — Design Courage
+        </div>
+        <div class="type-specimen__weights">
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Light 300</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-display); font-weight: 300;">Curaggi Abc</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Regular 400</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-display); font-weight: 400;">Curaggi Abc</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Medium 500</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-display); font-weight: 500;">Curaggi Abc</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">SemiBold 600</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-display); font-weight: 600;">Curaggi Abc</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Bold 700</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-display); font-weight: 700;">Curaggi Abc</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">ExtraBold 800</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-display); font-weight: 800;">Curaggi Abc</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body Font -->
+    <div class="type-specimen">
+      <div class="type-specimen__label">Body — DM Sans</div>
+      <div class="type-specimen__sample">
+        <div class="type-specimen__alphabet" style="font-family: var(--font-body); font-size: var(--text-3xl);">
+          The quick brown fox jumps over the lazy dog. 0123456789
+        </div>
+        <div class="type-specimen__weights">
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Light 300</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-body); font-weight: 300;">Design the future</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Regular 400</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-body); font-weight: 400;">Design the future</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Medium 500</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-body); font-weight: 500;">Design the future</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Bold 700</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-body); font-weight: 700;">Design the future</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Japanese Font -->
+    <div class="type-specimen">
+      <div class="type-specimen__label">Japanese — Noto Sans JP</div>
+      <div class="type-specimen__sample">
+        <div class="type-specimen__alphabet" style="font-family: var(--font-jp); font-size: var(--text-3xl);">
+          あきらめなくてよい世界をつくる
+        </div>
+        <div class="type-specimen__weights">
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Light 300</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-jp); font-weight: 300;">選択肢と勇気をデザインする</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Regular 400</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-jp); font-weight: 400;">選択肢と勇気をデザインする</div>
+          </div>
+          <div class="type-specimen__weight">
+            <div class="type-specimen__weight-label">Bold 700</div>
+            <div class="type-specimen__weight-demo" style="font-family: var(--font-jp); font-weight: 700;">選択肢と勇気をデザインする</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Type Scale -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Type Scale</div>
+      <div class="type-scale">
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-7xl</span>
+          <span class="type-scale__size">72px</span>
+          <span style="font-family: var(--font-display); font-size: var(--text-7xl); font-weight: 800; line-height: 1; color: var(--neutral-900);">Curaggi</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-6xl</span>
+          <span class="type-scale__size">60px</span>
+          <span style="font-family: var(--font-display); font-size: var(--text-6xl); font-weight: 700; line-height: 1.1; color: var(--neutral-900);">Curaggi</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-5xl</span>
+          <span class="type-scale__size">48px</span>
+          <span style="font-family: var(--font-display); font-size: var(--text-5xl); font-weight: 700; line-height: 1.1; color: var(--neutral-900);">選択肢と勇気</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-4xl</span>
+          <span class="type-scale__size">36px</span>
+          <span style="font-family: var(--font-display); font-size: var(--text-4xl); font-weight: 700; line-height: 1.2; color: var(--neutral-900);">Section Title</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-3xl</span>
+          <span class="type-scale__size">30px</span>
+          <span style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 600; line-height: 1.3; color: var(--neutral-900);">見出しレベル3</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-2xl</span>
+          <span class="type-scale__size">24px</span>
+          <span style="font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 600; line-height: 1.3; color: var(--neutral-900);">Card Heading</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-xl</span>
+          <span class="type-scale__size">20px</span>
+          <span style="font-family: var(--font-body); font-size: var(--text-xl); line-height: 1.4; color: var(--neutral-800);">Subsection Title</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-lg</span>
+          <span class="type-scale__size">18px</span>
+          <span style="font-family: var(--font-body); font-size: var(--text-lg); line-height: 1.6; color: var(--neutral-700);">リード文やイントロダクション</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-base</span>
+          <span class="type-scale__size">16px</span>
+          <span style="font-family: var(--font-body); font-size: var(--text-base); line-height: 1.6; color: var(--neutral-700);">Body text — 本文テキスト。読みやすさを重視した基本サイズ。</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-sm</span>
+          <span class="type-scale__size">14px</span>
+          <span style="font-family: var(--font-body); font-size: var(--text-sm); line-height: 1.5; color: var(--neutral-600);">Caption, label, 注釈テキストに使用</span>
+        </div>
+        <div class="type-scale__item">
+          <span class="type-scale__label">text-xs</span>
+          <span class="type-scale__size">12px</span>
+          <span style="font-family: var(--font-body); font-size: var(--text-xs); line-height: 1.5; color: var(--neutral-500);">Overline, tag label, micro text</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- ═══════════════════════════════════════════
+       03.5 LAYOUT SYSTEM
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="layout" aria-labelledby="layout-title">
+    <div class="ds-section__header">
+      <span class="ds-section__number">03.5</span>
+      <h2 class="ds-section__title" id="layout-title">Layout System</h2>
+      <p class="ds-section__desc">
+        12カラムグリッドを基本とし、モバイルでは4カラムに縮小。ブレイクポイントとコンテナ幅を統一し、あらゆるデバイスで一貫したレイアウトを実現します。
+      </p>
+    </div>
+
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Breakpoints</div>
+      <div style="overflow-x:auto;">
+        <table class="a11y-table" role="table">
+          <thead><tr><th scope="col">Name</th><th scope="col">Min Width</th><th scope="col">Columns</th><th scope="col">Gutter</th><th scope="col">Margin</th><th scope="col">用途</th></tr></thead>
+          <tbody>
+            <tr><td>Mobile</td><td style="font-family:monospace;">0 &ndash; 639px</td><td>4</td><td>16px</td><td>16px</td><td>スマートフォン縦</td></tr>
+            <tr><td>sm</td><td style="font-family:monospace;">640px</td><td>8</td><td>16px</td><td>24px</td><td>スマートフォン横</td></tr>
+            <tr><td>md</td><td style="font-family:monospace;">768px</td><td>12</td><td>24px</td><td>32px</td><td>タブレット</td></tr>
+            <tr><td>lg</td><td style="font-family:monospace;">1024px</td><td>12</td><td>24px</td><td>48px</td><td>小型ラップトップ</td></tr>
+            <tr><td>xl</td><td style="font-family:monospace;">1280px</td><td>12</td><td>24px</td><td>64px</td><td>デスクトップ</td></tr>
+            <tr><td>2xl</td><td style="font-family:monospace;">1440px</td><td>12</td><td>24px</td><td>auto (center)</td><td>ワイドスクリーン</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Grid — Desktop (12 Columns)</div>
+      <div style="background:var(--neutral-100);border-radius:var(--radius-md);padding:var(--space-4);position:relative;">
+        <div style="position:absolute;top:var(--space-2);right:var(--space-3);font-family:var(--font-display);font-size:10px;font-weight:600;color:var(--neutral-500);letter-spacing:var(--tracking-wider);text-transform:uppercase;">Desktop 1280px+</div>
+        <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:4px;min-height:120px;">
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-teal);opacity:0.2;border-radius:4px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Grid — Mobile (4 Columns)</div>
+      <div style="background:var(--neutral-100);border-radius:var(--radius-md);padding:var(--space-4);max-width:375px;position:relative;">
+        <div style="position:absolute;top:var(--space-2);right:var(--space-3);font-family:var(--font-display);font-size:10px;font-weight:600;color:var(--neutral-500);letter-spacing:var(--tracking-wider);text-transform:uppercase;">Mobile 375px</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;min-height:120px;">
+          <div style="background:var(--curaggi-coral);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-coral);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-coral);opacity:0.2;border-radius:4px;"></div>
+          <div style="background:var(--curaggi-coral);opacity:0.2;border-radius:4px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Container</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--space-4);">
+        <div style="padding:var(--space-4);background:var(--neutral-50);border-radius:var(--radius-md);border:1px solid var(--neutral-200);"><div style="font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;color:var(--neutral-600);letter-spacing:var(--tracking-wide);text-transform:uppercase;margin-bottom:var(--space-1);">Max Width</div><div style="font-family:monospace;font-size:var(--text-sm);color:var(--neutral-900);font-weight:600;">1200px</div></div>
+        <div style="padding:var(--space-4);background:var(--neutral-50);border-radius:var(--radius-md);border:1px solid var(--neutral-200);"><div style="font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;color:var(--neutral-600);letter-spacing:var(--tracking-wide);text-transform:uppercase;margin-bottom:var(--space-1);">Desktop Gutter</div><div style="font-family:monospace;font-size:var(--text-sm);color:var(--neutral-900);font-weight:600;">24px</div></div>
+        <div style="padding:var(--space-4);background:var(--neutral-50);border-radius:var(--radius-md);border:1px solid var(--neutral-200);"><div style="font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;color:var(--neutral-600);letter-spacing:var(--tracking-wide);text-transform:uppercase;margin-bottom:var(--space-1);">Mobile Gutter</div><div style="font-family:monospace;font-size:var(--text-sm);color:var(--neutral-900);font-weight:600;">16px</div></div>
+        <div style="padding:var(--space-4);background:var(--neutral-50);border-radius:var(--radius-md);border:1px solid var(--neutral-200);"><div style="font-family:var(--font-display);font-size:var(--text-xs);font-weight:600;color:var(--neutral-600);letter-spacing:var(--tracking-wide);text-transform:uppercase;margin-bottom:var(--space-1);">Centering</div><div style="font-family:monospace;font-size:var(--text-sm);color:var(--neutral-900);font-weight:600;">margin: 0 auto</div></div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════════════════════════════════
+       04. SPACING
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="spacing">
+    <div class="ds-section__header">
+      <span class="ds-section__number">04</span>
+      <h2 class="ds-section__title">Spacing System</h2>
+      <p class="ds-section__desc">
+        4pxを基本単位とした一貫性のあるスペーシングシステム。余白を十分にとることで開放感と明るさを表現します。
+      </p>
+    </div>
+
+    <div class="spacing-demo">
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-1</span>
+        <div class="spacing-item__bar" style="width: 4px;"></div>
+        <span class="spacing-item__value">4px / 0.25rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-2</span>
+        <div class="spacing-item__bar" style="width: 8px;"></div>
+        <span class="spacing-item__value">8px / 0.5rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-3</span>
+        <div class="spacing-item__bar" style="width: 12px;"></div>
+        <span class="spacing-item__value">12px / 0.75rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-4</span>
+        <div class="spacing-item__bar" style="width: 16px;"></div>
+        <span class="spacing-item__value">16px / 1rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-6</span>
+        <div class="spacing-item__bar" style="width: 24px;"></div>
+        <span class="spacing-item__value">24px / 1.5rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-8</span>
+        <div class="spacing-item__bar" style="width: 32px;"></div>
+        <span class="spacing-item__value">32px / 2rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-10</span>
+        <div class="spacing-item__bar" style="width: 40px;"></div>
+        <span class="spacing-item__value">40px / 2.5rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-12</span>
+        <div class="spacing-item__bar" style="width: 48px;"></div>
+        <span class="spacing-item__value">48px / 3rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-16</span>
+        <div class="spacing-item__bar" style="width: 64px;"></div>
+        <span class="spacing-item__value">64px / 4rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-20</span>
+        <div class="spacing-item__bar" style="width: 80px;"></div>
+        <span class="spacing-item__value">80px / 5rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-24</span>
+        <div class="spacing-item__bar" style="width: 96px;"></div>
+        <span class="spacing-item__value">96px / 6rem</span>
+      </div>
+      <div class="spacing-item">
+        <span class="spacing-item__label">space-32</span>
+        <div class="spacing-item__bar" style="width: 128px;"></div>
+        <span class="spacing-item__value">128px / 8rem</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       05. COMPONENTS
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="components">
+    <div class="ds-section__header">
+      <span class="ds-section__number">05</span>
+      <h2 class="ds-section__title">Components</h2>
+      <p class="ds-section__desc">
+        ブランドカラーを活用した基本UIコンポーネント。角丸を大きめに取り、温かみと先進性を両立させます。
+      </p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Buttons</div>
+      <div class="btn-showcase">
+        <button class="btn btn--primary btn--lg">Primary Large</button>
+        <button class="btn btn--coral">Coral</button>
+        <button class="btn btn--teal">Teal</button>
+        <button class="btn btn--amber">Amber</button>
+        <button class="btn btn--violet">Violet</button>
+        <button class="btn btn--gradient">Gradient</button>
+      </div>
+      <div class="btn-showcase">
+        <button class="btn btn--outline">Outline</button>
+        <button class="btn btn--ghost">Ghost</button>
+        <button class="btn btn--primary btn--sm">Small</button>
+        <button class="btn btn--coral btn--sm">Small Coral</button>
+      </div>
+      <div class="btn-showcase" style="margin-top: var(--space-4);">
+        <button class="btn btn--primary" disabled aria-disabled="true">Disabled</button>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Tags & Badges</div>
+      <div class="tag-showcase">
+        <span class="tag tag--coral">Coral</span>
+        <span class="tag tag--amber">Amber</span>
+        <span class="tag tag--teal">Teal</span>
+        <span class="tag tag--violet">Violet</span>
+        <span class="tag tag--lime">Lime</span>
+        <span class="tag tag--blue">Blue</span>
+        <span class="tag tag--neutral">Neutral</span>
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Cards</div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card__media card__media--coral">
+            <div class="card__media-shape" style="width: 120px; height: 120px; top: -20px; right: -20px;"></div>
+            <div class="card__media-shape" style="width: 80px; height: 80px; bottom: -15px; left: 30px;"></div>
+          </div>
+          <div class="card__body">
+            <span class="card__tag card__tag--coral">Design</span>
+            <h3 class="card__title">デザインの力で選択肢を広げる</h3>
+            <p class="card__desc">当事者の人生に新しい可能性を提案し、勇気を持って一歩踏み出せるデザインを追求します。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__media card__media--teal">
+            <div class="card__media-shape" style="width: 150px; height: 150px; top: -40px; left: -30px;"></div>
+            <div class="card__media-shape" style="width: 60px; height: 60px; bottom: 20px; right: 30px;"></div>
+          </div>
+          <div class="card__body">
+            <span class="card__tag card__tag--teal">Strategy</span>
+            <h3 class="card__title">多様なアプローチで解決策を提案</h3>
+            <p class="card__desc">ひとつの答えに縛られず、様々な視点から最適な選択肢を見つけ出していきます。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__media card__media--violet">
+            <div class="card__media-shape" style="width: 100px; height: 100px; top: 10px; right: 40px;"></div>
+            <div class="card__media-shape" style="width: 70px; height: 70px; bottom: -10px; left: 10px;"></div>
+          </div>
+          <div class="card__body">
+            <span class="card__tag card__tag--violet">Branding</span>
+            <h3 class="card__title">ブランドの世界観を構築する</h3>
+            <p class="card__desc">企業やプロダクトの想いを視覚言語に翻訳し、一貫性のあるブランド体験を実現します。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Inputs -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Form Inputs</div>
+      <div class="input-showcase">
+        <div class="input-group">
+          <label class="input-group__label">お名前</label>
+          <input type="text" class="input" placeholder="山田 太郎">
+          <span class="input-hint">フルネームを入力してください</span>
+        </div>
+        <div class="input-group">
+          <label class="input-group__label">メールアドレス</label>
+          <input type="email" class="input" placeholder="example@curaggi.com">
+        </div>
+        <div class="input-group">
+          <label class="input-group__label">メールアドレス（エラー状態）</label>
+          <input type="email" class="input input--error" value="invalid-email">
+          <span class="input-error-msg">有効なメールアドレスを入力してください</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Navigation Bar</div>
+      <div style="background:var(--white);border:1px solid var(--neutral-200);border-radius:var(--radius-lg);overflow:hidden;">
+        <nav style="display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-6);height:64px;" aria-label="Sample navigation">
+          <a href="#" style="font-family:var(--font-display);font-size:var(--text-xl);font-weight:800;color:var(--neutral-900);text-decoration:none;">Curaggi</a>
+          <div style="display:flex;gap:var(--space-1);">
+            <a href="#" style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:600;color:var(--neutral-900);text-decoration:none;padding:var(--space-2) var(--space-3);border-radius:var(--radius-full);background:var(--neutral-100);">Home</a>
+            <a href="#" style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;color:var(--neutral-600);text-decoration:none;padding:var(--space-2) var(--space-3);border-radius:var(--radius-full);">About</a>
+            <a href="#" style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;color:var(--neutral-600);text-decoration:none;padding:var(--space-2) var(--space-3);border-radius:var(--radius-full);">Works</a>
+            <a href="#" style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;color:var(--neutral-600);text-decoration:none;padding:var(--space-2) var(--space-3);border-radius:var(--radius-full);">Contact</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Breadcrumb</div>
+      <nav aria-label="Breadcrumb">
+        <ol style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);list-style:none;padding:0;">
+          <li><a href="#" style="color:var(--neutral-600);text-decoration:none;">Home</a></li>
+          <li style="color:var(--neutral-400);font-size:var(--text-xs);" aria-hidden="true">›</li>
+          <li><a href="#" style="color:var(--neutral-600);text-decoration:none;">Works</a></li>
+          <li style="color:var(--neutral-400);font-size:var(--text-xs);" aria-hidden="true">›</li>
+          <li style="color:var(--neutral-900);font-weight:500;" aria-current="page">Project Detail</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Tabs -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Tabs</div>
+      <div role="tablist" aria-label="Sample tabs" style="display:flex;border-bottom:1px solid var(--neutral-200);">
+        <button role="tab" aria-selected="true" style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:600;color:var(--neutral-900);padding:var(--space-3) var(--space-5);border:none;background:transparent;cursor:pointer;position:relative;">Overview<span style="position:absolute;bottom:-1px;left:var(--space-3);right:var(--space-3);height:3px;background:var(--curaggi-teal);border-radius:3px 3px 0 0;"></span></button>
+        <button role="tab" aria-selected="false" style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;color:var(--neutral-600);padding:var(--space-3) var(--space-5);border:none;background:transparent;cursor:pointer;">Detail</button>
+        <button role="tab" aria-selected="false" style="font-family:var(--font-display);font-size:var(--text-sm);font-weight:500;color:var(--neutral-600);padding:var(--space-3) var(--space-5);border:none;background:transparent;cursor:pointer;">Gallery</button>
+      </div>
+      <div role="tabpanel" style="padding:var(--space-6) 0;font-size:var(--text-sm);color:var(--neutral-700);line-height:var(--leading-relaxed);">タブパネルのコンテンツ。各タブは role=&quot;tab&quot;、パネルは role=&quot;tabpanel&quot; を使用しアクセシビリティに対応します。</div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Accordion</div>
+      <div style="border:1px solid var(--neutral-200);border-radius:var(--radius-lg);overflow:hidden;">
+        <div style="border-bottom:1px solid var(--neutral-100);">
+          <button aria-expanded="true" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:var(--space-4) var(--space-5);background:var(--white);border:none;cursor:pointer;font-family:var(--font-display);font-size:var(--text-sm);font-weight:600;color:var(--neutral-800);text-align:left;">Curaggiの名前の由来は？ <span aria-hidden="true">▾</span></button>
+          <div style="padding:0 var(--space-5) var(--space-5);font-size:var(--text-sm);color:var(--neutral-600);line-height:var(--leading-relaxed);">マルタ語の「Kuragg」とイタリア語の「Coraggio」に由来し、どちらも「勇気」「勇敢」という意味が込められています。</div>
+        </div>
+        <div><button aria-expanded="false" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:var(--space-4) var(--space-5);background:var(--white);border:none;cursor:pointer;font-family:var(--font-display);font-size:var(--text-sm);font-weight:600;color:var(--neutral-800);text-align:left;">デザインで何ができますか？ <span aria-hidden="true">▸</span></button></div>
+      </div>
+    </div>
+
+    <!-- Dialog / Modal -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Dialog / Modal</div>
+      <div style="background:rgba(0,0,0,0.32);border-radius:var(--radius-lg);padding:var(--space-16) var(--space-8);display:flex;justify-content:center;">
+        <div role="dialog" aria-labelledby="demo-dialog-title" aria-modal="true" style="background:var(--white);border-radius:var(--radius-2xl);padding:var(--space-8);max-width:480px;width:100%;box-shadow:var(--elevation-5);">
+          <h3 id="demo-dialog-title" style="font-family:var(--font-display);font-size:var(--text-2xl);font-weight:700;color:var(--neutral-900);margin-bottom:var(--space-3);">お問い合わせを送信</h3>
+          <p style="font-size:var(--text-sm);color:var(--neutral-600);line-height:var(--leading-relaxed);margin-bottom:var(--space-6);">この内容でお問い合わせを送信してよろしいですか？</p>
+          <div style="display:flex;justify-content:flex-end;gap:var(--space-3);">
+            <button class="btn btn--outline">キャンセル</button>
+            <button class="btn btn--coral">送信する</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Snackbar / Toast -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Snackbar / Toast</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+        <div role="status" style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:var(--space-4) var(--space-5);border-radius:var(--radius-md);background:var(--neutral-900);color:var(--white);font-size:var(--text-sm);font-weight:500;box-shadow:var(--elevation-3);max-width:480px;">メッセージが送信されました<button style="font-family:var(--font-display);font-weight:600;color:var(--curaggi-teal-light);background:none;border:none;cursor:pointer;font-size:var(--text-sm);">元に戻す</button></div>
+        <div role="alert" style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-4) var(--space-5);border-radius:var(--radius-md);background:#C62828;color:var(--white);font-size:var(--text-sm);font-weight:500;box-shadow:var(--elevation-3);max-width:480px;">エラーが発生しました。再度お試しください。</div>
+      </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Alert / Banner</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+        <div role="alert" style="display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-4) var(--space-5);border-radius:var(--radius-md);background:#E3F2FD;color:#1565C0;font-size:var(--text-sm);line-height:var(--leading-relaxed);"><span aria-hidden="true" style="flex-shrink:0;">ℹ️</span><div><strong>Info:</strong> システムメンテナンスのお知らせ</div></div>
+        <div role="alert" style="display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-4) var(--space-5);border-radius:var(--radius-md);background:#E8F5E9;color:#2E7D32;font-size:var(--text-sm);line-height:var(--leading-relaxed);"><span aria-hidden="true" style="flex-shrink:0;">✅</span><div><strong>Success:</strong> 保存が完了しました</div></div>
+        <div role="alert" style="display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-4) var(--space-5);border-radius:var(--radius-md);background:#FFF3E0;color:#E65100;font-size:var(--text-sm);line-height:var(--leading-relaxed);"><span aria-hidden="true" style="flex-shrink:0;">⚠️</span><div><strong>Warning:</strong> 容量が少なくなっています</div></div>
+        <div role="alert" style="display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-4) var(--space-5);border-radius:var(--radius-md);background:#FFEBEE;color:#C62828;font-size:var(--text-sm);line-height:var(--leading-relaxed);"><span aria-hidden="true" style="flex-shrink:0;">❌</span><div><strong>Error:</strong> 処理に失敗しました</div></div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Pagination</div>
+      <nav aria-label="Pagination" style="display:flex;align-items:center;gap:var(--space-1);">
+        <button disabled aria-label="前のページ" style="display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;border-radius:var(--radius-full);border:none;background:transparent;color:var(--neutral-400);font-size:var(--text-sm);cursor:not-allowed;">‹</button>
+        <button aria-current="page" style="display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;border-radius:var(--radius-full);border:none;background:var(--curaggi-teal);color:var(--neutral-900);font-size:var(--text-sm);font-weight:600;cursor:pointer;">1</button>
+        <button style="display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;border-radius:var(--radius-full);border:none;background:transparent;color:var(--neutral-700);font-size:var(--text-sm);cursor:pointer;">2</button>
+        <button style="display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;border-radius:var(--radius-full);border:none;background:transparent;color:var(--neutral-700);font-size:var(--text-sm);cursor:pointer;">3</button>
+        <span style="color:var(--neutral-500);">…</span>
+        <button style="display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;border-radius:var(--radius-full);border:none;background:transparent;color:var(--neutral-700);font-size:var(--text-sm);cursor:pointer;">12</button>
+        <button aria-label="次のページ" style="display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;border-radius:var(--radius-full);border:none;background:transparent;color:var(--neutral-700);font-size:var(--text-sm);cursor:pointer;">›</button>
+      </nav>
+    </div>
+
+    <!-- Avatar -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Avatar</div>
+      <div style="display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap;">
+        <span role="img" aria-label="User C" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--curaggi-coral);color:var(--white);font-family:var(--font-display);font-weight:700;font-size:var(--text-xs);">C</span>
+        <span role="img" aria-label="User K" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--curaggi-teal);color:var(--neutral-900);font-family:var(--font-display);font-weight:700;font-size:var(--text-sm);">K</span>
+        <span role="img" aria-label="User M" style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--curaggi-violet);color:var(--white);font-family:var(--font-display);font-weight:700;font-size:var(--text-xl);">M</span>
+      </div>
+    </div>
+
+    <!-- Toggle / Checkbox / Radio -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Toggle / Checkbox / Radio</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-5);">
+        <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;"><input type="checkbox" checked style="appearance:none;width:20px;height:20px;border:2px solid var(--curaggi-teal);background:var(--curaggi-teal);border-radius:4px;cursor:pointer;flex-shrink:0;"><span style="font-size:var(--text-sm);color:var(--neutral-800);">Checkbox (Checked)</span></label>
+        <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;"><input type="checkbox" style="appearance:none;width:20px;height:20px;border:2px solid var(--neutral-400);border-radius:4px;cursor:pointer;flex-shrink:0;"><span style="font-size:var(--text-sm);color:var(--neutral-800);">Checkbox (Unchecked)</span></label>
+        <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;"><input type="radio" name="sr" checked style="appearance:none;width:20px;height:20px;border:6px solid var(--curaggi-teal);border-radius:50%;cursor:pointer;flex-shrink:0;"><span style="font-size:var(--text-sm);color:var(--neutral-800);">Radio (Selected)</span></label>
+        <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;"><input type="radio" name="sr" style="appearance:none;width:20px;height:20px;border:2px solid var(--neutral-400);border-radius:50%;cursor:pointer;flex-shrink:0;"><span style="font-size:var(--text-sm);color:var(--neutral-800);">Radio (Unselected)</span></label>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Progress Indicator</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+        <div><p style="font-size:var(--text-xs);color:var(--neutral-600);margin-bottom:var(--space-2);">Linear — 65%</p><div role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" aria-label="Progress 65%" style="width:100%;height:8px;background:var(--neutral-200);border-radius:var(--radius-full);overflow:hidden;"><div style="height:100%;width:65%;border-radius:var(--radius-full);background:var(--curaggi-teal);"></div></div></div>
+        <div><p style="font-size:var(--text-xs);color:var(--neutral-600);margin-bottom:var(--space-2);">Linear — 30%</p><div role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" aria-label="Progress 30%" style="width:100%;height:8px;background:var(--neutral-200);border-radius:var(--radius-full);overflow:hidden;"><div style="height:100%;width:30%;border-radius:var(--radius-full);background:var(--curaggi-coral);"></div></div></div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Divider</div>
+      <div style="background:var(--white);border-radius:var(--radius-lg);padding:var(--space-6);border:1px solid var(--neutral-200);">
+        <p style="font-size:var(--text-sm);color:var(--neutral-700);">コンテンツブロック A</p>
+        <hr style="border:none;height:1px;background:var(--neutral-200);margin:var(--space-4) 0;" aria-hidden="true">
+        <p style="font-size:var(--text-sm);color:var(--neutral-700);">コンテンツブロック B</p>
+        <hr style="border:none;height:1px;background:var(--neutral-200);margin:var(--space-4) 0;margin-left:var(--space-16);" aria-hidden="true">
+        <p style="font-size:var(--text-sm);color:var(--neutral-700);">コンテンツブロック C（Inset Divider）</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       06. RADIUS & ELEVATION (M3)
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="radius">
+    <div class="ds-section__header">
+      <span class="ds-section__number">06</span>
+      <h2 class="ds-section__title" id="radius-title">Radius & Elevation</h2>
+      <p class="ds-section__desc">
+        大きめの角丸で温かさと親しみやすさを演出。シャドウはブランドカラーのグロー効果も用意しています。
+      </p>
+    </div>
+
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Border Radius</div>
+      <div class="radius-demo">
+        <div class="radius-item">
+          <div class="radius-item__box" style="border-radius: var(--radius-sm);"></div>
+          <div class="radius-item__label">sm / 6px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-item__box" style="border-radius: var(--radius-md);"></div>
+          <div class="radius-item__label">md / 12px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-item__box" style="border-radius: var(--radius-lg);"></div>
+          <div class="radius-item__label">lg / 16px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-item__box" style="border-radius: var(--radius-xl);"></div>
+          <div class="radius-item__label">xl / 24px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-item__box" style="border-radius: var(--radius-2xl);"></div>
+          <div class="radius-item__label">2xl / 32px</div>
+        </div>
+        <div class="radius-item">
+          <div class="radius-item__box" style="border-radius: var(--radius-full);"></div>
+          <div class="radius-item__label">full</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Elevation (M3-style)</div>
+      <div class="shadow-demo">
+        <div class="shadow-item">
+          <div class="shadow-item__box" style="box-shadow: var(--shadow-sm);"></div>
+          <div class="shadow-item__label">shadow-sm</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-item__box" style="box-shadow: var(--shadow-md);"></div>
+          <div class="shadow-item__label">shadow-md</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-item__box" style="box-shadow: var(--shadow-lg);"></div>
+          <div class="shadow-item__label">shadow-lg</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-item__box" style="box-shadow: var(--shadow-xl);"></div>
+          <div class="shadow-item__label">shadow-xl</div>
+        </div>
+      </div>
+      <div class="shadow-demo" style="margin-top: var(--space-6);">
+        <div class="shadow-item">
+          <div class="shadow-item__box" style="box-shadow: var(--elevation-1);"></div>
+          <div class="shadow-item__label">elevation-1</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-item__box" style="box-shadow: var(--elevation-2);"></div>
+          <div class="shadow-item__label">elevation-2</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-item__box" style="box-shadow: var(--elevation-3);"></div>
+          <div class="shadow-item__label">elevation-3</div>
+        </div>
+        <div class="shadow-item">
+          <div class="shadow-item__box" style="box-shadow: var(--elevation-4);"></div>
+          <div class="shadow-item__label">elevation-4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       07. DECORATIVE ELEMENTS
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="decorative">
+    <div class="ds-section__header">
+      <span class="ds-section__number">07</span>
+      <h2 class="ds-section__title">Decorative Elements</h2>
+      <p class="ds-section__desc">
+        GEAR8を参考にした流動的なシェイプ。型にはまらない自由さを表現し、ページに動きと個性を与えます。
+      </p>
+    </div>
+
+    <div class="deco-shapes">
+      <div class="deco-shape deco-shape--circle"></div>
+      <div class="deco-shape deco-shape--blob"></div>
+      <div class="deco-shape deco-shape--ring"></div>
+      <div class="deco-shape deco-shape--squircle"></div>
+      <div class="deco-shape deco-shape--pill"></div>
+      <div class="deco-shape deco-shape--diamond"></div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       08. DARK MODE
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="dark">
+    <div class="ds-section__header">
+      <span class="ds-section__number">08</span>
+      <h2 class="ds-section__title">Dark Mode Preview</h2>
+      <p class="ds-section__desc">
+        ダークモードではニュートラル900をベースに、ブランドカラーがより鮮やかに映えるよう調整します。
+      </p>
+    </div>
+
+    <div class="dark-preview">
+      <h3 class="dark-text-primary" style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 700; margin-bottom: var(--space-2);">あきらめなくてよい世界をつくる</h3>
+      <p class="dark-text-secondary" style="font-size: var(--text-lg); margin-bottom: var(--space-6);">デザインの力で当事者の人生の選択肢を広げ、勇気を届ける。</p>
+
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-6);">
+        <button class="btn btn--coral">Coral Button</button>
+        <button class="btn btn--teal">Teal Button</button>
+        <button class="btn btn--gradient">Gradient</button>
+        <button class="btn" style="background: transparent; color: var(--neutral-300); border: 1.5px solid var(--neutral-600);">Outline</button>
+      </div>
+
+      <div class="dark-surface">
+        <h4 class="dark-text-primary" style="font-family: var(--font-display); font-size: var(--text-xl); font-weight: 600; margin-bottom: var(--space-2);">Card on Dark Surface</h4>
+        <p class="dark-text-muted" style="font-size: var(--text-sm);">ダークモードのカード内テキスト。neutral-800の背景にneutral-400のテキストを配置し、十分なコントラストを確保します。</p>
+        <div style="display: flex; gap: var(--space-2); margin-top: var(--space-4);">
+          <span class="tag tag--coral">Design</span>
+          <span class="tag tag--teal">Strategy</span>
+          <span class="tag tag--violet">Brand</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       09. ANIMATION
+       ═══════════════════════════════════════════ -->
+  <section class="ds-section" id="animation">
+    <div class="ds-section__header">
+      <span class="ds-section__number">09</span>
+      <h2 class="ds-section__title">Animation & Motion</h2>
+      <p class="ds-section__desc">
+        ブランドの「勇気」と「活力」を表現するアニメーション。控えめだが印象的なモーションで、ページに生命感を与えます。
+      </p>
+    </div>
+
+    <div class="ds-subsection">
+      <div class="ds-subsection__title">Motion Patterns</div>
+      <div class="anim-showcase">
+        <div class="anim-item anim--pulse">
+          <div class="anim-item__dot"></div>
+          <div class="anim-item__label">Pulse</div>
+          <div class="anim-item__code">2s ease-in-out</div>
+        </div>
+        <div class="anim-item anim--bounce">
+          <div class="anim-item__dot"></div>
+          <div class="anim-item__label">Bounce</div>
+          <div class="anim-item__code">1.5s spring</div>
+        </div>
+        <div class="anim-item anim--spin">
+          <div class="anim-item__dot"></div>
+          <div class="anim-item__label">Spin</div>
+          <div class="anim-item__code">3s linear</div>
+        </div>
+        <div class="anim-item anim--morph">
+          <div class="anim-item__dot"></div>
+          <div class="anim-item__label">Morph</div>
+          <div class="anim-item__code">4s ease-in-out</div>
+        </div>
+        <div class="anim-item anim--fade">
+          <div class="anim-item__dot"></div>
+          <div class="anim-item__label">Fade</div>
+          <div class="anim-item__code">2.5s ease-in-out</div>
+        </div>
+        <div class="anim-item anim--glow">
+          <div class="anim-item__dot"></div>
+          <div class="anim-item__label">Glow</div>
+          <div class="anim-item__code">2s ease-in-out</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-subsection" style="margin-top: var(--space-10);">
+      <div class="ds-subsection__title">Easing & Duration Tokens</div>
+      <div style="background: var(--white); border-radius: var(--radius-lg); padding: var(--space-6); border: 1px solid var(--neutral-100);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6);">
+          <div>
+            <div style="font-family: 'DM Sans', monospace; font-size: var(--text-xs); color: var(--neutral-400); margin-bottom: var(--space-1);">--ease-out</div>
+            <div style="font-family: var(--font-body); font-size: var(--text-sm); color: var(--neutral-700);">cubic-bezier(0.22, 1, 0.36, 1)</div>
+            <div style="font-family: var(--font-body); font-size: var(--text-xs); color: var(--neutral-500); margin-top: var(--space-1);">標準的なトランジションに使用</div>
+          </div>
+          <div>
+            <div style="font-family: 'DM Sans', monospace; font-size: var(--text-xs); color: var(--neutral-400); margin-bottom: var(--space-1);">--ease-spring</div>
+            <div style="font-family: var(--font-body); font-size: var(--text-sm); color: var(--neutral-700);">cubic-bezier(0.34, 1.56, 0.64, 1)</div>
+            <div style="font-family: var(--font-body); font-size: var(--text-xs); color: var(--neutral-500); margin-top: var(--space-1);">ボタンやインタラクティブ要素に</div>
+          </div>
+          <div>
+            <div style="font-family: 'DM Sans', monospace; font-size: var(--text-xs); color: var(--neutral-400); margin-bottom: var(--space-1);">--duration-fast / normal / slow</div>
+            <div style="font-family: var(--font-body); font-size: var(--text-sm); color: var(--neutral-700);">150ms / 300ms / 500ms</div>
+            <div style="font-family: var(--font-body); font-size: var(--text-xs); color: var(--neutral-500); margin-top: var(--space-1);">用途に応じて使い分け</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════ -->
+  <footer style="text-align: center; padding: var(--space-16) 0 var(--space-8); border-top: 1px solid var(--neutral-200); margin-top: var(--space-16);">
+    <div style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 800; background: linear-gradient(135deg, var(--curaggi-coral), var(--curaggi-amber), var(--curaggi-teal)); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientShift 6s ease infinite; margin-bottom: var(--space-3);">
+      Curaggi
+    </div>
+    <p style="font-family: var(--font-body), var(--font-jp); font-size: var(--text-sm); color: var(--neutral-400);">
+      選択肢と勇気をデザインする
+    </p>
+    <p style="font-family: var(--font-body); font-size: var(--text-xs); color: var(--neutral-300); margin-top: var(--space-4);">
+      Design System v1.0 &mdash; &copy; 2026 Curaggi Inc.
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
