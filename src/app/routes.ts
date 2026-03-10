@@ -22,5 +22,5 @@ export const router = createBrowserRouter([
     ],
   },
 ], {
-  basename: "/curaggi",
+  basename: "/",
 });
