@@ -51,22 +51,22 @@ const formationScatter: Formation = (i, _total, w, h) => ({
 });
 
 const formationCircle: Formation = (i, total, w, h) => {
-  const maxR = Math.min(w, h) * 0.45;
-  const minR = maxR * 0.12;
-  // Radial angle with subtle streaking (ray-like structure)
-  const baseAngle = seededRandom(i * 2 + 500) * Math.PI * 2;
-  const rayCount = 32;
-  const nearestRay = Math.round(baseAngle / (Math.PI * 2) * rayCount);
-  const rayAngle = (nearestRay / rayCount) * Math.PI * 2;
-  const streakBlend = 0.12 + seededRandom(i * 2 + 777) * 0.08;
-  const angle = baseAngle * (1 - streakBlend) + rayAngle * streakBlend;
-  // Distance: hollow center, dense outside (inverted power distribution)
-  const rawDist = seededRandom(i * 2 + 501);
-  const dist = minR + Math.pow(rawDist, 0.3) * (maxR - minR);
-  // Radius scale: larger toward outside
-  const distRatio = (dist - minR) / (maxR - minR);
-  const rScale = 0.4 + distRatio * 2.2;
-  return { x: w / 2 + Math.cos(angle) * dist, y: h / 2 + Math.sin(angle) * dist, rScale };
+  const mainR = Math.min(w, h) * 0.38;
+  const minR = mainR * 0.12;
+  const outerR = Math.max(w, h) * 0.55;
+  const angle = seededRandom(i * 2 + 500) * Math.PI * 2;
+  // 80% in main circle (hollow center, dense outside), 20% outer scatter
+  const isOuter = seededRandom(i * 2 + 999) < 0.2;
+  let dist: number;
+  if (isOuter) {
+    // Sparse particles beyond main circle, out to ~800px from center
+    dist = mainR + seededRandom(i * 2 + 501) * (outerR - mainR);
+  } else {
+    // Main circle: hollow center, dense outside
+    const rawDist = seededRandom(i * 2 + 501);
+    dist = minR + Math.pow(rawDist, 0.3) * (mainR - minR);
+  }
+  return { x: w / 2 + Math.cos(angle) * dist, y: h / 2 + Math.sin(angle) * dist };
 };
 
 const formationGrid: Formation = (i, total, w, h) => {
