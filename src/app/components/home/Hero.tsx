@@ -1,4 +1,4 @@
-import { BackgroundShapes } from "./BackgroundShapes";
+import { ParticleCanvas } from "./ParticleCanvas";
 import { useState, useEffect } from "react";
 
 export function Hero() {
@@ -25,7 +25,7 @@ export function Hero() {
         zIndex: 2,
       }}
     >
-      <BackgroundShapes />
+      <ParticleCanvas />
 
       <div
         className="container"
@@ -128,7 +128,7 @@ export function Hero() {
 
         {/* Service Link Button */}
         <div style={{ marginTop: "var(--space-12)", textAlign: "center" }}>
-          <a href="/curaggi/service" className="btn btn--gradient btn--lg">
+          <a href="/service" className="btn btn--gradient btn--lg">
             事業領域へ
           </a>
         </div>
