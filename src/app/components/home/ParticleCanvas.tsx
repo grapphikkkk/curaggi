@@ -12,7 +12,7 @@ interface Particle {
   x: number; y: number;
   targetX: number; targetY: number;
   originX: number; originY: number;
-  color: string; radius: number; opacity: number; speed: number;
+  color: string; baseRadius: number; radius: number; radiusScale: number; targetRadiusScale: number; opacity: number; speed: number;
   driftAngle: number; driftSpeed: number; driftRadius: number;
 }
 
@@ -25,7 +25,7 @@ interface AnimState {
   globalTime: number;
 }
 
-type Formation = (i: number, total: number, w: number, h: number) => { x: number; y: number };
+type Formation = (i: number, total: number, w: number, h: number) => { x: number; y: number; rScale?: number };
 
 function mulberry32(seed: number): () => number {
   return () => {
@@ -51,11 +51,22 @@ const formationScatter: Formation = (i, _total, w, h) => ({
 });
 
 const formationCircle: Formation = (i, total, w, h) => {
-  const angle = seededRandom(i * 2 + 500) * Math.PI * 2;
-  const maxR = Math.min(w, h) * 0.38;
+  const maxR = Math.min(w, h) * 0.45;
+  const minR = maxR * 0.12;
+  // Radial angle with subtle streaking (ray-like structure)
+  const baseAngle = seededRandom(i * 2 + 500) * Math.PI * 2;
+  const rayCount = 32;
+  const nearestRay = Math.round(baseAngle / (Math.PI * 2) * rayCount);
+  const rayAngle = (nearestRay / rayCount) * Math.PI * 2;
+  const streakBlend = 0.12 + seededRandom(i * 2 + 777) * 0.08;
+  const angle = baseAngle * (1 - streakBlend) + rayAngle * streakBlend;
+  // Distance: hollow center, dense outside (inverted power distribution)
   const rawDist = seededRandom(i * 2 + 501);
-  const dist = Math.pow(rawDist, 0.7) * maxR;
-  return { x: w / 2 + Math.cos(angle) * dist, y: h / 2 + Math.sin(angle) * dist };
+  const dist = minR + Math.pow(rawDist, 0.3) * (maxR - minR);
+  // Radius scale: larger toward outside
+  const distRatio = (dist - minR) / (maxR - minR);
+  const rScale = 0.4 + distRatio * 2.2;
+  return { x: w / 2 + Math.cos(angle) * dist, y: h / 2 + Math.sin(angle) * dist, rScale };
 };
 
 const formationGrid: Formation = (i, total, w, h) => {
@@ -72,17 +83,6 @@ const formationGrid: Formation = (i, total, w, h) => {
   const jitterX = (seededRandom(i * 17) - 0.5) * cellW * 0.8;
   const jitterY = (seededRandom(i * 19) - 0.5) * cellH * 0.8;
   return { x: offsetX + col * cellW + cellW / 2 + jitterX, y: offsetY + row * cellH + cellH / 2 + jitterY };
-};
-
-const formationCluster: Formation = (i, _total, w, h) => {
-  const clusterCount = 6;
-  const clusterIndex = i % clusterCount;
-  const cx = seededRandom(clusterIndex * 100) * w * 0.7 + w * 0.15;
-  const cy = seededRandom(clusterIndex * 100 + 1) * h * 0.7 + h * 0.15;
-  const angle = seededRandom(i * 3) * Math.PI * 2;
-  const rawDist = seededRandom(i * 3 + 1);
-  const dist = Math.pow(rawDist, 0.6) * Math.min(w, h) * 0.18;
-  return { x: cx + Math.cos(angle) * dist, y: cy + Math.sin(angle) * dist };
 };
 
 const formationWave: Formation = (i, total, w, h) => {
@@ -103,7 +103,7 @@ const formationWave: Formation = (i, total, w, h) => {
   };
 };
 
-const formations: Formation[] = [formationScatter, formationCircle, formationGrid, formationCluster, formationWave];
+const formations: Formation[] = [formationScatter, formationCircle, formationGrid, formationWave];
 // Color Resolution
 
 function resolveColors(): string[] {
@@ -131,7 +131,10 @@ function createParticles(count: number, w: number, h: number, colors: string[]):
     particles.push({
       x: pos.x, y: pos.y, targetX: pos.x, targetY: pos.y, originX: pos.x, originY: pos.y,
       color: colors[colorIndex] || "#7C7C8A",
+      baseRadius: 1.5 + seededRandom(i * 5) * 1.0,
       radius: 1.5 + seededRandom(i * 5) * 1.0,
+      radiusScale: 1.0,
+      targetRadiusScale: 1.0,
       opacity: isNeutral ? 0.15 + seededRandom(i * 11) * 0.35 : 0.2 + seededRandom(i * 11) * 0.4,
       speed: 0.85 + seededRandom(i * 13) * 0.3,
       driftAngle: seededRandom(i * 41) * Math.PI * 2,
@@ -156,7 +159,7 @@ function drawParticles(ctx: CanvasRenderingContext2D, particles: Particle[], w: 
     for (const p of group) {
       ctx.globalAlpha = p.opacity;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, p.baseRadius * p.radiusScale, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -272,6 +275,7 @@ export function ParticleCanvas() {
             const target = formations[nextIdx](i, particles.length, cw, ch);
             particles[i].targetX = target.x;
             particles[i].targetY = target.y;
+            particles[i].targetRadiusScale = target.rScale ?? 1.0;
           }
           state.currentFormation = nextIdx;
         }
@@ -281,7 +285,9 @@ export function ParticleCanvas() {
         if (state.transitionProgress >= 1) {
           state.phase = "hold";
           state.holdTimer = 0;
-          for (const p of particles) { p.originX = p.targetX; p.originY = p.targetY;
+          for (const p of particles) {
+            p.originX = p.targetX; p.originY = p.targetY;
+            p.radiusScale = p.targetRadiusScale;
           }
         } else {
           for (const p of particles) {
@@ -289,6 +295,7 @@ export function ParticleCanvas() {
             const easedT = easeInOutCubic(individualT);
             p.x = p.originX + (p.targetX - p.originX) * easedT;
             p.y = p.originY + (p.targetY - p.originY) * easedT;
+            p.radiusScale = 1.0 + (p.targetRadiusScale - 1.0) * easedT;
           }
         }
       }
