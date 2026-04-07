@@ -51,15 +51,19 @@ export function Header() {
           <Link
             to="/"
             style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "var(--text-2xl)",
-              fontWeight: 800,
-              color: "var(--neutral-900)",
+              display: "flex",
+              alignItems: "center",
               textDecoration: "none",
-              letterSpacing: "var(--tracking-tight)",
             }}
           >
-            Curaggi
+            <img
+              src="/logo.png"
+              alt="Curaggi"
+              style={{
+                height: "32px",
+                width: "auto",
+              }}
+            />
           </Link>
 
           {/* Desktop Navigation */}
