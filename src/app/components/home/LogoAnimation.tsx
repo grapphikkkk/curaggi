@@ -14,7 +14,7 @@ const LETTERS = [
 // 0  letters fade in spread across the viewport at opacity 0.3
 // 1  letters fade out, logo.svg fades in at centered small size
 // 2  logo flips on X-axis (split-flap feel) while scaling up and moving to top
-// 3  rows 2 and 3 fade in below at opacity 0.6 / 1.0 (tightly overlapping)
+// 3  rows 2 and 3 fade in below at opacity 0.6 / 1.0
 // 4  idle loop — each row's opacity drifts smoothly at random
 
 const TIMING = {
@@ -25,17 +25,21 @@ const TIMING = {
 };
 
 // logo.svg aspect ratio = 654 / 183 ≈ 3.5714
-// Row width is capped by both viewport width and height so 3 rows always fit vertically.
 const ROW_WIDTH = "min(92vw, 100vh)";
 const ROW_HEIGHT = "calc(min(92vw, 100vh) / 3.5714)";
-const ROW_OVERLAP = "calc(min(92vw, 100vh) / 3.5714 * -0.18)";
-
+// Mild overlap so descenders visually "connect" with the next row's caps
+// without the rows looking like they collide.
+const ROW_OVERLAP = "calc(min(92vw, 100vh) / 3.5714 * -0.06)";
 // Scale used while the single logo sits in the middle before flipping/growing.
 const CENTER_SCALE = 0.35;
-// Natural unscaled center of row 1 in viewport terms is 80px + 3vh + row_h/2.
-// row_h on wide screens = 100vh / 3.5714 ≈ 28vh, so center is 80px + 17vh.
-// Target visible center at stage 1 is 50vh, so translateY = 50vh - 80px - 17vh = 33vh - 80px.
 const CENTER_TRANSLATE_Y = "calc(33vh - 80px)";
+
+// Letter sizing: C is rendered at full size; the other (lowercase) letters
+// are rendered at ~80% so the initial "Curaggi" row looks balanced rather
+// than C-dominated. Heights are also clamped by viewport width so the
+// seven letters always fit within 92vw on mobile without overlapping.
+const H_CAPITAL = "clamp(48px, min(11vh, 16vw), 112px)";
+const H_LOWER = "clamp(38px, min(8.8vh, 12.8vw), 90px)";
 
 export function LogoAnimation() {
   const [stage, setStage] = useState(0);
@@ -96,8 +100,9 @@ export function LogoAnimation() {
           ["--row-h" as string]: ROW_HEIGHT,
         } as CSSProperties
       }
+      className="curaggi-logo-anim"
     >
-      {/* Spread-letters layer (stage 0). Fades out at stage ≥ 1. */}
+      {/* Spread-letters layer (stage 0) */}
       <div
         style={{
           position: "absolute",
@@ -120,7 +125,7 @@ export function LogoAnimation() {
             src={l.src}
             alt={l.alt}
             style={{
-              height: "clamp(56px, 11vh, 112px)",
+              height: i === 0 ? H_CAPITAL : H_LOWER,
               opacity: 0,
               animation: `curaggi-fade-in 0.25s ${i * 0.04}s forwards`,
             }}
@@ -128,11 +133,7 @@ export function LogoAnimation() {
         ))}
       </div>
 
-      {/* Stacked logos wrapper (stages ≥ 1).
-          Row 1 sits at the top of this wrapper. During stage 1 it is
-          translated down + scaled down via transform so it appears centered.
-          At stage 2 it flips on the X-axis while scaling to full size and
-          settling at its natural position (top of wrapper = top of viewport). */}
+      {/* Stacked logos wrapper (stages ≥ 1) */}
       <div
         style={{
           position: "absolute",
@@ -202,10 +203,18 @@ export function LogoAnimation() {
         @keyframes curaggi-row-in {
           from { opacity: 0; }
         }
+        /* On narrow viewports the rows become shorter (height-limited by the
+           width cap), so we shrink the section so there is no big empty gap
+           at the bottom. */
+        @media (max-width: 767px) {
+          .curaggi-logo-anim {
+            min-height: calc(80px + 3vh + min(92vw, 100vh) / 3.5714 * 2.88 + 6vh) !important;
+          }
+        }
         @media (prefers-reduced-motion: reduce) {
-          [aria-label="Curaggi logo animation"] *,
-          [aria-label="Curaggi logo animation"] *::before,
-          [aria-label="Curaggi logo animation"] *::after {
+          .curaggi-logo-anim *,
+          .curaggi-logo-anim *::before,
+          .curaggi-logo-anim *::after {
             animation: none !important;
             transition: none !important;
           }
