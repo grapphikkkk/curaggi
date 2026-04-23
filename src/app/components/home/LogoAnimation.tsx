@@ -11,30 +11,31 @@ const LETTERS = [
 ];
 
 // Animation stages:
-// 0  letters fade in spread across viewport at opacity 0.3
-// 1  letters converge — container shrinks toward logo.svg width, letters shrink
-// 2  row 1 logo appears at same size/position as the converged letters
-// 3  row 1 logo grows to full size (min(92vw,100vh)) while sliding to top
-// 4  rows 2 and 3 fade in below at opacity 0.6 / 1.0 (tightly overlapping)
-// 5  idle loop — each row's opacity drifts smoothly at random
+// 0  letters fade in spread across the viewport at opacity 0.3
+// 1  letters fade out, logo.svg fades in at centered small size
+// 2  logo flips on X-axis (split-flap feel) while scaling up and moving to top
+// 3  rows 2 and 3 fade in below at opacity 0.6 / 1.0 (tightly overlapping)
+// 4  idle loop — each row's opacity drifts smoothly at random
 
 const TIMING = {
-  toConverge: 1500,
-  toLogo: 2600,
-  toTop: 2900,
-  toStack: 3800,
-  toLoop: 5400,
+  toCrossfade: 650,
+  toFlipGrow: 1050,
+  toStack: 1800,
+  toLoop: 3000,
 };
 
 // logo.svg aspect ratio = 654 / 183 ≈ 3.5714
 // Row width is capped by both viewport width and height so 3 rows always fit vertically.
 const ROW_WIDTH = "min(92vw, 100vh)";
 const ROW_HEIGHT = "calc(min(92vw, 100vh) / 3.5714)";
-// negative margin between rows for a tight, overlapping feel
 const ROW_OVERLAP = "calc(min(92vw, 100vh) / 3.5714 * -0.18)";
 
-// Scale used while the single logo sits in the middle before moving up.
-const CENTER_SCALE = 0.4;
+// Scale used while the single logo sits in the middle before flipping/growing.
+const CENTER_SCALE = 0.35;
+// Natural unscaled center of row 1 in viewport terms is 80px + 3vh + row_h/2.
+// row_h on wide screens = 100vh / 3.5714 ≈ 28vh, so center is 80px + 17vh.
+// Target visible center at stage 1 is 50vh, so translateY = 50vh - 80px - 17vh = 33vh - 80px.
+const CENTER_TRANSLATE_Y = "calc(33vh - 80px)";
 
 export function LogoAnimation() {
   const [stage, setStage] = useState(0);
@@ -45,21 +46,20 @@ export function LogoAnimation() {
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
-      setStage(5);
+      setStage(4);
       return;
     }
     const timers = [
-      window.setTimeout(() => setStage(1), TIMING.toConverge),
-      window.setTimeout(() => setStage(2), TIMING.toLogo),
-      window.setTimeout(() => setStage(3), TIMING.toTop),
-      window.setTimeout(() => setStage(4), TIMING.toStack),
-      window.setTimeout(() => setStage(5), TIMING.toLoop),
+      window.setTimeout(() => setStage(1), TIMING.toCrossfade),
+      window.setTimeout(() => setStage(2), TIMING.toFlipGrow),
+      window.setTimeout(() => setStage(3), TIMING.toStack),
+      window.setTimeout(() => setStage(4), TIMING.toLoop),
     ];
     return () => timers.forEach((t) => window.clearTimeout(t));
   }, []);
 
   useEffect(() => {
-    if (stage < 5) return;
+    if (stage < 4) return;
     const tick = () => {
       setRowOp([
         0.15 + Math.random() * 0.7,
@@ -72,16 +72,10 @@ export function LogoAnimation() {
     return () => window.clearInterval(interval);
   }, [stage]);
 
-  const row1Op = stage >= 5 ? rowOp[0] : stage >= 2 ? 0.3 : 0;
-  const row2Op = stage >= 5 ? rowOp[1] : stage >= 4 ? 0.6 : 0;
-  const row3Op = stage >= 5 ? rowOp[2] : stage >= 4 ? 1.0 : 0;
+  const row1Op = stage >= 4 ? rowOp[0] : stage >= 1 ? 0.3 : 0;
+  const row2Op = stage >= 4 ? rowOp[1] : stage >= 3 ? 0.6 : 0;
+  const row3Op = stage >= 4 ? rowOp[2] : stage >= 3 ? 1.0 : 0;
 
-  // Stage-1 container width: approximately the width of logo.svg at CENTER_SCALE
-  // — row width is 100vh wide on desktop, so at 0.4 scale that is 40vh.
-  // This is the "各文字の幅をlogo.png と同じ幅" value.
-  const convergedWidth = "min(40vh, 92vw)";
-
-  // Shared row image style, using CSS var --row-w so margins scale responsively.
   const rowBase: CSSProperties = {
     display: "block",
     width: "var(--row-w)",
@@ -103,7 +97,7 @@ export function LogoAnimation() {
         } as CSSProperties
       }
     >
-      {/* Spread-letters layer (stages 0–1) */}
+      {/* Spread-letters layer (stage 0). Fades out at stage ≥ 1. */}
       <div
         style={{
           position: "absolute",
@@ -113,12 +107,11 @@ export function LogoAnimation() {
           display: "flex",
           alignItems: "flex-end",
           justifyContent: "space-between",
-          width: stage === 0 ? "92vw" : convergedWidth,
+          width: "92vw",
           gap: 0,
-          opacity: stage < 2 ? 1 : 0,
+          opacity: stage < 1 ? 1 : 0,
           pointerEvents: "none",
-          transition:
-            "width 1.0s cubic-bezier(0.65,0,0.35,1), opacity 0.3s ease",
+          transition: "opacity 0.3s ease",
         }}
       >
         {LETTERS.map((l, i) => (
@@ -127,21 +120,19 @@ export function LogoAnimation() {
             src={l.src}
             alt={l.alt}
             style={{
-              height:
-                stage >= 1 ? "clamp(42px, 8.5vh, 90px)" : "clamp(56px, 11vh, 112px)",
+              height: "clamp(56px, 11vh, 112px)",
               opacity: 0,
-              animation: `curaggi-fade-in 0.7s ${i * 0.13}s forwards`,
-              transition: "height 1.0s cubic-bezier(0.65,0,0.35,1)",
+              animation: `curaggi-fade-in 0.25s ${i * 0.04}s forwards`,
             }}
           />
         ))}
       </div>
 
-      {/* Stacked logos wrapper (stages ≥ 2).
-          Row 1 sits at the top of this wrapper; during stage 2 it is translated
-          down + scaled down via transform so it appears centered in the viewport.
-          Rows 2 and 3 only render from stage 4 onward so they never steal layout
-          space from row 1's positioning. */}
+      {/* Stacked logos wrapper (stages ≥ 1).
+          Row 1 sits at the top of this wrapper. During stage 1 it is
+          translated down + scaled down via transform so it appears centered.
+          At stage 2 it flips on the X-axis while scaling to full size and
+          settling at its natural position (top of wrapper = top of viewport). */}
       <div
         style={{
           position: "absolute",
@@ -151,6 +142,8 @@ export function LogoAnimation() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          perspective: "1400px",
+          perspectiveOrigin: "50% 35%",
         }}
       >
         <img
@@ -158,18 +151,20 @@ export function LogoAnimation() {
           alt="Curaggi"
           style={{
             ...rowBase,
-            transformOrigin: "center top",
+            transformOrigin: "center center",
             transform:
-              stage >= 3
-                ? "scale(1)"
-                : `translateY(calc(50vh - 80px - 3vh - var(--row-h) * ${CENTER_SCALE} / 2)) scale(${CENTER_SCALE})`,
-            opacity: row1Op,
+              stage >= 2
+                ? "translateY(0) scale(1) rotateX(720deg)"
+                : `translateY(${CENTER_TRANSLATE_Y}) scale(${CENTER_SCALE}) rotateX(0deg)`,
+            opacity: stage >= 1 ? row1Op : 0,
             transition:
-              "transform 0.95s cubic-bezier(0.65,0,0.35,1), opacity 2.4s ease",
+              "transform 0.65s cubic-bezier(0.45, 0.05, 0.2, 1), opacity 0.35s ease",
+            willChange: "transform, opacity",
+            backfaceVisibility: "visible",
           }}
         />
 
-        {stage >= 4 && (
+        {stage >= 3 && (
           <>
             <img
               src="/logos/logo.svg"
@@ -180,7 +175,7 @@ export function LogoAnimation() {
                 marginTop: ROW_OVERLAP,
                 opacity: row2Op,
                 transition: "opacity 2.4s ease",
-                animation: "curaggi-row-in 0.6s both",
+                animation: "curaggi-row-in 0.45s both",
               }}
             />
             <img
@@ -192,7 +187,7 @@ export function LogoAnimation() {
                 marginTop: ROW_OVERLAP,
                 opacity: row3Op,
                 transition: "opacity 2.4s ease 0.2s",
-                animation: "curaggi-row-in 0.6s 0.25s both",
+                animation: "curaggi-row-in 0.45s 0.2s both",
               }}
             />
           </>
