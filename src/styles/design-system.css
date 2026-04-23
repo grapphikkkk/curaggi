@@ -32,6 +32,11 @@
   --curaggi-blue-light:  #90CAF9;
   --curaggi-blue-dark:   #1E88E5;
 
+  /* ── Marker / Accent Tokens ── */
+  --curaggi-pink:        #F04177;  /* Vision marker */
+  --curaggi-yellow:      #F2E72B;  /* Mission marker */
+  --curaggi-teal-bright: #00CEC5;  /* Description section background */
+
   /* ── Accessible Text-on-White Colors (WCAG AA 4.5:1+) ── */
   --a11y-coral:    #C13030;
   --a11y-amber:    #935600;

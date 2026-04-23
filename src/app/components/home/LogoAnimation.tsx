@@ -102,7 +102,7 @@ export function LogoAnimation() {
       }
       className="curaggi-logo-anim"
     >
-      {/* Spread-letters layer (stage 0) */}
+      {/* Spread-letters layer (stage 0 → converges while fading out at stage 1) */}
       <div
         style={{
           position: "absolute",
@@ -112,11 +112,12 @@ export function LogoAnimation() {
           display: "flex",
           alignItems: "flex-end",
           justifyContent: "space-between",
-          width: "92vw",
+          width: stage < 1 ? "92vw" : "min(40vh, 80vw)",
           gap: 0,
           opacity: stage < 1 ? 1 : 0,
           pointerEvents: "none",
-          transition: "opacity 0.3s ease",
+          transition:
+            "width 0.6s cubic-bezier(0.65,0,0.35,1), opacity 0.45s ease 0.15s",
         }}
       >
         {LETTERS.map((l, i) => (
