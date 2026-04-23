@@ -2,7 +2,7 @@ import type { Article } from "./types";
 
 export const article: Article = {
   title: "当事者中心のUXデザインとは何か",
-  date: "2026-02-05",
+  date: "2026-04-10",
   category: "Insight",
   tags: ["UXデザイン", "当事者中心", "アクセシビリティ"],
   summary:

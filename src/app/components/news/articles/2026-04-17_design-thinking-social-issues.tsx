@@ -2,7 +2,7 @@ import type { Article } from "./types";
 
 export const article: Article = {
   title: "デザインシンキングで社会課題にアプローチする方法",
-  date: "2026-02-10",
+  date: "2026-04-17",
   category: "Insight",
   tags: ["デザインシンキング", "社会課題", "UXデザイン"],
   summary:

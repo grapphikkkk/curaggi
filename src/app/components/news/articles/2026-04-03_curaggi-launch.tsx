@@ -2,7 +2,7 @@ import type { Article } from "./types";
 
 export const article: Article = {
   title: "Curaggi設立のお知らせ",
-  date: "2026-02-15",
+  date: "2026-04-03",
   category: "News",
   tags: ["お知らせ", "会社設立"],
   summary:

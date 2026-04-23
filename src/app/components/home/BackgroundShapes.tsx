@@ -1,0 +1,360 @@
+import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
+import { useRef, useMemo, useState, useEffect } from "react";
+
+interface Shape {
+  id: number;
+  color: string;
+  size: number;
+  startX: number;
+  startY: number;
+  duration: number;
+  opacity: number;
+  type: "blob" | "triangle" | "line";
+  rotation?: number;
+  randomOffset: number;
+  strokeWidth?: number;
+  hasPattern?: "gradient" | "mesh" | "dots" | "stripes" | "none";
+}
+
+function generateRandomShapes(): Shape[] {
+  const colors = [
+    "var(--neutral-950)",
+    "var(--neutral-900)",
+    "var(--neutral-800)",
+    "var(--neutral-700)",
+    "var(--neutral-600)",
+    "var(--neutral-500)",
+    "var(--neutral-400)",
+    "var(--neutral-300)",
+    "var(--neutral-950)",
+    "var(--neutral-900)",
+    "var(--neutral-800)",
+    "var(--neutral-700)",
+  ];
+
+  const shapes: Shape[] = [];
+  const shapeCount = 32;
+
+  for (let i = 0; i < shapeCount; i++) {
+    // モバイル（640px以下）とデスクトップで異なるサイズを使用
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 640;
+    const sizeVariations = isMobile 
+      ? [40, 60, 90, 120, 160, 200, 250]
+      : [40, 60, 90, 120, 160, 200, 250, 300, 350, 420];
+    const typeOptions: Array<"blob" | "triangle" | "line"> = [
+      "blob",
+      "triangle",
+      "line",
+    ];
+    const patternOptions: Array<"gradient" | "mesh" | "dots" | "stripes" | "none"> = [
+      "gradient",
+      "mesh",
+      "dots",
+      "stripes",
+      "none",
+    ];
+    const randomOffset = Math.random();
+
+    // 透過度をより濃い範囲でバラバラにする（0.3～1.0）
+    const opacityOptions = [0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0];
+    const opacity = opacityOptions[Math.floor(Math.random() * opacityOptions.length)];
+
+    shapes.push({
+      id: i,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: sizeVariations[Math.floor(Math.random() * sizeVariations.length)],
+      startX: Math.random() * 140 - 40,
+      startY: Math.random() * 200 - 40,
+      duration: 7 + Math.random() * 16,
+      opacity,
+      type: typeOptions[Math.floor(Math.random() * typeOptions.length)],
+      rotation: Math.random() * 360,
+      randomOffset,
+      strokeWidth: 1 + Math.random() * 4,
+      hasPattern: patternOptions[Math.floor(Math.random() * patternOptions.length)],
+    });
+  }
+
+  return shapes;
+}
+
+function GeometricShape({
+  shape,
+  scrollY,
+  isMobile,
+}: {
+  shape: Shape;
+  scrollY: any;
+  isMobile: boolean;
+}) {
+  // ShortContext セクション到達時のしきい値
+  const TRIGGER_SCROLL = 500;
+
+  // スクロール値をベースに各図形が異なるタイミングで動きます
+  const y = useTransform(
+    scrollY,
+    [0, 1200],
+    [0, 400 + shape.randomOffset * 200]
+  );
+  
+  // 最初は拡大なし（scale=1）、TRIGGER_SCROLL (500px) 以後に 0.1 に段階的に縮小
+  // ポイント数を20個に増やしてスムーズにする
+  const scale = useTransform(
+    scrollY,
+    [0, 500, 520, 540, 560, 580, 600, 620, 640, 660, 680, 700, 720, 740, 760, 780, 800, 820, 840, 900],
+    [1, 1, 0.98, 0.95, 0.92, 0.88, 0.85, 0.80, 0.75, 0.70, 0.65, 0.6, 0.55, 0.50, 0.40, 0.30, 0.20, 0.15, 0.12, 0.1]
+  );
+  
+  // 形が不規則に変わるロジック（0-1で変形度を制御）
+  // ポイント数を増やしてスムーズにする
+  const morphShape = useTransform(scrollY, [0, 500, 600, 700, 800, 900], [0, 0.2, 0.4, 0.6, 0.8, 1]);
+  
+  // morphShape の値を state で監視
+  const [morphValue, setMorphValue] = useState(0);
+  
+  useMotionValueEvent(morphShape, "change", (latest) => {
+    setMorphValue(latest);
+  });
+  
+  // モバイルかデスクトップかで異なる初期分散値
+  const initialDispersion = isMobile ? (shape.randomOffset - 0.5) * 150 : 0;
+  
+  // TRIGGER_SCROLL 以後、段階的に左右に強く分散
+  // 【テスト用 - かくつきを確認するため一時的に無効化】
+  // 元のコード：
+  // const x = useTransform(
+  //   scrollY,
+  //   [0, 500, 550, 600, 650, 700, 750, 800, 850, 900],
+  //   [
+  //     initialDispersion,
+  //     initialDispersion,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 200,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 400,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 600,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 900,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 1200,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 1500,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 1800,
+  //     initialDispersion + (shape.randomOffset - 0.5) * 2000
+  //   ]
+  // );
+  
+  // 左右の分散を元に戻す
+  // ポイント数を20個に増やしてスムーズにする
+  const x = useTransform(
+    scrollY,
+    [0, 500, 520, 540, 560, 580, 600, 620, 640, 660, 680, 700, 720, 740, 760, 780, 800, 820, 840, 900],
+    [
+      initialDispersion,
+      initialDispersion,
+      initialDispersion + (shape.randomOffset - 0.5) * 90,
+      initialDispersion + (shape.randomOffset - 0.5) * 150,
+      initialDispersion + (shape.randomOffset - 0.5) * 220,
+      initialDispersion + (shape.randomOffset - 0.5) * 310,
+      initialDispersion + (shape.randomOffset - 0.5) * 400,
+      initialDispersion + (shape.randomOffset - 0.5) * 500,
+      initialDispersion + (shape.randomOffset - 0.5) * 600,
+      initialDispersion + (shape.randomOffset - 0.5) * 710,
+      initialDispersion + (shape.randomOffset - 0.5) * 820,
+      initialDispersion + (shape.randomOffset - 0.5) * 900,
+      initialDispersion + (shape.randomOffset - 0.5) * 1000,
+      initialDispersion + (shape.randomOffset - 0.5) * 1100,
+      initialDispersion + (shape.randomOffset - 0.5) * 1200,
+      initialDispersion + (shape.randomOffset - 0.5) * 1350,
+      initialDispersion + (shape.randomOffset - 0.5) * 1500,
+      initialDispersion + (shape.randomOffset - 0.5) * 1650,
+      initialDispersion + (shape.randomOffset - 0.5) * 1800,
+      initialDispersion + (shape.randomOffset - 0.5) * 2000
+    ]
+  );
+
+  // すべての図形タイプのバリエーション定義
+  const shapeVariations = {
+    blob: [
+      // 複雑で流動的、有機的な図形
+      "45% 55% 20% 80% / 30% 70% 60% 40%",
+      "30% 70% 45% 55% / 50% 50% 30% 70%",
+      "60% 40% 35% 65% / 70% 30% 45% 55%",
+      "50% 50% 25% 75% / 40% 60% 50% 50%",
+      "40% 60% 50% 50% / 60% 40% 35% 65%",
+      "65% 35% 30% 70% / 50% 50% 40% 60%",
+      "35% 65% 60% 40% / 35% 65% 55% 45%",
+    ],
+    triangle: [
+      // 大きい二等辺三角形
+      "polygon(50% 0%, 100% 85%, 0% 85%)",
+      "polygon(50% 5%, 95% 90%, 5% 90%)",
+      "polygon(50% 10%, 100% 80%, 0% 80%)",
+    ],
+    line: [
+      // 直線のバリエーション（スクロール時に長さが変わる）
+      "0%",
+      "50%",
+      "100%",
+    ],
+  };
+
+  const getShapeStyle = (morphVal: number = 0) => {
+    const baseStyle: any = {
+      position: "absolute",
+      width: `${shape.size}px`,
+      height: `${shape.size}px`,
+      opacity: shape.opacity,
+      left: `${shape.startX}%`,
+      top: `${shape.startY}%`,
+    };
+
+    // パターン適用
+    if (shape.hasPattern !== "none") {
+      if (shape.hasPattern === "gradient") {
+        baseStyle.background = `linear-gradient(
+          ${shape.rotation || 45}deg,
+          ${shape.color} 0%,
+          rgba(255,255,255,0.3) 50%,
+          ${shape.color} 100%
+        )`;
+      } else if (shape.hasPattern === "mesh") {
+        baseStyle.background = `
+          repeating-linear-gradient(
+            0deg,
+            ${shape.color},
+            ${shape.color} 2px,
+            transparent 2px,
+            transparent 4px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            ${shape.color},
+            ${shape.color} 2px,
+            transparent 2px,
+            transparent 4px
+          )
+        `;
+        baseStyle.backgroundSize = "8px 8px";
+      } else if (shape.hasPattern === "dots") {
+        baseStyle.background = `
+          radial-gradient(
+            circle,
+            ${shape.color} 1px,
+            transparent 1px
+          )
+        `;
+        baseStyle.backgroundSize = "6px 6px";
+      } else if (shape.hasPattern === "stripes") {
+        baseStyle.background = `repeating-linear-gradient(
+          45deg,
+          ${shape.color},
+          ${shape.color} 4px,
+          transparent 4px,
+          transparent 8px
+        )`;
+      }
+    } else {
+      baseStyle.background = shape.color;
+    }
+
+    switch (shape.type) {
+      case "line":
+        // スクロール時に長さが伸び縮みする直線
+        const lineVariations = shapeVariations.line;
+        const lineIndex = Math.floor(((morphVal * 10) + (shape.id * 1.5)) % lineVariations.length);
+        const lineWidthPercent = parseFloat(lineVariations[lineIndex]);
+        const lineWidth = (shape.size * 2) * (lineWidthPercent / 100);
+        return {
+          ...baseStyle,
+          width: `${lineWidth}px`,
+          height: shape.strokeWidth,
+          borderRadius: `${shape.strokeWidth / 2}px`,
+          background: shape.color,
+        };
+      case "triangle":
+        const triangleVariations = shapeVariations.triangle;
+        const triangleIndex = Math.floor(((morphVal * 10) + (shape.id * 2.1)) % triangleVariations.length);
+        return {
+          ...baseStyle,
+          clipPath: triangleVariations[triangleIndex] || "polygon(50% 0%, 100% 85%, 0% 85%)",
+        };
+      case "blob":
+      default:
+        const blobVariations = shapeVariations.blob;
+        const blobIndex = Math.floor(((morphVal * 10) + (shape.id * 2.7)) % blobVariations.length);
+        return {
+          ...baseStyle,
+          borderRadius: blobVariations[blobIndex] || "45% 55% 20% 80% / 30% 70% 60% 40%",
+        };
+    }
+  };
+
+  // 各図形の独立した動きパターン
+  const pathX = Math.sin(shape.id * 0.5) * 50;
+  const pathY = Math.cos(shape.id * 0.3) * 50;
+
+  return (
+    <motion.div
+      style={{
+        ...getShapeStyle(morphValue),
+        y,
+        x,
+        scale,
+        rotate: shape.rotation || 0,
+      }}
+      // 【テスト用 - 自動的な移動を一時的に無効化】
+      // animate={{
+      //   x: [0, pathX, -pathX, 0],
+      //   y: [0, pathY, -pathY, 0],
+      // }}
+      // transition={{
+      //   x: {
+      //     duration: shape.duration,
+      //     repeat: Infinity,
+      //     ease: "easeInOut",
+      //   },
+      //   y: {
+      //     duration: shape.duration * 1.3,
+      //     repeat: Infinity,
+      //     ease: "easeInOut",
+      //     delay: shape.randomOffset * 2,
+      //   },
+      // }}
+    />
+  );
+}
+
+export function BackgroundShapes() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // モバイルサイズを判定
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const shapes = useMemo(() => generateRandomShapes(), []);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: "hidden",
+        pointerEvents: "none",
+        zIndex: 0,
+      }}
+      aria-hidden="true"
+    >
+      {shapes.map((shape) => (
+        <GeometricShape key={shape.id} shape={shape} scrollY={scrollY} isMobile={isMobile} />
+      ))}
+    </div>
+  );
+}

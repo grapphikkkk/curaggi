@@ -25,22 +25,36 @@ export function ContactForm() {
   };
 
   return (
-    <section className="section">
-      <div className="container" style={{ maxWidth: "640px" }}>
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "var(--space-12)",
-          }}
-        >
-          <h1
+    <section
+      style={{
+        paddingTop: "var(--space-20)",
+        paddingBottom: "var(--space-24)",
+        background: "#ffffff",
+        color: "#0A0A0B",
+      }}
+    >
+      <div className="container">
+        <div style={{ marginBottom: "var(--space-16)" }}>
+          <div
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(2rem, 6vw, 3rem)",
-              fontWeight: 700,
-              color: "var(--neutral-900)",
-              letterSpacing: "var(--tracking-tight)",
+              fontSize: "var(--text-xs)",
+              fontWeight: 600,
+              letterSpacing: "var(--tracking-wider)",
+              textTransform: "uppercase",
               marginBottom: "var(--space-4)",
+            }}
+          >
+            — Contact
+          </div>
+          <h1
+            style={{
+              fontFamily: "var(--font-display), var(--font-jp)",
+              fontSize: "clamp(3rem, 14vw, 12rem)",
+              fontWeight: 800,
+              lineHeight: 0.9,
+              letterSpacing: "-0.05em",
+              marginBottom: "var(--space-8)",
             }}
           >
             Contact
@@ -48,14 +62,16 @@ export function ContactForm() {
           <p
             style={{
               fontFamily: "var(--font-body), var(--font-jp)",
-              fontSize: "var(--text-base)",
-              color: "var(--neutral-600)",
-              lineHeight: "var(--leading-relaxed)",
+              fontSize: "var(--text-lg)",
+              color: "#44444F",
+              lineHeight: 1.9,
+              maxWidth: "720px",
             }}
           >
             お問い合わせはこちらのフォームからお送りください。
           </p>
         </div>
+        <div style={{ maxWidth: "640px" }}>
 
         <form
           onSubmit={handleSubmit}
@@ -149,6 +165,7 @@ export function ContactForm() {
             </button>
           </div>
         </form>
+        </div>
       </div>
     </section>
   );
