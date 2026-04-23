@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 
 const LETTERS = [
   { src: "/logos/C.svg", alt: "C" },
@@ -10,31 +10,41 @@ const LETTERS = [
   { src: "/logos/i.svg", alt: "i" },
 ];
 
-// Stages:
-// 0  letters fade in, spread evenly across viewport, opacity 0.3
-// 1  letters converge toward center, container shrinks to logo.svg aspect
-// 2  crossfade letters → logo.svg at center
-// 3  logo moves to top, scales to full viewport width (90vw)
-// 4  rows 2 and 3 fade in below at the same size (opacity 0.6, 1.0)
-// 5  loop: each row's opacity smoothly drifts between 0.1 and 1.0
+// Animation stages:
+// 0  letters fade in spread across viewport at opacity 0.3
+// 1  letters converge — container shrinks toward logo.svg width, letters shrink
+// 2  row 1 logo appears at same size/position as the converged letters
+// 3  row 1 logo grows to full size (min(92vw,100vh)) while sliding to top
+// 4  rows 2 and 3 fade in below at opacity 0.6 / 1.0 (tightly overlapping)
+// 5  idle loop — each row's opacity drifts smoothly at random
 
 const TIMING = {
   toConverge: 1500,
   toLogo: 2600,
   toTop: 2900,
   toStack: 3800,
-  toLoop: 5200,
+  toLoop: 5400,
 };
+
+// logo.svg aspect ratio = 654 / 183 ≈ 3.5714
+// Row width is capped by both viewport width and height so 3 rows always fit vertically.
+const ROW_WIDTH = "min(92vw, 100vh)";
+const ROW_HEIGHT = "calc(min(92vw, 100vh) / 3.5714)";
+// negative margin between rows for a tight, overlapping feel
+const ROW_OVERLAP = "calc(min(92vw, 100vh) / 3.5714 * -0.18)";
+
+// Scale used while the single logo sits in the middle before moving up.
+const CENTER_SCALE = 0.4;
 
 export function LogoAnimation() {
   const [stage, setStage] = useState(0);
-  const [rowOpacity, setRowOpacity] = useState<[number, number, number]>([0.3, 0.6, 1.0]);
+  const [rowOp, setRowOp] = useState<[number, number, number]>([0.3, 0.6, 1.0]);
 
   useEffect(() => {
-    const prefersReduced =
+    const reduced =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) {
+    if (reduced) {
       setStage(5);
       return;
     }
@@ -51,9 +61,9 @@ export function LogoAnimation() {
   useEffect(() => {
     if (stage < 5) return;
     const tick = () => {
-      setRowOpacity([
+      setRowOp([
         0.15 + Math.random() * 0.7,
-        0.15 + Math.random() * 0.7,
+        0.2 + Math.random() * 0.7,
         0.3 + Math.random() * 0.7,
       ]);
     };
@@ -62,24 +72,36 @@ export function LogoAnimation() {
     return () => window.clearInterval(interval);
   }, [stage]);
 
-  const lettersOpacity = stage < 2 ? 1 : 0;
-  const logoOpacity = stage >= 2 ? 1 : 0;
+  const row1Op = stage >= 5 ? rowOp[0] : stage >= 2 ? 0.3 : 0;
+  const row2Op = stage >= 5 ? rowOp[1] : stage >= 4 ? 0.6 : 0;
+  const row3Op = stage >= 5 ? rowOp[2] : stage >= 4 ? 1.0 : 0;
 
-  // Top row opacity
-  const row1 = stage >= 5 ? rowOpacity[0] : 0.3;
-  const row2 = stage >= 5 ? rowOpacity[1] : stage >= 4 ? 0.6 : 0;
-  const row3 = stage >= 5 ? rowOpacity[2] : stage >= 4 ? 1.0 : 0;
+  // Stage-1 container width: approximately the width of logo.svg at CENTER_SCALE
+  // — row width is 100vh wide on desktop, so at 0.4 scale that is 40vh.
+  // This is the "各文字の幅をlogo.png と同じ幅" value.
+  const convergedWidth = "min(40vh, 92vw)";
+
+  // Shared row image style, using CSS var --row-w so margins scale responsively.
+  const rowBase: CSSProperties = {
+    display: "block",
+    width: "var(--row-w)",
+    height: "auto",
+  };
 
   return (
     <section
       aria-label="Curaggi logo animation"
-      style={{
-        position: "relative",
-        width: "100%",
-        minHeight: "100vh",
-        overflow: "hidden",
-        background: "#ffffff",
-      }}
+      style={
+        {
+          position: "relative",
+          width: "100%",
+          minHeight: "100vh",
+          overflow: "hidden",
+          background: "#ffffff",
+          ["--row-w" as string]: ROW_WIDTH,
+          ["--row-h" as string]: ROW_HEIGHT,
+        } as CSSProperties
+      }
     >
       {/* Spread-letters layer (stages 0–1) */}
       <div
@@ -91,12 +113,12 @@ export function LogoAnimation() {
           display: "flex",
           alignItems: "flex-end",
           justifyContent: "space-between",
-          width: stage === 0 ? "90vw" : "min(60vw, 720px)",
+          width: stage === 0 ? "92vw" : convergedWidth,
           gap: 0,
-          opacity: lettersOpacity,
+          opacity: stage < 2 ? 1 : 0,
           pointerEvents: "none",
           transition:
-            "width 1.1s cubic-bezier(0.65,0,0.35,1), opacity 0.35s ease",
+            "width 1.0s cubic-bezier(0.65,0,0.35,1), opacity 0.3s ease",
         }}
       >
         {LETTERS.map((l, i) => (
@@ -105,73 +127,85 @@ export function LogoAnimation() {
             src={l.src}
             alt={l.alt}
             style={{
-              height: "clamp(56px, 11vh, 112px)",
+              height:
+                stage >= 1 ? "clamp(42px, 8.5vh, 90px)" : "clamp(56px, 11vh, 112px)",
               opacity: 0,
               animation: `curaggi-fade-in 0.7s ${i * 0.13}s forwards`,
+              transition: "height 1.0s cubic-bezier(0.65,0,0.35,1)",
             }}
           />
         ))}
       </div>
 
-      {/* Logo + stacked rows layer (stages ≥2) */}
+      {/* Stacked logos wrapper (stages ≥ 2).
+          Row 1 sits at the top of this wrapper; during stage 2 it is translated
+          down + scaled down via transform so it appears centered in the viewport.
+          Rows 2 and 3 only render from stage 4 onward so they never steal layout
+          space from row 1's positioning. */}
       <div
         style={{
           position: "absolute",
+          top: "calc(80px + 3vh)",
           left: 0,
           right: 0,
-          top: stage >= 3 ? "calc(80px + 4vh)" : "50%",
-          transform: stage >= 3 ? "none" : "translateY(-50%)",
-          padding: "0 5vw",
-          opacity: logoOpacity,
-          transition:
-            "top 0.9s cubic-bezier(0.65,0,0.35,1), transform 0.9s cubic-bezier(0.65,0,0.35,1), opacity 0.4s ease",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <img
           src="/logos/logo.svg"
           alt="Curaggi"
           style={{
-            display: "block",
-            width: stage >= 3 ? "90vw" : "min(60vw, 720px)",
-            height: "auto",
-            margin: "0 auto",
-            opacity: row1,
+            ...rowBase,
+            transformOrigin: "center top",
+            transform:
+              stage >= 3
+                ? "scale(1)"
+                : `translateY(calc(50vh - 80px - 3vh - var(--row-h) * ${CENTER_SCALE} / 2)) scale(${CENTER_SCALE})`,
+            opacity: row1Op,
             transition:
-              "width 0.9s cubic-bezier(0.65,0,0.35,1), opacity 2.4s ease",
+              "transform 0.95s cubic-bezier(0.65,0,0.35,1), opacity 2.4s ease",
           }}
         />
-        <img
-          src="/logos/logo.svg"
-          alt=""
-          aria-hidden="true"
-          style={{
-            display: "block",
-            width: "90vw",
-            height: "auto",
-            margin: "3vh auto 0",
-            opacity: row2,
-            transition: "opacity 2.4s ease",
-          }}
-        />
-        <img
-          src="/logos/logo.svg"
-          alt=""
-          aria-hidden="true"
-          style={{
-            display: "block",
-            width: "90vw",
-            height: "auto",
-            margin: "3vh auto 0",
-            opacity: row3,
-            transition: "opacity 2.4s ease 0.15s",
-          }}
-        />
+
+        {stage >= 4 && (
+          <>
+            <img
+              src="/logos/logo.svg"
+              alt=""
+              aria-hidden
+              style={{
+                ...rowBase,
+                marginTop: ROW_OVERLAP,
+                opacity: row2Op,
+                transition: "opacity 2.4s ease",
+                animation: "curaggi-row-in 0.6s both",
+              }}
+            />
+            <img
+              src="/logos/logo.svg"
+              alt=""
+              aria-hidden
+              style={{
+                ...rowBase,
+                marginTop: ROW_OVERLAP,
+                opacity: row3Op,
+                transition: "opacity 2.4s ease 0.2s",
+                animation: "curaggi-row-in 0.6s 0.25s both",
+              }}
+            />
+          </>
+        )}
       </div>
 
       <style>{`
         @keyframes curaggi-fade-in {
           from { opacity: 0; }
           to { opacity: 0.3; }
+        }
+        @keyframes curaggi-row-in {
+          from { opacity: 0; }
         }
         @media (prefers-reduced-motion: reduce) {
           [aria-label="Curaggi logo animation"] *,
