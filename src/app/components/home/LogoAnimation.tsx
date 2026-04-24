@@ -18,10 +18,10 @@ const LETTERS = [
 // 4  idle loop — each row's opacity drifts smoothly at random
 
 const TIMING = {
-  toCrossfade: 650,
-  toFlipGrow: 1050,
-  toStack: 1800,
-  toLoop: 3000,
+  toCrossfade: 1400,
+  toFlipGrow: 2000,
+  toStack: 2750,
+  toLoop: 3950,
 };
 
 // logo.svg aspect ratio = 654 / 183 ≈ 3.5714
@@ -40,6 +40,10 @@ const CENTER_TRANSLATE_Y = "calc(33vh - 80px)";
 // seven letters always fit within 92vw on mobile without overlapping.
 const H_CAPITAL = "clamp(48px, min(11vh, 16vw), 112px)";
 const H_LOWER = "clamp(38px, min(8.8vh, 12.8vw), 90px)";
+// g has a descender inside its SVG, so we scale it up so the body matches
+// the other lowercase letters, then translate it down so the descender
+// hangs slightly below the shared baseline.
+const H_G = `calc(${H_LOWER} * 1.32)`;
 
 export function LogoAnimation() {
   const [stage, setStage] = useState(0);
@@ -117,21 +121,26 @@ export function LogoAnimation() {
           opacity: stage < 1 ? 1 : 0,
           pointerEvents: "none",
           transition:
-            "width 0.6s cubic-bezier(0.65,0,0.35,1), opacity 0.45s ease 0.15s",
+            "width 0.95s cubic-bezier(0.65,0,0.35,1), opacity 0.7s ease 0.35s",
         }}
       >
-        {LETTERS.map((l, i) => (
-          <img
-            key={i}
-            src={l.src}
-            alt={l.alt}
-            style={{
-              height: i === 0 ? H_CAPITAL : H_LOWER,
-              opacity: 0,
-              animation: `curaggi-fade-in 0.25s ${i * 0.04}s forwards`,
-            }}
-          />
-        ))}
+        {LETTERS.map((l, i) => {
+          const isG = l.alt === "g";
+          const height = i === 0 ? H_CAPITAL : isG ? H_G : H_LOWER;
+          return (
+            <img
+              key={i}
+              src={l.src}
+              alt={l.alt}
+              style={{
+                height,
+                transform: isG ? "translateY(18%)" : undefined,
+                opacity: 0,
+                animation: `curaggi-fade-in 0.25s ${i * 0.04}s forwards`,
+              }}
+            />
+          );
+        })}
       </div>
 
       {/* Stacked logos wrapper (stages ≥ 1) */}
