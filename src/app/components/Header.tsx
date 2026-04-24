@@ -148,8 +148,9 @@ export function Header() {
                     width: "14px",
                     height: "14px",
                     borderRadius: "50%",
-                    background: "#ffffff",
+                    background: isHover ? "#0A0A0B" : "#ffffff",
                     opacity: isCurrent ? 1 : 0,
+                    transition: "background 0.15s ease",
                   }}
                 />
                 {item.label}
