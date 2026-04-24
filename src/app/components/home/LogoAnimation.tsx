@@ -18,10 +18,10 @@ const LETTERS = [
 // 4  idle loop — each row's opacity drifts smoothly at random
 
 const TIMING = {
-  toCrossfade: 1400,
-  toFlipGrow: 2000,
-  toStack: 2750,
-  toLoop: 3950,
+  toCrossfade: 800,
+  toFlipGrow: 1500,
+  toStack: 2300,
+  toLoop: 3500,
 };
 
 // logo.svg aspect ratio = 654 / 183 ≈ 3.5714
@@ -29,7 +29,7 @@ const ROW_WIDTH = "min(92vw, 100vh)";
 const ROW_HEIGHT = "calc(min(92vw, 100vh) / 3.5714)";
 // Mild overlap so descenders visually "connect" with the next row's caps
 // without the rows looking like they collide.
-const ROW_OVERLAP = "calc(min(92vw, 100vh) / 3.5714 * -0.06)";
+const ROW_OVERLAP = "calc(min(92vw, 100vh) / 3.5714 * -0.22)";
 // Scale used while the single logo sits in the middle before flipping/growing.
 const CENTER_SCALE = 0.35;
 const CENTER_TRANSLATE_Y = "calc(33vh - 80px)";
@@ -44,6 +44,9 @@ const H_LOWER = "clamp(38px, min(8.8vh, 12.8vw), 90px)";
 // the other lowercase letters, then translate it down so the descender
 // hangs slightly below the shared baseline.
 const H_G = `calc(${H_LOWER} * 1.32)`;
+// i spans from the dot (ascender) to baseline, so its stem renders small
+// at H_LOWER. Scale it up so the stem roughly matches lowercase x-height.
+const H_I = `calc(${H_LOWER} * 1.4)`;
 
 export function LogoAnimation() {
   const [stage, setStage] = useState(0);
@@ -126,19 +129,28 @@ export function LogoAnimation() {
       >
         {LETTERS.map((l, i) => {
           const isG = l.alt === "g";
-          const height = i === 0 ? H_CAPITAL : isG ? H_G : H_LOWER;
+          const isI = l.alt === "i";
+          const height =
+            i === 0 ? H_CAPITAL : isG ? H_G : isI ? H_I : H_LOWER;
           return (
-            <img
+            <span
               key={i}
-              src={l.src}
-              alt={l.alt}
               style={{
-                height,
+                display: "inline-flex",
                 transform: isG ? "translateY(18%)" : undefined,
-                opacity: 0,
-                animation: `curaggi-fade-in 0.25s ${i * 0.04}s forwards`,
               }}
-            />
+            >
+              <img
+                src={l.src}
+                alt={l.alt}
+                style={{
+                  height,
+                  opacity: 0,
+                  transformOrigin: "center center",
+                  animation: `curaggi-rotate-in 0.32s ${i * 0.06}s cubic-bezier(0.2,0.8,0.2,1) forwards`,
+                }}
+              />
+            </span>
           );
         })}
       </div>
@@ -206,9 +218,9 @@ export function LogoAnimation() {
       </div>
 
       <style>{`
-        @keyframes curaggi-fade-in {
-          from { opacity: 0; }
-          to { opacity: 0.3; }
+        @keyframes curaggi-rotate-in {
+          from { opacity: 0; transform: rotateZ(-180deg); }
+          to   { opacity: 0.3; transform: rotateZ(0deg); }
         }
         @keyframes curaggi-row-in {
           from { opacity: 0; }
