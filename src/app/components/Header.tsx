@@ -1,198 +1,171 @@
 import { Link, useLocation } from "react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+const navItems = [
+  { path: "/", label: "TOP" },
+  { path: "/service", label: "Services" },
+  { path: "/news", label: "Insight" },
+  { path: "/company", label: "Company" },
+  { path: "/contact", label: "Contact" },
+];
 
 export function Header() {
   const location = useLocation();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [hoverPath, setHoverPath] = useState<string | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+  const open = () => setIsOpen(true);
+  const close = () => {
+    setIsOpen(false);
+    setHoverPath(null);
+  };
+  const toggle = () => (isOpen ? close() : open());
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const width = isOpen ? 300 : 150;
+  const height = isOpen ? 300 : 80;
 
-  const navItems = [
-    { path: "/", label: "Home" },
-    { path: "/service", label: "Service" },
-    { path: "/news", label: "News / Insight" },
-    { path: "/company", label: "Company" },
-    { path: "/contact", label: "Contact" },
-  ];
+  // Different transition choreography: width first on open, height first on close.
+  const transition = isOpen
+    ? "width 0.28s cubic-bezier(0.65,0,0.35,1) 0s, height 0.3s cubic-bezier(0.65,0,0.35,1) 0.22s"
+    : "height 0.28s cubic-bezier(0.65,0,0.35,1) 0s, width 0.3s cubic-bezier(0.65,0,0.35,1) 0.22s";
 
   return (
     <header
       style={{
         position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
+        top: 20,
+        right: 20,
         zIndex: 100,
-        background: isScrolled ? "rgba(255,255,255,0.95)" : "transparent",
-        backdropFilter: isScrolled ? "blur(10px)" : "none",
-        borderBottom: isScrolled ? "1px solid var(--neutral-200)" : "1px solid transparent",
-        transition: "all var(--duration-normal) var(--ease-out)",
       }}
+      aria-label="Global navigation"
     >
-      <div className="container">
-        <nav
+      <div
+        onMouseEnter={open}
+        onMouseLeave={close}
+        style={{
+          position: "relative",
+          width: `${width}px`,
+          height: `${height}px`,
+          maxWidth: "calc(100vw - 40px)",
+          background: "#000000",
+          borderRadius: "5px",
+          transition,
+          overflow: "hidden",
+          boxShadow: "0 6px 24px rgba(0,0,0,0.18)",
+        }}
+      >
+        {/* Hamburger button (closed state) */}
+        <button
+          type="button"
+          onClick={toggle}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isOpen}
           style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: "150px",
+            height: "80px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            height: "80px",
+            justifyContent: "center",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+            opacity: isOpen ? 0 : 1,
+            pointerEvents: isOpen ? "none" : "auto",
+            transition: "opacity 0.18s ease",
           }}
-          aria-label="Main navigation"
         >
-          {/* Logo */}
-          <Link
-            to="/"
+          <span
+            aria-hidden="true"
             style={{
-              display: "flex",
-              alignItems: "center",
-              textDecoration: "none",
-            }}
-          >
-            <img
-              src="/logo.png"
-              alt="Curaggi"
-              style={{
-                height: "32px",
-                width: "auto",
-              }}
-            />
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div
-            style={{
-              display: "none",
-              gap: "var(--space-1)",
-            }}
-            className="desktop-nav"
-          >
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "var(--text-sm)",
-                  fontWeight: location.pathname === item.path ? 600 : 500,
-                  color: location.pathname === item.path ? "var(--neutral-900)" : "var(--neutral-600)",
-                  textDecoration: "none",
-                  padding: "var(--space-2) var(--space-4)",
-                  borderRadius: "var(--radius-full)",
-                  background: location.pathname === item.path ? "var(--neutral-100)" : "transparent",
-                  transition: "all var(--duration-fast) var(--ease-out)",
-                }}
-                onMouseEnter={(e) => {
-                  if (location.pathname !== item.path) {
-                    (e.target as HTMLElement).style.background = "var(--neutral-50)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (location.pathname !== item.path) {
-                    (e.target as HTMLElement).style.background = "transparent";
-                  }
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="mobile-menu-btn"
-            style={{
-              display: "none",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "40px",
-              height: "40px",
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-              color: "var(--neutral-900)",
-            }}
-            aria-label="Toggle menu"
-            aria-expanded={isMobileMenuOpen}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              {isMobileMenuOpen ? (
-                <>
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </>
-              ) : (
-                <>
-                  <line x1="3" y1="6" x2="21" y2="6" />
-                  <line x1="3" y1="12" x2="21" y2="12" />
-                  <line x1="3" y1="18" x2="21" y2="18" />
-                </>
-              )}
-            </svg>
-          </button>
-        </nav>
-
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div
-            className="mobile-nav"
-            style={{
-              display: "none",
+              display: "inline-flex",
               flexDirection: "column",
-              gap: "var(--space-2)",
-              paddingBottom: "var(--space-6)",
+              gap: "7px",
+              width: "28px",
             }}
           >
-            {navItems.map((item) => (
+            <span style={lineStyle} />
+            <span style={lineStyle} />
+            <span style={lineStyle} />
+          </span>
+        </button>
+
+        {/* Menu (open state) */}
+        <nav
+          aria-hidden={!isOpen}
+          style={{
+            position: "absolute",
+            inset: 0,
+            padding: "28px 24px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: "4px",
+            opacity: isOpen ? 1 : 0,
+            pointerEvents: isOpen ? "auto" : "none",
+            transition: `opacity 0.2s ease ${isOpen ? "0.4s" : "0s"}`,
+          }}
+        >
+          {navItems.map((item) => {
+            const isCurrent = location.pathname === item.path;
+            const isHover = hoverPath === item.path;
+            return (
               <Link
                 key={item.path}
                 to={item.path}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={close}
+                onMouseEnter={() => setHoverPath(item.path)}
+                onMouseLeave={() => setHoverPath(null)}
                 style={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "6px 12px",
+                  borderRadius: "4px",
                   fontFamily: "var(--font-display)",
-                  fontSize: "var(--text-base)",
-                  fontWeight: location.pathname === item.path ? 600 : 500,
-                  color: location.pathname === item.path ? "var(--neutral-900)" : "var(--neutral-600)",
+                  fontSize: "24px",
+                  fontWeight: 600,
+                  letterSpacing: "-0.01em",
                   textDecoration: "none",
-                  padding: "var(--space-3) var(--space-4)",
-                  borderRadius: "var(--radius-md)",
-                  background: location.pathname === item.path ? "var(--neutral-100)" : "transparent",
+                  color: isHover ? "#0A0A0B" : "#ffffff",
+                  background: isHover ? "var(--scintilla-yellow)" : "transparent",
+                  transition:
+                    "background 0.15s ease, color 0.15s ease",
+                  paddingLeft: "26px",
                 }}
               >
+                <span
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    left: 4,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    width: "14px",
+                    height: "14px",
+                    borderRadius: "50%",
+                    background: "#ffffff",
+                    opacity: isCurrent ? 1 : 0,
+                  }}
+                />
                 {item.label}
               </Link>
-            ))}
-          </div>
-        )}
+            );
+          })}
+        </nav>
       </div>
-
-      <style>{`
-        @media (min-width: 768px) {
-          .desktop-nav {
-            display: flex !important;
-          }
-          .mobile-menu-btn {
-            display: none !important;
-          }
-        }
-
-        @media (max-width: 767px) {
-          .mobile-menu-btn {
-            display: flex !important;
-          }
-          .mobile-nav {
-            display: flex !important;
-          }
-        }
-      `}</style>
     </header>
   );
 }
+
+const lineStyle: React.CSSProperties = {
+  display: "block",
+  width: "100%",
+  height: "2px",
+  background: "#ffffff",
+  borderRadius: "1px",
+};
