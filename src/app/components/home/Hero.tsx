@@ -21,14 +21,31 @@ function useInView<T extends Element>(threshold = 0.35) {
   return { ref, inView };
 }
 
-function WaveRow({ color = "#0A0A0B" }: { color?: string }) {
-  const { ref, inView } = useInView<HTMLDivElement>(0.3);
+function WaveRow({
+  color = "#0A0A0B",
+  delayMs = 3000,
+}: {
+  color?: string;
+  delayMs?: number;
+}) {
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => {
+    const reduced =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      setRevealed(true);
+      return;
+    }
+    const t = window.setTimeout(() => setRevealed(true), delayMs);
+    return () => window.clearTimeout(t);
+  }, [delayMs]);
   // A row of dots arranged along one sine period; the SVG tiles via
   // repeat-x and slides rightward on a seamless loop once in view.
   const PERIOD = 320;
-  const HEIGHT = 40;
-  const DOTS = 16;
-  const AMP = 6;
+  const HEIGHT = 60;
+  const DOTS = 8;
+  const AMP = 16;
   const SQ = 10;
   const squares = Array.from({ length: DOTS }, (_, i) => {
     const cx = (i + 0.5) * (PERIOD / DOTS);
@@ -39,9 +56,12 @@ function WaveRow({ color = "#0A0A0B" }: { color?: string }) {
   }).join("");
   const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${PERIOD} ${HEIGHT}'>${squares}</svg>`;
   const dataUrl = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+  // Soft-edge wipe from the left: a 2x gradient mask slides so the fade
+  // line sweeps across from left to right.
+  const maskImage =
+    "linear-gradient(90deg, #000 0%, #000 45%, transparent 55%, transparent 100%)";
   return (
     <div
-      ref={ref}
       aria-hidden="true"
       className="wave-row"
       style={{
@@ -52,9 +72,19 @@ function WaveRow({ color = "#0A0A0B" }: { color?: string }) {
         backgroundPosition: "0 50%",
         backgroundSize: `${PERIOD}px ${HEIGHT}px`,
         imageRendering: "pixelated",
-        opacity: inView ? 1 : 0,
-        animation: inView ? "wave-scroll-right 6s linear infinite" : "none",
-        transition: "opacity 0.6s ease",
+        WebkitMaskImage: maskImage,
+        maskImage: maskImage,
+        WebkitMaskSize: "200% 100%",
+        maskSize: "200% 100%",
+        WebkitMaskRepeat: "no-repeat",
+        maskRepeat: "no-repeat",
+        WebkitMaskPosition: revealed ? "0% 0" : "100% 0",
+        maskPosition: revealed ? "0% 0" : "100% 0",
+        transition:
+          "mask-position 1.4s cubic-bezier(0.65,0,0.35,1), -webkit-mask-position 1.4s cubic-bezier(0.65,0,0.35,1)",
+        animation: revealed
+          ? "wave-scroll-right 6s linear infinite"
+          : "none",
       }}
     />
   );
