@@ -23,9 +23,19 @@ function useInView<T extends Element>(threshold = 0.35) {
 
 function WaveRow({ color = "#0A0A0B" }: { color?: string }) {
   const { ref, inView } = useInView<HTMLDivElement>(0.3);
-  // A single wave period viewBox 120x40; tiled via repeat-x, shifted
-  // rightward in an infinite loop once the row enters view.
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 40' preserveAspectRatio='none'><path d='M0 20 Q30 0 60 20 T120 20' fill='none' stroke='${color}' stroke-width='3' stroke-linecap='round'/></svg>`;
+  // A row of dots arranged along one sine period; the SVG tiles via
+  // repeat-x and slides rightward on a seamless loop once in view.
+  const PERIOD = 120;
+  const HEIGHT = 40;
+  const DOTS = 26;
+  const AMP = 12;
+  const R = 2.2;
+  const circles = Array.from({ length: DOTS }, (_, i) => {
+    const x = (i + 0.5) * (PERIOD / DOTS);
+    const y = HEIGHT / 2 + AMP * Math.sin((x / PERIOD) * Math.PI * 2);
+    return `<circle cx='${x.toFixed(2)}' cy='${y.toFixed(2)}' r='${R}' fill='${color}'/>`;
+  }).join("");
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${PERIOD} ${HEIGHT}' preserveAspectRatio='none'>${circles}</svg>`;
   const dataUrl = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
   return (
     <div
@@ -33,12 +43,12 @@ function WaveRow({ color = "#0A0A0B" }: { color?: string }) {
       aria-hidden="true"
       className="wave-row"
       style={{
-        height: "40px",
+        height: `${HEIGHT}px`,
         width: "100%",
         backgroundImage: dataUrl,
         backgroundRepeat: "repeat-x",
         backgroundPosition: "0 50%",
-        backgroundSize: "120px 40px",
+        backgroundSize: `${PERIOD}px ${HEIGHT}px`,
         opacity: inView ? 1 : 0,
         animation: inView ? "wave-scroll-right 6s linear infinite" : "none",
         transition: "opacity 0.6s ease",
