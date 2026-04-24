@@ -191,9 +191,9 @@ export function Hero() {
           <div>
             <p style={labelStyle}>Mission</p>
             <h2 style={missionHeadingStyle}>
-              <MarkerLine marker="var(--curaggi-yellow)">選択肢と勇気を</MarkerLine>
+              <MarkerLine marker="var(--scintilla-yellow)">選択肢と勇気を</MarkerLine>
               <br />
-              <MarkerLine marker="var(--curaggi-yellow)" delay={0.12}>
+              <MarkerLine marker="var(--scintilla-yellow)" delay={0.12}>
                 デザインする
               </MarkerLine>
             </h2>
@@ -206,7 +206,7 @@ export function Hero() {
       {/* Description section with teal background and white markers */}
       <section
         style={{
-          background: "var(--curaggi-teal-bright)",
+          background: "var(--fiducia-teal)",
           paddingTop: "var(--space-24)",
           paddingBottom: "var(--space-24)",
         }}
