@@ -153,7 +153,7 @@ export function Hero() {
       <section
         style={{
           background: "#ffffff",
-          paddingTop: "var(--space-12)",
+          paddingTop: 0,
           paddingBottom: "var(--space-12)",
         }}
       >
