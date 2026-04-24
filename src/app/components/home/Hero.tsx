@@ -21,44 +21,29 @@ function useInView<T extends Element>(threshold = 0.35) {
   return { ref, inView };
 }
 
-function DotRow({
-  count = 48,
-  color = "var(--neutral-900)",
-  size = 10,
-  stagger = 0.025,
-}: {
-  count?: number;
-  color?: string;
-  size?: number;
-  stagger?: number;
-}) {
+function WaveRow({ color = "#0A0A0B" }: { color?: string }) {
   const { ref, inView } = useInView<HTMLDivElement>(0.3);
+  // A single wave period viewBox 120x40; tiled via repeat-x, shifted
+  // rightward in an infinite loop once the row enters view.
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 40' preserveAspectRatio='none'><path d='M0 20 Q30 0 60 20 T120 20' fill='none' stroke='${color}' stroke-width='3' stroke-linecap='round'/></svg>`;
+  const dataUrl = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
   return (
     <div
       ref={ref}
       aria-hidden="true"
+      className="wave-row"
       style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "0 var(--space-6)",
+        height: "40px",
+        width: "100%",
+        backgroundImage: dataUrl,
+        backgroundRepeat: "repeat-x",
+        backgroundPosition: "0 50%",
+        backgroundSize: "120px 40px",
+        opacity: inView ? 1 : 0,
+        animation: inView ? "wave-scroll-right 6s linear infinite" : "none",
+        transition: "opacity 0.6s ease",
       }}
-    >
-      {Array.from({ length: count }).map((_, i) => (
-        <span
-          key={i}
-          style={{
-            width: `${size}px`,
-            height: `${size}px`,
-            background: color,
-            display: "block",
-            opacity: inView ? 1 : 0,
-            transform: inView ? "scale(1)" : "scale(0.2)",
-            transition: `opacity 0.25s ease ${i * stagger}s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1) ${i * stagger}s`,
-          }}
-        />
-      ))}
-    </div>
+    />
   );
 }
 
@@ -162,7 +147,7 @@ export function Hero() {
           paddingBottom: "var(--space-12)",
         }}
       >
-        <DotRow />
+        <WaveRow />
 
         <div
           className="container"
@@ -200,8 +185,20 @@ export function Hero() {
           </div>
         </div>
 
-        <DotRow />
+        <WaveRow />
       </section>
+
+      <style>{`
+        @keyframes wave-scroll-right {
+          from { background-position-x: 0px; }
+          to   { background-position-x: 120px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .wave-row {
+            animation: none !important;
+          }
+        }
+      `}</style>
 
       {/* Description section with teal background and white markers */}
       <section

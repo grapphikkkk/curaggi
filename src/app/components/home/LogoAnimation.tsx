@@ -50,7 +50,9 @@ const H_I = `calc(${H_LOWER} * 1.4)`;
 
 export function LogoAnimation() {
   const [stage, setStage] = useState(0);
-  const [rowOp, setRowOp] = useState<[number, number, number]>([0.3, 0.6, 1.0]);
+  const [rowOp, setRowOp] = useState<[number, number, number, number]>([
+    0.2, 0.4, 0.7, 1.0,
+  ]);
 
   useEffect(() => {
     const reduced =
@@ -73,9 +75,10 @@ export function LogoAnimation() {
     if (stage < 4) return;
     const tick = () => {
       setRowOp([
-        0.15 + Math.random() * 0.7,
-        0.2 + Math.random() * 0.7,
-        0.3 + Math.random() * 0.7,
+        0.1 + Math.random() * 0.55,
+        0.2 + Math.random() * 0.6,
+        0.35 + Math.random() * 0.55,
+        0.55 + Math.random() * 0.45,
       ]);
     };
     tick();
@@ -83,9 +86,10 @@ export function LogoAnimation() {
     return () => window.clearInterval(interval);
   }, [stage]);
 
-  const row1Op = stage >= 4 ? rowOp[0] : stage >= 1 ? 0.3 : 0;
-  const row2Op = stage >= 4 ? rowOp[1] : stage >= 3 ? 0.6 : 0;
-  const row3Op = stage >= 4 ? rowOp[2] : stage >= 3 ? 1.0 : 0;
+  const row1Op = stage >= 4 ? rowOp[0] : stage >= 1 ? 0.2 : 0;
+  const row2Op = stage >= 4 ? rowOp[1] : stage >= 3 ? 0.45 : 0;
+  const row3Op = stage >= 4 ? rowOp[2] : stage >= 3 ? 0.75 : 0;
+  const row4Op = stage >= 4 ? rowOp[3] : stage >= 3 ? 1.0 : 0;
 
   const rowBase: CSSProperties = {
     display: "block",
@@ -213,6 +217,18 @@ export function LogoAnimation() {
                 animation: "curaggi-row-in 0.45s 0.2s both",
               }}
             />
+            <img
+              src="/logos/logo.svg"
+              alt=""
+              aria-hidden
+              style={{
+                ...rowBase,
+                marginTop: ROW_OVERLAP,
+                opacity: row4Op,
+                transition: "opacity 2.4s ease 0.4s",
+                animation: "curaggi-row-in 0.45s 0.4s both",
+              }}
+            />
           </>
         )}
       </div>
@@ -230,7 +246,7 @@ export function LogoAnimation() {
            at the bottom. */
         @media (max-width: 767px) {
           .curaggi-logo-anim {
-            min-height: calc(80px + 3vh + min(92vw, 100vh) / 3.5714 * 2.88 + 6vh) !important;
+            min-height: calc(80px + 3vh + min(92vw, 100vh) / 3.5714 * 3.34 + 6vh) !important;
           }
         }
         @media (prefers-reduced-motion: reduce) {
