@@ -25,17 +25,19 @@ function WaveRow({ color = "#0A0A0B" }: { color?: string }) {
   const { ref, inView } = useInView<HTMLDivElement>(0.3);
   // A row of dots arranged along one sine period; the SVG tiles via
   // repeat-x and slides rightward on a seamless loop once in view.
-  const PERIOD = 120;
+  const PERIOD = 320;
   const HEIGHT = 40;
-  const DOTS = 26;
-  const AMP = 12;
-  const R = 2.2;
-  const circles = Array.from({ length: DOTS }, (_, i) => {
-    const x = (i + 0.5) * (PERIOD / DOTS);
-    const y = HEIGHT / 2 + AMP * Math.sin((x / PERIOD) * Math.PI * 2);
-    return `<circle cx='${x.toFixed(2)}' cy='${y.toFixed(2)}' r='${R}' fill='${color}'/>`;
+  const DOTS = 16;
+  const AMP = 6;
+  const SQ = 10;
+  const squares = Array.from({ length: DOTS }, (_, i) => {
+    const cx = (i + 0.5) * (PERIOD / DOTS);
+    const cy = HEIGHT / 2 + AMP * Math.sin((cx / PERIOD) * Math.PI * 2);
+    const x = cx - SQ / 2;
+    const y = cy - SQ / 2;
+    return `<rect x='${x.toFixed(2)}' y='${y.toFixed(2)}' width='${SQ}' height='${SQ}' fill='${color}'/>`;
   }).join("");
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${PERIOD} ${HEIGHT}' preserveAspectRatio='none'>${circles}</svg>`;
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${PERIOD} ${HEIGHT}'>${squares}</svg>`;
   const dataUrl = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
   return (
     <div
@@ -49,6 +51,7 @@ function WaveRow({ color = "#0A0A0B" }: { color?: string }) {
         backgroundRepeat: "repeat-x",
         backgroundPosition: "0 50%",
         backgroundSize: `${PERIOD}px ${HEIGHT}px`,
+        imageRendering: "pixelated",
         opacity: inView ? 1 : 0,
         animation: inView ? "wave-scroll-right 6s linear infinite" : "none",
         transition: "opacity 0.6s ease",
@@ -201,7 +204,7 @@ export function Hero() {
       <style>{`
         @keyframes wave-scroll-right {
           from { background-position-x: 0px; }
-          to   { background-position-x: 120px; }
+          to   { background-position-x: 320px; }
         }
         @media (prefers-reduced-motion: reduce) {
           .wave-row {
