@@ -74,17 +74,16 @@ const LETTERS: Letter[] = [
 
 const VB_W = 654;
 const VB_H = 183;
-// How far each letter fans out from center while spread (multiplier on
-// its offset from the composite's horizontal centerline).
-const SPREAD_FACTOR = 1.0;
-const SPREAD_SCALE = 0.55;
+// How far each letter fans out from center while spread (additional
+// horizontal offset = (cx - center) * SPREAD_FACTOR).
+const SPREAD_FACTOR = 0.55;
+const SPREAD_SCALE = 0.7;
 
 // logo.svg aspect ratio = 654 / 183 ≈ 3.5714
 const ROW_WIDTH = "min(92vw, 100vh)";
 const ROW_HEIGHT = "calc(min(92vw, 100vh) / 3.5714)";
 const ROW_OVERLAP = "calc(min(92vw, 100vh) / 3.5714 * -0.22)";
 const CENTER_TRANSLATE_Y = "calc(33vh - 80px)";
-const CENTER_SCALE = 0.55;
 
 // Animation stages:
 // 0  letters appear at spread positions (rotate-in + fade)
@@ -93,14 +92,17 @@ const CENTER_SCALE = 0.55;
 // 3  rows 2 & 3 fade in below
 // 4  idle loop — each row's opacity drifts smoothly
 const TIMING = {
-  toConverge: 800,
-  toFlipGrow: 1700,
-  toStack: 2500,
-  toLoop: 3700,
+  toConverge: 1300,
+  toFlipGrow: 2200,
+  toStack: 3000,
+  toLoop: 4200,
 };
+
+type Phase = "hidden" | "spread" | "converge";
 
 export function LogoAnimation() {
   const [stage, setStage] = useState(0);
+  const [phase, setPhase] = useState<Phase>("hidden");
   const [rowOp, setRowOp] = useState<[number, number, number]>([
     0.3, 0.6, 1.0,
   ]);
@@ -111,15 +113,24 @@ export function LogoAnimation() {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       setStage(4);
+      setPhase("converge");
       return;
     }
+    // Kick off entrance one tick after mount so the transition runs.
+    const enter = window.setTimeout(() => setPhase("spread"), 30);
     const timers = [
-      window.setTimeout(() => setStage(1), TIMING.toConverge),
+      window.setTimeout(() => {
+        setStage(1);
+        setPhase("converge");
+      }, TIMING.toConverge),
       window.setTimeout(() => setStage(2), TIMING.toFlipGrow),
       window.setTimeout(() => setStage(3), TIMING.toStack),
       window.setTimeout(() => setStage(4), TIMING.toLoop),
     ];
-    return () => timers.forEach((t) => window.clearTimeout(t));
+    return () => {
+      window.clearTimeout(enter);
+      timers.forEach((t) => window.clearTimeout(t));
+    };
   }, []);
 
   useEffect(() => {
@@ -148,8 +159,8 @@ export function LogoAnimation() {
 
   const compositeTransform =
     stage >= 2
-      ? "translateY(0) scale(1) rotateX(720deg)"
-      : `translateY(${CENTER_TRANSLATE_Y}) scale(${CENTER_SCALE}) rotateX(0deg)`;
+      ? "translateY(0) rotateX(720deg)"
+      : `translateY(${CENTER_TRANSLATE_Y}) rotateX(0deg)`;
 
   return (
     <section
@@ -211,6 +222,15 @@ export function LogoAnimation() {
               const cx = l.x + l.w / 2;
               const offset = (cx - VB_W / 2) * SPREAD_FACTOR;
               const spreadTf = `translate(${offset}px, 0) scale(${SPREAD_SCALE})`;
+              const transform =
+                phase === "hidden"
+                  ? `${spreadTf} rotateZ(-180deg)`
+                  : phase === "spread"
+                  ? `${spreadTf} rotateZ(0deg)`
+                  : "translate(0,0) scale(1) rotateZ(0deg)";
+              const opacity = phase === "hidden" ? 0 : 1;
+              const transitionDelay =
+                phase === "converge" ? "0s" : `${i * 0.07}s`;
               return (
                 <g
                   key={i}
@@ -219,11 +239,11 @@ export function LogoAnimation() {
                     {
                       transformBox: "fill-box",
                       transformOrigin: "center",
-                      transform: stage < 1 ? spreadTf : "translate(0,0) scale(1)",
+                      transform,
+                      opacity,
                       transition:
-                        "transform 0.85s cubic-bezier(0.65,0,0.35,1)",
-                      animation: `logo-letter-in 0.4s ${i * 0.06}s cubic-bezier(0.2,0.8,0.2,1) both`,
-                      ["--spread-tf" as string]: spreadTf,
+                        "transform 0.7s cubic-bezier(0.2,0.8,0.2,1), opacity 0.35s ease",
+                      transitionDelay,
                     } as CSSProperties
                   }
                 >
@@ -265,10 +285,6 @@ export function LogoAnimation() {
       </div>
 
       <style>{`
-        @keyframes logo-letter-in {
-          from { opacity: 0; transform: var(--spread-tf) rotateZ(-180deg); }
-          to   { opacity: 1; transform: var(--spread-tf) rotateZ(0deg); }
-        }
         @keyframes curaggi-row-in {
           from { opacity: 0; }
         }

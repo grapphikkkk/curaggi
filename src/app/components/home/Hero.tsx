@@ -23,7 +23,7 @@ function useInView<T extends Element>(threshold = 0.35) {
 
 function WaveRow({
   color = "#0A0A0B",
-  delayMs = 3000,
+  delayMs = 3500,
 }: {
   color?: string;
   delayMs?: number;
