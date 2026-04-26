@@ -46,7 +46,7 @@ function MarkerLine({
         backgroundRepeat: "no-repeat",
         backgroundPosition: "left center",
         backgroundSize: inView ? "100% 100%" : "0% 100%",
-        padding: 0,
+        padding: "1px 0 0 0",
         borderRadius: "5px",
         opacity: inView ? 1 : 0,
         transform: inView ? "translateY(0)" : "translateY(0.25em)",
@@ -131,8 +131,9 @@ const HIGHLIGHTS: Highlight[] = [
     tag: "自社開発サービス",
     heading: [
       "偶然を設計し、",
-      "失われつつあるリアルの",
-      "つながりを取りもどす。",
+      "失われつつある",
+      "リアルのつながりを",
+      "取りもどす。",
     ],
     body: [
       [

@@ -98,6 +98,7 @@ type MarkerLineProps = {
   marker: string;
   delay?: number;
   textColor?: string;
+  radius?: number;
 };
 
 function MarkerLine({
@@ -105,6 +106,7 @@ function MarkerLine({
   marker,
   delay = 0,
   textColor = "#0A0A0B",
+  radius = 5,
 }: MarkerLineProps) {
   const { ref, inView } = useInView<HTMLSpanElement>(0.4);
   return (
@@ -118,8 +120,8 @@ function MarkerLine({
         backgroundRepeat: "no-repeat",
         backgroundPosition: "left center",
         backgroundSize: inView ? "100% 100%" : "0% 100%",
-        padding: 0,
-        borderRadius: "5px",
+        padding: "1px 0 0 0",
+        borderRadius: `${radius}px`,
         opacity: inView ? 1 : 0,
         transform: inView ? "translateY(0)" : "translateY(0.25em)",
         transition: [
@@ -137,9 +139,10 @@ function MarkerLine({
 const DESCRIPTION_GROUPS: string[][] = [
   ["知らず知らずのうちに、", "選択肢を失ってしまう場面があります。"],
   [
-    "日常の中では、使いにくさや複雑さという壁によって、",
-    "本来享受できたはずの体験にたどり着けず、",
-    "その手前で諦めてしまうことがあります。",
+    "日常の中では、",
+    "複雑さの壁によって、",
+    "本来享受できたはずの体験ができず、",
+    "あきらめてしまうことがあります。",
   ],
   [
     "さらに視野を広げれば、",
@@ -149,8 +152,10 @@ const DESCRIPTION_GROUPS: string[][] = [
   ],
   [
     "デザインの力で、",
-    "本来ひらかれていたはずの選択肢を取り戻し、",
-    "自ら選び取れる可能性を増やしていきたい。",
+    "本来拓かれていたはずの",
+    "選択肢を取り戻し、",
+    "自ら、",
+    "選び取れる可能性を増やしていきたい。",
   ],
   ["選択肢を持つことが、", "一歩先へ進む勇気になります。"],
 ];
@@ -282,7 +287,7 @@ export function Hero() {
                   descCounter += 1;
                   return (
                     <span key={li}>
-                      <MarkerLine marker="#ffffff" delay={delay}>
+                      <MarkerLine marker="#ffffff" delay={delay} radius={2}>
                         {line}
                       </MarkerLine>
                       {li < group.length - 1 && <br />}
