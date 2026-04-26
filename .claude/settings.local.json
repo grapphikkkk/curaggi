@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm .github/workflows/deploy.yml)",
+      "Bash(rmdir .github/workflows)",
+      "Bash(rmdir .github)",
+      "Bash(cp \"C:/Users/yoj92/OneDrive/05_/favicon.ico\" \"C:/Users/yoj92/OneDrive/Desktop/Curaggi/public/favicon.ico\")",
+      "Bash(cp \"C:/Users/yoj92/OneDrive/05_/logo.png\" \"C:/Users/yoj92/OneDrive/Desktop/Curaggi/public/logo.png\")",
+      "Bash(where pdftoppm *)",
+      "Bash(pdftotext -layout -enc UTF-8 \"C:/Users/yoj92/OneDrive/05_Curaggi/職務経歴書_2026.pdf\" \"C:/Users/yoj92/OneDrive/Desktop/Curaggi/resume.txt\")",
+      "Bash(pdftotext -layout -enc UTF-8 \"C:/Users/yoj92/OneDrive/05_Curaggi/会社案内_202604.pdf\" \"C:/Users/yoj92/OneDrive/Desktop/Curaggi/company.txt\")",
+      "Bash(pdftotext -layout -enc UTF-8 \"C:/Users/yoj92/OneDrive/05_Curaggi/Portfolio_YutaNISHI.pdf\" \"C:/Users/yoj92/OneDrive/Desktop/Curaggi/portfolio.txt\")",
+      "Bash(rm \"C:/Users/yoj92/OneDrive/Desktop/Curaggi/resume.txt\" \"C:/Users/yoj92/OneDrive/Desktop/Curaggi/company.txt\" \"C:/Users/yoj92/OneDrive/Desktop/Curaggi/portfolio.txt\")",
+      "Bash(mkdir -p \"C:/Users/yoj92/OneDrive/Desktop/Curaggi/public/images\")",
+      "Bash(curl -sL -o service-prototype.jpg \"https://images.unsplash.com/photo-1553484771-371a605b060b?w=1600&q=80\")",
+      "Bash(curl -sL -o service-ux.jpg \"https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&q=80\")",
+      "Bash(curl -sL -o service-seminar.jpg \"https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1600&q=80\")",
+      "Bash(curl -sL -o service-community.jpg \"https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=1600&q=80\")",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(npm list *)",
+      "Bash(npm install *)",
+      "Bash(node scripts/extract-letter-bboxes.mjs)"
+    ]
+  }
+}

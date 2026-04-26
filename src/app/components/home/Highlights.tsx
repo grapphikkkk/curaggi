@@ -45,7 +45,8 @@ function MarkerLine({
         backgroundRepeat: "no-repeat",
         backgroundPosition: "left center",
         backgroundSize: inView ? "100% 100%" : "0% 100%",
-        padding: "0 0.08em",
+        padding: 0,
+        borderRadius: "5px",
         opacity: inView ? 1 : 0,
         transform: inView ? "translateY(0)" : "translateY(0.25em)",
         transition: [
@@ -64,6 +65,7 @@ type Highlight = {
   bg: string;
   markerColor: string;
   textColor: string;
+  tagColor: string;
   tag: string;
   heading: string[];
   body: string[][];
@@ -76,6 +78,7 @@ const HIGHLIGHTS: Highlight[] = [
     bg: "var(--visione-purple)",
     markerColor: "#ffffff",
     textColor: "#0A0A0B",
+    tagColor: "#ffffff",
     tag: "爆速プロトタイピング支援",
     heading: ["机上の空論に、", "早くおさらば。"],
     body: [
@@ -101,6 +104,7 @@ const HIGHLIGHTS: Highlight[] = [
     bg: "var(--fiducia-teal)",
     markerColor: "#ffffff",
     textColor: "#0A0A0B",
+    tagColor: "#0A0A0B",
     tag: "AI活用支援 / AI活用セミナー",
     heading: ["AI時代は設計力。", "つくれるから、", "設計できるへ。"],
     body: [
@@ -122,6 +126,7 @@ const HIGHLIGHTS: Highlight[] = [
     bg: "var(--scintilla-yellow)",
     markerColor: "#ffffff",
     textColor: "#0A0A0B",
+    tagColor: "#0A0A0B",
     tag: "自社開発サービス",
     heading: [
       "偶然を設計し、",
@@ -260,13 +265,13 @@ function HighlightBlock({
               position: "relative",
               zIndex: 1,
               display: "inline-block",
-              border: `2px solid ${h.textColor}`,
+              border: `2px solid ${h.tagColor}`,
               padding: "0.45em 0.9em",
               marginBottom: "var(--space-10)",
               fontFamily: "var(--font-display), var(--font-jp)",
               fontSize: "var(--text-sm)",
               fontWeight: 700,
-              color: h.textColor,
+              color: h.tagColor,
               letterSpacing: "0.02em",
               background: "transparent",
             }}
@@ -333,8 +338,8 @@ export function Highlights() {
   return (
     <>
       <HighlightBlock h={HIGHLIGHTS[0]} showTopCurve />
-      <HighlightBlock h={HIGHLIGHTS[1]} noBottomPad />
-      <HighlightBlock h={HIGHLIGHTS[2]} noTopPad />
+      <HighlightBlock h={HIGHLIGHTS[1]} />
+      <HighlightBlock h={HIGHLIGHTS[2]} />
     </>
   );
 }

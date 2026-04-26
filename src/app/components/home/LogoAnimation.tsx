@@ -231,6 +231,13 @@ export function LogoAnimation() {
               const opacity = phase === "hidden" ? 0 : 1;
               const transitionDelay =
                 phase === "converge" ? "0s" : `${i * 0.07}s`;
+              // Anchor each letter's scale/rotate origin to the shared
+              // baseline (y = 141 in viewBox units) so the bottoms of
+              // u / r / a / i / C and the body bottom of g all line up
+              // when the spread scale is applied.
+              const BASELINE_Y = 141;
+              const originX = cx - l.x;
+              const originY = BASELINE_Y - l.y;
               return (
                 <g
                   key={i}
@@ -238,7 +245,7 @@ export function LogoAnimation() {
                   style={
                     {
                       transformBox: "fill-box",
-                      transformOrigin: "center",
+                      transformOrigin: `${originX}px ${originY}px`,
                       transform,
                       opacity,
                       transition:

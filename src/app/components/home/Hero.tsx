@@ -56,10 +56,13 @@ function WaveRow({
   }).join("");
   const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${PERIOD} ${HEIGHT}'>${squares}</svg>`;
   const dataUrl = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
-  // Soft-edge wipe from the left: a 2x gradient mask slides so the fade
-  // line sweeps across from left to right.
+  // Soft-edge wipe from the left. Mask is 3x element width with the
+  // black region 0-33%, fade 33-50%, transparent 50-100% — so at
+  // position 100% the visible window lands fully in the transparent
+  // zone (no leakage) and at position 0% it lands fully in the black
+  // zone (fully revealed).
   const maskImage =
-    "linear-gradient(90deg, #000 0%, #000 45%, transparent 55%, transparent 100%)";
+    "linear-gradient(90deg, #000 0%, #000 33%, transparent 50%, transparent 100%)";
   return (
     <div
       aria-hidden="true"
@@ -74,8 +77,8 @@ function WaveRow({
         imageRendering: "pixelated",
         WebkitMaskImage: maskImage,
         maskImage: maskImage,
-        WebkitMaskSize: "200% 100%",
-        maskSize: "200% 100%",
+        WebkitMaskSize: "300% 100%",
+        maskSize: "300% 100%",
         WebkitMaskRepeat: "no-repeat",
         maskRepeat: "no-repeat",
         WebkitMaskPosition: revealed ? "0% 0" : "100% 0",
@@ -114,7 +117,8 @@ function MarkerLine({
         backgroundRepeat: "no-repeat",
         backgroundPosition: "left center",
         backgroundSize: inView ? "100% 100%" : "0% 100%",
-        padding: "0 0.08em",
+        padding: 0,
+        borderRadius: "5px",
         opacity: inView ? 1 : 0,
         transform: inView ? "translateY(0)" : "translateY(0.25em)",
         transition: [
@@ -255,7 +259,7 @@ export function Hero() {
           <div
             style={{
               fontFamily: "var(--font-display), var(--font-jp)",
-              fontSize: "clamp(18px, 3.3vw, 45px)",
+              fontSize: "40px",
               fontWeight: 900,
               lineHeight: 1.55,
               letterSpacing: "-0.005em",
