@@ -41,6 +41,7 @@ function MarkerLine({
       style={{
         display: "inline-block",
         color: textColor,
+        lineHeight: 1,
         backgroundImage: `linear-gradient(${marker}, ${marker})`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "left center",

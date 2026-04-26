@@ -113,6 +113,7 @@ function MarkerLine({
       style={{
         display: "inline-block",
         color: textColor,
+        lineHeight: 1,
         backgroundImage: `linear-gradient(${marker}, ${marker})`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "left center",
@@ -259,7 +260,7 @@ export function Hero() {
           <div
             style={{
               fontFamily: "var(--font-display), var(--font-jp)",
-              fontSize: "40px",
+              fontSize: "clamp(18px, 5vw, 40px)",
               fontWeight: 900,
               lineHeight: 1.55,
               letterSpacing: "-0.005em",
