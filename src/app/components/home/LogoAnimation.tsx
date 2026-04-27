@@ -75,9 +75,12 @@ const LETTERS: Letter[] = [
 const VB_W = 654;
 const VB_H = 183;
 // How far each letter fans out from center while spread (additional
-// horizontal offset = (cx - center) * SPREAD_FACTOR).
-const SPREAD_FACTOR = 0.55;
-const SPREAD_SCALE = 0.7;
+// horizontal offset = (cx - center) * SPREAD_FACTOR). Smaller scale on
+// phones so the rightmost letters never escape the device width.
+const SPREAD_FACTOR_DESKTOP = 0.55;
+const SPREAD_SCALE_DESKTOP = 0.7;
+const SPREAD_FACTOR_MOBILE = 0.05;
+const SPREAD_SCALE_MOBILE = 0.55;
 
 // logo.svg aspect ratio = 654 / 183 ≈ 3.5714
 const ROW_WIDTH = "min(92vw, 100vh)";
@@ -103,9 +106,21 @@ type Phase = "hidden" | "spread" | "converge";
 export function LogoAnimation() {
   const [stage, setStage] = useState(0);
   const [phase, setPhase] = useState<Phase>("hidden");
+  const [isMobile, setIsMobile] = useState(false);
   const [rowOp, setRowOp] = useState<[number, number, number]>([
     0.3, 0.6, 1.0,
   ]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const SPREAD_FACTOR = isMobile ? SPREAD_FACTOR_MOBILE : SPREAD_FACTOR_DESKTOP;
+  const SPREAD_SCALE = isMobile ? SPREAD_SCALE_MOBILE : SPREAD_SCALE_DESKTOP;
 
   useEffect(() => {
     const reduced =

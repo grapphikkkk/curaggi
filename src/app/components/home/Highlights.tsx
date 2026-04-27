@@ -26,6 +26,7 @@ type MarkerLineProps = {
   marker: string;
   delay?: number;
   textColor?: string;
+  radius?: number;
 };
 
 function MarkerLine({
@@ -33,6 +34,7 @@ function MarkerLine({
   marker,
   delay = 0,
   textColor = "#0A0A0B",
+  radius = 5,
 }: MarkerLineProps) {
   const { ref, inView } = useInView<HTMLSpanElement>(0.4);
   return (
@@ -47,7 +49,7 @@ function MarkerLine({
         backgroundPosition: "left center",
         backgroundSize: inView ? "100% 100%" : "0% 100%",
         padding: "1px 0 0 0",
-        borderRadius: "5px",
+        borderRadius: `${radius}px`,
         opacity: inView ? 1 : 0,
         transform: inView ? "translateY(0)" : "translateY(0.25em)",
         transition: [
@@ -81,7 +83,7 @@ const HIGHLIGHTS: Highlight[] = [
     textColor: "#0A0A0B",
     tagColor: "#ffffff",
     tag: "爆速プロトタイピング支援",
-    heading: ["机上の空論に、", "早くおさらば。"],
+    heading: ["机上の空論に", "早くおさらば。"],
     body: [
       [
         "パワーポイントの議論だけでは、",
@@ -107,7 +109,7 @@ const HIGHLIGHTS: Highlight[] = [
     textColor: "#0A0A0B",
     tagColor: "#0A0A0B",
     tag: "AI活用支援 / AI活用セミナー",
-    heading: ["AI時代は設計力。", "つくれるから、", "設計できるへ。"],
+    heading: ["AI制作は", "設計力が9割。"],
     body: [
       [
         "AIで「作れる」はもはや当たり前の時代に。",
@@ -130,7 +132,6 @@ const HIGHLIGHTS: Highlight[] = [
     tagColor: "#0A0A0B",
     tag: "自社開発サービス",
     heading: [
-      "偶然を設計し、",
       "失われつつある",
       "リアルのつながりを",
       "取りもどす。",
@@ -157,11 +158,13 @@ function HighlightBlock({
   showTopCurve,
   noBottomPad,
   noTopPad,
+  topHeader,
 }: {
   h: Highlight;
   showTopCurve?: boolean;
   noBottomPad?: boolean;
   noTopPad?: boolean;
+  topHeader?: { en: string; ja: string };
 }) {
   let counter = 0;
   return (
@@ -172,7 +175,7 @@ function HighlightBlock({
         paddingTop: noTopPad
           ? 0
           : showTopCurve
-          ? "clamp(80px, 14vw, 200px)"
+          ? "clamp(120px, 18vw, 260px)"
           : "var(--space-24)",
         paddingBottom: noBottomPad ? 0 : "var(--space-24)",
         overflow: "hidden",
@@ -181,23 +184,63 @@ function HighlightBlock({
       {showTopCurve && (
         <svg
           aria-hidden="true"
-          viewBox="0 0 1440 220"
+          viewBox="0 0 1440 260"
           preserveAspectRatio="none"
           style={{
             position: "absolute",
             top: 0,
             left: 0,
             width: "100%",
-            height: "clamp(80px, 14vw, 220px)",
+            height: "clamp(120px, 18vw, 260px)",
             display: "block",
           }}
         >
-          <rect x="0" y="0" width="1440" height="220" fill="var(--fiducia-teal)" />
+          <rect x="0" y="0" width="1440" height="260" fill="var(--fiducia-teal)" />
           <path
-            d="M0,120 C240,200 480,40 720,120 C960,200 1200,40 1440,120 L1440,220 L0,220 Z"
+            d="M0,150 C160,250 360,30 720,170 C920,250 1140,-20 1440,90 L1440,260 L0,260 Z"
             fill="var(--visione-purple)"
           />
         </svg>
+      )}
+
+      {topHeader && (
+        <div
+          className="container"
+          style={{
+            position: "relative",
+            zIndex: 1,
+            textAlign: "center",
+            paddingTop: "var(--space-8)",
+            paddingBottom: "clamp(80px, 12vw, 160px)",
+          }}
+        >
+          <h2
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(56px, 9vw, 120px)",
+              fontWeight: 800,
+              color: "rgba(255,255,255,0.55)",
+              letterSpacing: "-0.02em",
+              lineHeight: 1,
+              margin: 0,
+            }}
+          >
+            {topHeader.en}
+          </h2>
+          <p
+            style={{
+              fontFamily: "var(--font-display), var(--font-jp)",
+              fontSize: "var(--text-lg)",
+              fontWeight: 600,
+              color: "#ffffff",
+              letterSpacing: "0.04em",
+              marginTop: "var(--space-4)",
+              marginBottom: 0,
+            }}
+          >
+            {topHeader.ja}
+          </p>
+        </div>
       )}
 
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
@@ -311,6 +354,7 @@ function HighlightBlock({
                         marker={h.markerColor}
                         delay={delay}
                         textColor={h.textColor}
+                        radius={2}
                       >
                         {line}
                       </MarkerLine>
@@ -339,7 +383,11 @@ function HighlightBlock({
 export function Highlights() {
   return (
     <>
-      <HighlightBlock h={HIGHLIGHTS[0]} showTopCurve />
+      <HighlightBlock
+        h={HIGHLIGHTS[0]}
+        showTopCurve
+        topHeader={{ en: "Services", ja: "事業領域" }}
+      />
       <HighlightBlock h={HIGHLIGHTS[1]} />
       <HighlightBlock h={HIGHLIGHTS[2]} />
     </>
