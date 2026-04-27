@@ -48,7 +48,7 @@ export function ShortContext() {
                 opacity: 0.6,
               }}
             >
-              /kuˈrad.dʒi/ — courage
+              /kuˈrad.dʒi/ — クラッヂ
             </span>
           </h2>
 
