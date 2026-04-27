@@ -112,7 +112,7 @@
 /* ── Cards ── */
 .card {
   background: var(--white);
-  border-radius: var(--radius-xl);
+  border-radius: 2px;
   overflow: hidden;
   border: 1px solid var(--neutral-200);
   transition: background var(--duration-normal) var(--ease-m3),

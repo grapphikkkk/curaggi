@@ -56,7 +56,7 @@ export function NewsCard({ title, date, category, summary, slug }: NewsCardProps
             fontFamily: "var(--font-display)",
             fontSize: "var(--text-sm)",
             fontWeight: 600,
-            color: "var(--a11y-teal)",
+            color: "#0A0A0B",
             textDecoration: "none",
             transition: "gap var(--duration-fast) var(--ease-out)",
           }}
