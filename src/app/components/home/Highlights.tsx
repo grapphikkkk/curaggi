@@ -220,11 +220,14 @@ function HighlightBlock({
             width: "100%",
             height: "clamp(120px, 18vw, 260px)",
             display: "block",
+            shapeRendering: "geometricPrecision",
           }}
         >
-          <rect x="0" y="0" width="1440" height="260" fill="var(--fiducia-teal)" />
+          {/* Above the path: the previous section's background shows
+              through. Below: this section's purple bg lines up with the
+              path's fill at sub-pixel precision. */}
           <path
-            d="M0,150 C160,250 360,30 720,170 C920,250 1140,-20 1440,90 L1440,260 L0,260 Z"
+            d="M0,150 C160,250 360,30 720,170 C920,250 1140,-20 1440,90 L1440,261 L0,261 Z"
             fill="var(--visione-purple)"
           />
         </svg>

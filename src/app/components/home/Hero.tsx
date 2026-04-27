@@ -261,24 +261,26 @@ export function Hero() {
           overflow: "hidden",
         }}
       >
-        {/* Top wave — opposite curve of the purple/teal one in
-            Highlights: a center peak that pushes teal up into white */}
+        {/* Top wave — center peak that pushes teal up into the white
+            section above. No background rect: above the path is the
+            previous section's background, below it is this section's
+            background, so there's no seam at sub-pixel boundaries. */}
         <svg
           aria-hidden="true"
-          viewBox="0 0 1440 220"
+          viewBox="0 0 1440 260"
           preserveAspectRatio="none"
           style={{
             position: "absolute",
             top: 0,
             left: 0,
             width: "100%",
-            height: "clamp(120px, 18vw, 220px)",
+            height: "clamp(120px, 18vw, 260px)",
             display: "block",
+            shapeRendering: "geometricPrecision",
           }}
         >
-          <rect x="0" y="0" width="1440" height="220" fill="#ffffff" />
           <path
-            d="M0,150 C220,200 460,30 720,40 C960,30 1200,200 1440,150 L1440,220 L0,220 Z"
+            d="M0,180 C220,236 460,35 720,55 C960,35 1200,236 1440,180 L1440,261 L0,261 Z"
             fill="var(--fiducia-teal)"
           />
         </svg>
