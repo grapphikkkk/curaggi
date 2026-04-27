@@ -1,7 +1,9 @@
 import { useParams, Link } from "react-router";
 import { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { Seo } from "../components/Seo";
 import { NewsCard } from "../components/news/NewsCard";
 import { getArticleBySlug, articles, isNewArticle } from "../components/news/articles";
 
@@ -109,8 +111,48 @@ export function NewsArticle() {
 
   const Content = article.content;
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.summary,
+    datePublished: article.date,
+    inLanguage: "ja",
+    author: {
+      "@type": "Organization",
+      name: "株式会社Curaggi",
+      url: "https://www.curaggi.jp/",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "株式会社Curaggi",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.curaggi.jp/logos/logo.svg",
+      },
+    },
+    mainEntityOfPage: `https://www.curaggi.jp/news/${article.slug}`,
+    image: "https://www.curaggi.jp/og-image.png",
+    keywords: article.tags.join(", "),
+  };
+
   return (
     <div>
+      <Seo
+        title={article.title}
+        description={article.summary}
+        path={`/news/${article.slug}`}
+        article={{
+          publishedTime: article.date,
+          tags: article.tags,
+          category: article.category,
+        }}
+      />
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(articleJsonLd)}
+        </script>
+      </Helmet>
       <Header />
       <main style={{ paddingTop: "80px" }}>
         <div className="article">

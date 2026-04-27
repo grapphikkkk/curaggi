@@ -7,14 +7,30 @@ export function CompanyInfo() {
     {
       label: "事業内容",
       value: (
-        <ul style={{ paddingLeft: "var(--space-5)", margin: 0, lineHeight: 1.9 }}>
-          <li>インターネット等の通信ネットワーク及び電子技術を利用した各種情報提供サービス及び情報収集サービス</li>
-          <li>ＥＣ（電子商取引）サイト、アプリ、その他各種ウェブサイトの企画、デザイン、制作、販売、配信、運営及び管理</li>
-          <li>UI(ユーザーインターフェース)・UX(ユーザーエクスペリエンス)デザイン・サービスデザイン・デザインスプリント領域におけるコンサルティング業務</li>
-          <li>研修、セミナー、講演会、講習会等の各種催事の企画、立案、実施、運営及びそれらに関するコンサルティング業務</li>
-          <li>性別・性的指向・人種問題に関する啓発活動</li>
-          <li>各種イベントの企画、運営の請負及び飲食店の予約代行業務</li>
-          <li>前各号に附帯関連する一切の事業</li>
+        <ul
+          style={{
+            paddingLeft: "var(--space-5)",
+            margin: 0,
+            lineHeight: 1.9,
+            listStyleType: "disc",
+            listStylePosition: "outside",
+          }}
+        >
+          <li style={{ listStyleType: "disc" }}>
+            インターネット等の通信ネットワーク及び電子技術を利用した各種情報提供サービス及び情報収集サービス
+          </li>
+          <li style={{ listStyleType: "disc" }}>
+            ＥＣ（電子商取引）サイト、アプリ、その他各種ウェブサイトの企画、デザイン、制作、販売、配信、運営及び管理
+          </li>
+          <li style={{ listStyleType: "disc" }}>
+            UI(ユーザーインターフェース)・UX(ユーザーエクスペリエンス)デザイン・サービスデザイン・デザインスプリント領域におけるコンサルティング業務
+          </li>
+          <li style={{ listStyleType: "disc" }}>
+            研修、セミナー、講演会、講習会等の各種催事の企画、立案、実施、運営及びそれらに関するコンサルティング業務
+          </li>
+          <li style={{ listStyleType: "disc" }}>性別・性的指向・人種問題に関する啓発活動</li>
+          <li style={{ listStyleType: "disc" }}>各種イベントの企画、運営の請負及び飲食店の予約代行業務</li>
+          <li style={{ listStyleType: "disc" }}>前各号に附帯関連する一切の事業</li>
         </ul>
       ),
     },
@@ -71,10 +87,11 @@ export function CompanyInfo() {
           会社概要
         </h2>
 
-        <dl style={{ margin: 0 }}>
+        <dl style={{ margin: 0 }} className="company-info">
           {info.map((item, index) => (
             <div
               key={index}
+              className="company-info__row"
               style={{
                 display: "grid",
                 gridTemplateColumns: "minmax(140px, 200px) 1fr",
@@ -112,6 +129,15 @@ export function CompanyInfo() {
           ))}
         </dl>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .company-info__row {
+            grid-template-columns: 1fr !important;
+            gap: var(--space-2) !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

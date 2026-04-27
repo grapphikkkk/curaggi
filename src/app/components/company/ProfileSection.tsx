@@ -9,7 +9,7 @@ const careers: CareerEntry[] = [
     period: "2013 — 2018",
     organization: "早稲田大学",
     description:
-      "東進ハイスクールやイトマンスイミングスクールのWEB制作（デザイン・コーディング）やディレクションを経験し、デジタル業界へ興味をもつ。",
+      "大手予備校やスイミングスクールのWEB制作インターンシップにて、デザイン・コーディング・ディレクションを経験し、デジタル業界へ興味をもつ。",
   },
   {
     period: "2018 — 2023",
@@ -65,21 +65,24 @@ export function ProfileSection() {
             marginBottom: "var(--space-4)",
           }}
         >
-          Yuta Nishi
+          代表紹介
         </h2>
-        <p
+        <div
           style={{
             fontFamily: "var(--font-display), var(--font-jp)",
             fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
             fontWeight: 500,
             color: "#ffffff",
-            opacity: 0.7,
             marginBottom: "var(--space-16)",
             letterSpacing: "-0.01em",
+            lineHeight: 1.7,
           }}
         >
-          西 湧太 — 株式会社Curaggi 代表 / UXデザイナー・サービスデザイナー / Claude AI活用講師
-        </p>
+          <div style={{ fontWeight: 700, fontSize: "1.2em" }}>西 湧太</div>
+          <div style={{ opacity: 0.85 }}>株式会社Curaggi 代表取締役</div>
+          <div style={{ opacity: 0.85 }}>UXデザイナー / サービスデザイナー</div>
+          <div style={{ opacity: 0.85 }}>Claude AI 活用講師</div>
+        </div>
 
         <div
           style={{

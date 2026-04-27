@@ -1,11 +1,17 @@
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { Seo } from "../components/Seo";
 import { NewsCard } from "../components/news/NewsCard";
 import { articles } from "../components/news/articles";
 
 export function News() {
   return (
     <div>
+      <Seo
+        title="News / Insight"
+        description="Curaggi のお知らせと、UXデザイン・AI活用・プロトタイピングに関するインサイト記事をお届けします。"
+        path="/news"
+      />
       <Header />
       <main style={{ paddingTop: "80px", background: "#ffffff", color: "#0A0A0B" }}>
         <section

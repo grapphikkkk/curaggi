@@ -1,11 +1,17 @@
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { Seo } from "../components/Seo";
 import { CompanyInfo } from "../components/company/CompanyInfo";
 import { ProfileSection } from "../components/company/ProfileSection";
 
 export function Company() {
   return (
     <div>
+      <Seo
+        title="会社概要"
+        description="株式会社Curaggi の会社概要・代表プロフィール。UXデザインと AI活用で『あきらめなくていい世界をつくる』を掲げる東京・西新宿のクリエイティブスタジオです。"
+        path="/company"
+      />
       <Header />
       <main style={{ paddingTop: "80px", background: "#ffffff", color: "#0A0A0B" }}>
         <section
