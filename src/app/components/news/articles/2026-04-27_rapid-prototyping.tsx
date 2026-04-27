@@ -11,6 +11,8 @@ import type { Article } from "./types";
 
 const PURPLE = "var(--visione-purple)";
 const TEAL = "var(--fiducia-teal)";
+const YELLOW = "var(--scintilla-yellow)";
+const PINK = "var(--curaggi-pink)";
 const INK = "#0A0A0B"; // single allowed body color (black)
 
 const PROCESS_STEPS: { label: string; desc: string }[] = [
@@ -274,7 +276,7 @@ function DomainMap() {
             position: "relative",
             padding: "var(--space-5)",
             border: `2px solid ${INK}`,
-            background: c.isOurs ? TEAL : "#ffffff",
+            background: c.isOurs ? YELLOW : "#ffffff",
           }}
         >
           {c.isOurs && (
@@ -405,13 +407,7 @@ function PainPoint({
   body: string;
 }) {
   return (
-    <div
-      style={{
-        margin: "var(--space-6) 0",
-        paddingLeft: "var(--space-5)",
-        borderLeft: `4px solid ${INK}`,
-      }}
-    >
+    <div style={{ margin: "var(--space-6) 0" }}>
       <div
         style={{
           fontFamily: "var(--font-display), var(--font-jp)",
@@ -572,9 +568,21 @@ export const article: Article = {
         body="AI を使ってもインプットの設計が雑だと、生成物は使い物になりません。AI で「速く作れる」ことと「価値あるものを作れる」ことは別物です。"
       />
 
-      <blockquote style={{ color: INK }}>
-        共通する原因は、ひとつ。<br />
+      <blockquote
+        style={{
+          color: INK,
+          background: "transparent",
+          borderLeft: `4px solid ${PINK}`,
+          fontStyle: "normal",
+        }}
+      >
+        共通する原因は、ひとつ。
+        <br />
         構想段階に「動くもの」がないこと。
+        <br />
+        構想段階に意思統一できる「動くもの」を、いかに早く出せるか。
+        <br />
+        それがプロジェクト全体の質とスピードを左右します。
       </blockquote>
 
       {/* ────────────────────────────── */}
