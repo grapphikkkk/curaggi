@@ -264,11 +264,10 @@ export function Hero() {
           overflow: "hidden",
         }}
       >
-        {/* Top wave — center peak pushes teal up into the white
-            section above. The white rect above the path mirrors the
-            previous section's bg; positioning the SVG at top: -1px and
-            stretching it +1px taller absorbs any sub-pixel rounding so
-            the white block lines up flush with the previous section. */}
+        {/* Top wave — a single white-filled shape that covers the upper
+            portion of this section. Below the wave the path is empty
+            so the section's own teal bg shows through. No rect, so
+            there's no element-boundary seam. */}
         <svg
           aria-hidden="true"
           viewBox="0 0 1440 260"
@@ -278,15 +277,14 @@ export function Hero() {
             top: "-1px",
             left: 0,
             width: "100%",
-            height: "calc(clamp(120px, 18vw, 260px) + 2px)",
+            height: "calc(clamp(120px, 18vw, 260px) + 1px)",
             display: "block",
             shapeRendering: "geometricPrecision",
           }}
         >
-          <rect x="-1" y="-1" width="1442" height="262" fill="#ffffff" />
           <path
-            d="M0,180 C220,236 460,35 720,55 C960,35 1200,236 1440,180 L1440,262 L0,262 Z"
-            fill="var(--fiducia-teal)"
+            d="M0,-1 L1441,-1 L1441,180 C1200,236 960,35 720,55 C460,35 220,236 0,180 Z"
+            fill="#ffffff"
           />
         </svg>
 

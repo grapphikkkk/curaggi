@@ -218,17 +218,17 @@ function HighlightBlock({
             top: "-1px",
             left: 0,
             width: "100%",
-            height: "calc(clamp(120px, 18vw, 260px) + 2px)",
+            height: "calc(clamp(120px, 18vw, 260px) + 1px)",
             display: "block",
             shapeRendering: "geometricPrecision",
           }}
         >
-          {/* Teal rect mirrors the previous section's bg; +1/-1px
-              overflow on the SVG itself absorbs any sub-pixel seam. */}
-          <rect x="-1" y="-1" width="1442" height="262" fill="var(--fiducia-teal)" />
+          {/* Single teal-filled shape covering the upper portion. Below
+              the wave is empty → this section's purple bg shows
+              through, so no rect / no element-boundary seam. */}
           <path
-            d="M0,150 C160,250 360,30 720,170 C920,250 1140,-20 1440,90 L1440,262 L0,262 Z"
-            fill="var(--visione-purple)"
+            d="M0,-1 L1441,-1 L1441,90 C1140,-20 920,250 720,170 C360,30 160,250 0,150 Z"
+            fill="var(--fiducia-teal)"
           />
         </svg>
       )}
