@@ -20,22 +20,6 @@ const USER_STEPS: { label: string; desc: string }[] = [
   { label: "フィードバック", desc: "次回のグループ設計に反映するため、感想をシェア。" },
 ];
 
-// ── Operations flow (3 steps) ──
-const OPS_STEPS: { label: string; desc: string }[] = [
-  {
-    label: "レストラン予約・テーブル設定",
-    desc: "性格診断の結果に基づいて、相性の良いメンバーでテーブルを設計します。",
-  },
-  {
-    label: "当日対応",
-    desc: "参加者がスムーズに会食を始められるよう、当日の運営をサポート。",
-  },
-  {
-    label: "評価分析・サービス改善",
-    desc: "フィードバックをもとに、次のグループ設計とサービス全体を継続的に改善。",
-  },
-];
-
 // ── Modern issues (3) ──
 const ISSUES: { num: string; title: string; body: string }[] = [
   {
@@ -281,8 +265,8 @@ function StatsGrid() {
           key={i}
           style={{
             padding: "var(--space-6)",
-            background: PURPLE,
-            color: "#ffffff",
+            background: YELLOW,
+            color: INK,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
@@ -296,7 +280,6 @@ function StatsGrid() {
               fontWeight: 700,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              opacity: 0.9,
             }}
           >
             {s.label}
@@ -393,19 +376,11 @@ export const article: Article = {
         color={YELLOW}
       />
 
-      <h3 style={{ color: INK }}>運営の流れ</h3>
-
       <p style={{ fontSize: "16px", color: INK }}>
         裏側では、性格診断の結果をもとに
         <strong>「価値観や性格に基づいたテーブル設計」</strong>
         を行っています。単にランダムで人を集めるのではなく、最初の会話が自然と弾むようにグループの組み合わせを設計しているのが、本サービスの中核です。
       </p>
-
-      <FlowSteps
-        title="Operations Flow — 運営の流れ"
-        steps={OPS_STEPS}
-        color={TEAL}
-      />
 
       {/* ────────────────────────────── */}
       <h2 id="section-2" style={{ color: INK }}>
