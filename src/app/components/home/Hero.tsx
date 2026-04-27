@@ -237,8 +237,6 @@ export function Hero() {
             </h2>
           </div>
         </div>
-
-        <WaveRow />
       </section>
 
       <style>{`
@@ -256,12 +254,36 @@ export function Hero() {
       {/* Description section with teal background and white markers */}
       <section
         style={{
+          position: "relative",
           background: "var(--fiducia-teal)",
-          paddingTop: "var(--space-24)",
+          paddingTop: "clamp(120px, 18vw, 260px)",
           paddingBottom: "var(--space-24)",
+          overflow: "hidden",
         }}
       >
-        <div className="container">
+        {/* Top wave — opposite curve of the purple/teal one in
+            Highlights: a center peak that pushes teal up into white */}
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 1440 220"
+          preserveAspectRatio="none"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "clamp(120px, 18vw, 220px)",
+            display: "block",
+          }}
+        >
+          <rect x="0" y="0" width="1440" height="220" fill="#ffffff" />
+          <path
+            d="M0,150 C220,200 460,30 720,40 C960,30 1200,200 1440,150 L1440,220 L0,220 Z"
+            fill="var(--fiducia-teal)"
+          />
+        </svg>
+
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
           <div
             style={{
               fontFamily: "var(--font-display), var(--font-jp)",

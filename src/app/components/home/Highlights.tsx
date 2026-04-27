@@ -74,6 +74,7 @@ type Highlight = {
   body: string[][];
   image: string;
   imageAlt: string;
+  link: { href: string; label: string; external?: boolean };
 };
 
 const HIGHLIGHTS: Highlight[] = [
@@ -102,6 +103,10 @@ const HIGHLIGHTS: Highlight[] = [
     ],
     image: "/images/osaraba.png",
     imageAlt: "Prototype sketchbook",
+    link: {
+      href: "/news/rapid-prototyping",
+      label: "Read more",
+    },
   },
   {
     bg: "var(--fiducia-teal)",
@@ -119,11 +124,19 @@ const HIGHLIGHTS: Highlight[] = [
       [
         "ユーザー起点の思考とAIを掛け合わせ、",
         "本当に価値あるアウトプットを生み出す",
-        "実践的な方法論をお伝えします。",
+        "実践的な方法論を、",
+        "Udemy コースとしても公開中です。",
+        "本ページからのお申し込みで、",
+        "割引が適用されます。",
       ],
     ],
     image: "/images/service-seminar.jpg",
     imageAlt: "Seminar presentation",
+    link: {
+      href: "https://www.udemy.com/course/claude-curaggi/?couponCode=45087D86C46D2C3D62C1",
+      label: "View Course",
+      external: true,
+    },
   },
   {
     bg: "var(--scintilla-yellow)",
@@ -147,9 +160,17 @@ const HIGHLIGHTS: Highlight[] = [
         "実装・運用まで自社で手がけることで、",
         "つながりを取りもどすサービスを育てています。",
       ],
+      [
+        "β版ローンチから1ヶ月で、",
+        "会員90人を突破しました。",
+      ],
     ],
     image: "/images/service-community.jpg",
     imageAlt: "Small group meeting",
+    link: {
+      href: "/news/host-free-community",
+      label: "Read more",
+    },
   },
 ];
 
@@ -363,6 +384,38 @@ function HighlightBlock({
                 })}
               </p>
             ))}
+          </div>
+
+          {/* Read more / external link */}
+          <div
+            style={{
+              position: "relative",
+              zIndex: 1,
+              marginTop: "var(--space-10)",
+            }}
+          >
+            <a
+              href={h.link.href}
+              {...(h.link.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                fontFamily: "var(--font-display)",
+                fontSize: "16px",
+                fontWeight: 700,
+                color: h.textColor,
+                textDecoration: "none",
+                borderBottom: `2px solid ${h.textColor}`,
+                paddingBottom: "6px",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {h.link.label}
+              <span aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
       </div>
