@@ -23,7 +23,9 @@
       "Bash(git push *)",
       "Bash(npm list *)",
       "Bash(npm install *)",
-      "Bash(node scripts/extract-letter-bboxes.mjs)"
+      "Bash(node scripts/extract-letter-bboxes.mjs)",
+      "Bash(pdftotext -layout -f 6 -l 9 \"/c/Users/yoj92/OneDrive/05_Curaggi/会社案内_202604.pdf\" -)",
+      "Bash(pdftotext -f 6 -l 9 -enc UTF-8 \"/c/Users/yoj92/OneDrive/05_Curaggi/会社案内_202604.pdf\" -)"
     ]
   }
 }
