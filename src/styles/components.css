@@ -187,9 +187,26 @@
   background: rgba(66,165,245,0.1); 
 }
 
-.tag--neutral { 
-  color: var(--neutral-600); 
-  background: var(--neutral-100); 
+.tag--neutral {
+  color: var(--neutral-600);
+  background: var(--neutral-100);
+}
+
+/* News page article tags — solid brand fills, sharp 2px radius */
+.tag--insight {
+  color: #0A0A0B;
+  background: var(--scintilla-yellow);
+  border-radius: 2px;
+}
+.tag--news {
+  color: #0A0A0B;
+  background: var(--fiducia-teal);
+  border-radius: 2px;
+}
+.tag--new {
+  color: #ffffff;
+  background: #0A0A0B;
+  border-radius: 2px;
 }
 
 /* ── Inputs ── */

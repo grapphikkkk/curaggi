@@ -24,11 +24,11 @@ export function NewsCard({ title, date, category, summary, slug }: NewsCardProps
             flexWrap: "wrap",
           }}
         >
-          <span className={`tag ${category === "News" ? "tag--coral" : "tag--teal"}`}>
+          <span className={`tag ${category === "News" ? "tag--news" : "tag--insight"}`}>
             {category}
           </span>
           {isNew && (
-            <span className="tag tag--coral" style={{ fontWeight: 700 }}>
+            <span className="tag tag--new" style={{ fontWeight: 700 }}>
               NEW
             </span>
           )}

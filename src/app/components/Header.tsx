@@ -34,8 +34,8 @@ export function Header() {
   const close = () => setIsOpen(false);
   const toggle = () => (isOpen ? close() : open());
 
-  const closedW = isMobile ? 100 : 150;
-  const closedH = isMobile ? 50 : 80;
+  const closedW = isMobile ? 100 : 96;
+  const closedH = isMobile ? 50 : 52;
   const width = isOpen ? 300 : closedW;
   const height = isOpen ? 300 : closedH;
 
@@ -143,8 +143,8 @@ export function Header() {
               style={{
                 display: "inline-flex",
                 flexDirection: "column",
-                gap: isMobile ? "5px" : "7px",
-                width: isMobile ? "22px" : "28px",
+                gap: "5px",
+                width: "22px",
               }}
             >
               <span style={lineStyle} />

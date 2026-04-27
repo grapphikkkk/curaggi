@@ -126,12 +126,12 @@ export function NewsArticle() {
           <header className="article__header">
             <div className="article__meta">
               <span
-                className={`tag ${article.category === "News" ? "tag--coral" : "tag--teal"}`}
+                className={`tag ${article.category === "News" ? "tag--news" : "tag--insight"}`}
               >
                 {article.category}
               </span>
               {isNewArticle(article.date) && (
-                <span className="tag tag--coral" style={{ fontWeight: 700 }}>
+                <span className="tag tag--new" style={{ fontWeight: 700 }}>
                   NEW
                 </span>
               )}

@@ -218,9 +218,8 @@ function HighlightBlock({
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(56px, 9vw, 120px)",
-              fontWeight: 800,
-              color: "rgba(255,255,255,0.55)",
-              letterSpacing: "-0.02em",
+              fontWeight: 300,
+              color: "#ffffff",
               lineHeight: 1,
               margin: 0,
             }}
