@@ -46,13 +46,16 @@ function WaveRow({
   const HEIGHT = 60;
   const DOTS = 8;
   const AMP = 16;
-  const SQ = 10;
+  const SQ_BIG = 10;
+  const SQ_SMALL = 5;
+  // Every 5th square shrinks to 5x5 — adds rhythm to the dot wave.
   const squares = Array.from({ length: DOTS }, (_, i) => {
+    const sq = (i + 1) % 5 === 0 ? SQ_SMALL : SQ_BIG;
     const cx = (i + 0.5) * (PERIOD / DOTS);
     const cy = HEIGHT / 2 + AMP * Math.sin((cx / PERIOD) * Math.PI * 2);
-    const x = cx - SQ / 2;
-    const y = cy - SQ / 2;
-    return `<rect x='${x.toFixed(2)}' y='${y.toFixed(2)}' width='${SQ}' height='${SQ}' fill='${color}'/>`;
+    const x = cx - sq / 2;
+    const y = cy - sq / 2;
+    return `<rect x='${x.toFixed(2)}' y='${y.toFixed(2)}' width='${sq}' height='${sq}' fill='${color}'/>`;
   }).join("");
   const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${PERIOD} ${HEIGHT}'>${squares}</svg>`;
   const dataUrl = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
@@ -261,26 +264,28 @@ export function Hero() {
           overflow: "hidden",
         }}
       >
-        {/* Top wave — center peak that pushes teal up into the white
-            section above. No background rect: above the path is the
-            previous section's background, below it is this section's
-            background, so there's no seam at sub-pixel boundaries. */}
+        {/* Top wave — center peak pushes teal up into the white
+            section above. The white rect above the path mirrors the
+            previous section's bg; positioning the SVG at top: -1px and
+            stretching it +1px taller absorbs any sub-pixel rounding so
+            the white block lines up flush with the previous section. */}
         <svg
           aria-hidden="true"
           viewBox="0 0 1440 260"
           preserveAspectRatio="none"
           style={{
             position: "absolute",
-            top: 0,
+            top: "-1px",
             left: 0,
             width: "100%",
-            height: "clamp(120px, 18vw, 260px)",
+            height: "calc(clamp(120px, 18vw, 260px) + 2px)",
             display: "block",
             shapeRendering: "geometricPrecision",
           }}
         >
+          <rect x="-1" y="-1" width="1442" height="262" fill="#ffffff" />
           <path
-            d="M0,180 C220,236 460,35 720,55 C960,35 1200,236 1440,180 L1440,261 L0,261 Z"
+            d="M0,180 C220,236 460,35 720,55 C960,35 1200,236 1440,180 L1440,262 L0,262 Z"
             fill="var(--fiducia-teal)"
           />
         </svg>

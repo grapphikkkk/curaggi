@@ -103,12 +103,42 @@ const TIMING = {
 
 type Phase = "hidden" | "spread" | "converge";
 
+// Static logo (rows 2 / 3): inherits the parent's `color` so each row
+// can be tinted independently to a brand color.
+function LogoStaticSvg() {
+  return (
+    <svg
+      viewBox={`0 0 ${VB_W} ${VB_H}`}
+      preserveAspectRatio="xMidYMid meet"
+      style={{ width: "100%", height: "auto", display: "block" }}
+      aria-hidden="true"
+    >
+      {LETTERS.map((l, i) => (
+        <path key={i} d={l.d} fill="currentColor" />
+      ))}
+    </svg>
+  );
+}
+
 export function LogoAnimation() {
   const [stage, setStage] = useState(0);
   const [phase, setPhase] = useState<Phase>("hidden");
   const [isMobile, setIsMobile] = useState(false);
   const [rowOp, setRowOp] = useState<[number, number, number]>([
     0.3, 0.6, 1.0,
+  ]);
+  // Each row occasionally flips into one of the brand colors.
+  const COLOR_POOL = [
+    "#1A1816",
+    "var(--curaggi-pink)",
+    "var(--scintilla-yellow)",
+    "var(--fiducia-teal)",
+    "var(--visione-purple)",
+  ];
+  const [rowColors, setRowColors] = useState<[string, string, string]>([
+    "#1A1816",
+    "#1A1816",
+    "#1A1816",
   ]);
 
   useEffect(() => {
@@ -150,16 +180,20 @@ export function LogoAnimation() {
 
   useEffect(() => {
     if (stage < 4) return;
+    const pickColor = () =>
+      COLOR_POOL[Math.floor(Math.random() * COLOR_POOL.length)];
     const tick = () => {
       setRowOp([
         0.15 + Math.random() * 0.7,
         0.2 + Math.random() * 0.7,
         0.3 + Math.random() * 0.7,
       ]);
+      setRowColors([pickColor(), pickColor(), pickColor()]);
     };
     tick();
     const interval = window.setInterval(tick, 2800);
     return () => window.clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage]);
 
   const row1Op = stage >= 4 ? rowOp[0] : stage >= 1 ? 0.3 : 1;
@@ -184,8 +218,12 @@ export function LogoAnimation() {
         {
           position: "relative",
           width: "100%",
+          // Two heights need to fit: the stacked-rows layout, and the
+          // spread state where row 1 is translated down by ~33vh. We
+          // take the max so neither gets clipped on tall portrait
+          // viewports nor wide landscape ones.
           minHeight:
-            "calc(80px + 3vh + min(92vw, 100vh) / 3.5714 * 2.56 + 4vh)",
+            "max(calc(80px + 3vh + min(92vw, 100vh) / 3.5714 * 2.56 + 4vh), calc(40vh + min(92vw, 100vh) / 3.5714 + 6vh))",
           overflow: "hidden",
           background: "#ffffff",
           ["--row-w" as string]: ROW_WIDTH,
@@ -217,8 +255,9 @@ export function LogoAnimation() {
             transformOrigin: "center center",
             transform: compositeTransform,
             opacity: stage >= 4 ? row1Op : 1,
+            color: rowColors[0],
             transition:
-              "transform 0.65s cubic-bezier(0.45, 0.05, 0.2, 1), opacity 0.35s ease",
+              "transform 0.65s cubic-bezier(0.45, 0.05, 0.2, 1), opacity 0.35s ease, color 1.6s ease",
             willChange: "transform, opacity",
             backfaceVisibility: "visible",
           }}
@@ -269,7 +308,7 @@ export function LogoAnimation() {
                     } as CSSProperties
                   }
                 >
-                  <path d={l.d} fill="#1A1816" />
+                  <path d={l.d} fill="currentColor" />
                 </g>
               );
             })}
@@ -278,30 +317,32 @@ export function LogoAnimation() {
 
         {stage >= 3 && (
           <>
-            <img
-              src="/logos/logo.svg"
-              alt=""
+            <div
               aria-hidden
               style={{
                 ...rowBase,
                 marginTop: ROW_OVERLAP,
                 opacity: row2Op,
-                transition: "opacity 2.4s ease",
+                color: rowColors[1],
+                transition: "opacity 2.4s ease, color 1.6s ease",
                 animation: "curaggi-row-in 0.45s both",
               }}
-            />
-            <img
-              src="/logos/logo.svg"
-              alt=""
+            >
+              <LogoStaticSvg />
+            </div>
+            <div
               aria-hidden
               style={{
                 ...rowBase,
                 marginTop: ROW_OVERLAP,
                 opacity: row3Op,
-                transition: "opacity 2.4s ease 0.2s",
+                color: rowColors[2],
+                transition: "opacity 2.4s ease 0.2s, color 1.6s ease",
                 animation: "curaggi-row-in 0.45s 0.2s both",
               }}
-            />
+            >
+              <LogoStaticSvg />
+            </div>
           </>
         )}
       </div>
@@ -312,7 +353,7 @@ export function LogoAnimation() {
         }
         @media (max-width: 767px) {
           .curaggi-logo-anim {
-            min-height: calc(80px + 3vh + min(92vw, 100vh) / 3.5714 * 2.56 + 4vh) !important;
+            min-height: max(calc(80px + 3vh + min(92vw, 100vh) / 3.5714 * 2.56 + 4vh), calc(40vh + min(92vw, 100vh) / 3.5714 + 6vh)) !important;
           }
         }
         @media (prefers-reduced-motion: reduce) {

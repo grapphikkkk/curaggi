@@ -215,19 +215,19 @@ function HighlightBlock({
           preserveAspectRatio="none"
           style={{
             position: "absolute",
-            top: 0,
+            top: "-1px",
             left: 0,
             width: "100%",
-            height: "clamp(120px, 18vw, 260px)",
+            height: "calc(clamp(120px, 18vw, 260px) + 2px)",
             display: "block",
             shapeRendering: "geometricPrecision",
           }}
         >
-          {/* Above the path: the previous section's background shows
-              through. Below: this section's purple bg lines up with the
-              path's fill at sub-pixel precision. */}
+          {/* Teal rect mirrors the previous section's bg; +1/-1px
+              overflow on the SVG itself absorbs any sub-pixel seam. */}
+          <rect x="-1" y="-1" width="1442" height="262" fill="var(--fiducia-teal)" />
           <path
-            d="M0,150 C160,250 360,30 720,170 C920,250 1140,-20 1440,90 L1440,261 L0,261 Z"
+            d="M0,150 C160,250 360,30 720,170 C920,250 1140,-20 1440,90 L1440,262 L0,262 Z"
             fill="var(--visione-purple)"
           />
         </svg>
