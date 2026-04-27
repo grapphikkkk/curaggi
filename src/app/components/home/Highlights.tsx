@@ -72,6 +72,9 @@ type Highlight = {
   tag: string;
   heading: string[];
   body: string[][];
+  /** Plain text shown after the marker body — no marker / no animation,
+   *  slightly smaller, regular weight. */
+  bodyNote?: string[];
   image: string;
   imageAlt: string;
   link: { href: string; label: string; external?: boolean };
@@ -88,7 +91,8 @@ const HIGHLIGHTS: Highlight[] = [
     body: [
       [
         "パワーポイントの議論だけでは、",
-        "新規事業や新機能の合意形成はなかなか進みません。",
+        "新規事業や新機能の合意形成は",
+        "なかなか進みません。",
       ],
       [
         "ユーザーテストやヒアリングも、",
@@ -98,7 +102,7 @@ const HIGHLIGHTS: Highlight[] = [
       [
         "構想からプロトタイピングまで最短2週間。",
         "発注側の要件イメージを早期に固め、",
-        "実装後の「思っていたものと違う」をなくします。",
+        "意思決定とカイゼンを高速化します。",
       ],
     ],
     image: "/images/osaraba.png",
@@ -126,9 +130,11 @@ const HIGHLIGHTS: Highlight[] = [
         "本当に価値あるアウトプットを生み出す",
         "実践的な方法論を、",
         "Udemy コースとしても公開中です。",
-        "本ページからのお申し込みで、",
-        "割引が適用されます。",
       ],
+    ],
+    bodyNote: [
+      "本ページ経由のお申し込みで、",
+      "割引が適用されます。",
     ],
     image: "/images/service-seminar.jpg",
     imageAlt: "Seminar presentation",
@@ -385,6 +391,27 @@ function HighlightBlock({
               </p>
             ))}
           </div>
+
+          {h.bodyNote && (
+            <div
+              style={{
+                position: "relative",
+                zIndex: 1,
+                marginTop: "var(--space-4)",
+                fontFamily: "var(--font-display), var(--font-jp)",
+                fontSize: "14px",
+                fontWeight: 400,
+                lineHeight: 1.7,
+                color: h.textColor,
+              }}
+            >
+              {h.bodyNote.map((line, i) => (
+                <span key={i} style={{ display: "block" }}>
+                  {line}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Read more / external link */}
           <div

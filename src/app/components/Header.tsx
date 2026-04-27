@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 
 const navItems = [
   { path: "/", label: "TOP" },
-  { path: "/service", label: "Services" },
   { path: "/news", label: "Insight" },
   { path: "/company", label: "Company" },
   { path: "/contact", label: "Contact" },
@@ -34,8 +33,8 @@ export function Header() {
   const close = () => setIsOpen(false);
   const toggle = () => (isOpen ? close() : open());
 
-  const closedW = isMobile ? 100 : 96;
-  const closedH = isMobile ? 50 : 52;
+  const closedW = 90;
+  const closedH = 40;
   const width = isOpen ? 300 : closedW;
   const height = isOpen ? 300 : closedH;
 

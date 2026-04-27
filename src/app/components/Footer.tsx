@@ -76,7 +76,6 @@ export function Footer() {
               >
                 {[
                   { path: "/", label: "Home" },
-                  { path: "/service", label: "Service" },
                   { path: "/news", label: "News / Insight" },
                   { path: "/company", label: "Company" },
                   { path: "/contact", label: "Contact" },
