@@ -5,13 +5,16 @@ const SITE_NAME = "Curaggi";
 const DEFAULT_OG = `${SITE}/og-image.png`;
 
 type SeoProps = {
-  /** Page title (without site name suffix). The site name is appended automatically. */
+  /** Page title. By default the site name is appended; set
+   *  `rawTitle` to use this value as-is. */
   title: string;
   description: string;
   /** Path on this site, e.g. "/news" or "/news/rapid-prototyping". Leading slash required. */
   path?: string;
   /** Override OG image URL (defaults to brand OG). */
   image?: string;
+  /** When true, render `title` exactly as given (no `｜Curaggi` suffix). */
+  rawTitle?: boolean;
   /** Article-specific JSON-LD payload (optional). */
   article?: {
     publishedTime: string;
@@ -21,8 +24,15 @@ type SeoProps = {
   };
 };
 
-export function Seo({ title, description, path = "/", image, article }: SeoProps) {
-  const fullTitle = `${title}｜${SITE_NAME}`;
+export function Seo({
+  title,
+  description,
+  path = "/",
+  image,
+  rawTitle,
+  article,
+}: SeoProps) {
+  const fullTitle = rawTitle ? title : `${title}｜${SITE_NAME}`;
   const url = `${SITE}${path === "/" ? "" : path}`;
   const ogImage = image ?? DEFAULT_OG;
 

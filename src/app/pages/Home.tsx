@@ -10,9 +10,10 @@ export function Home() {
   return (
     <div>
       <Seo
-        title="爆速プロトタイピング × AI活用 UXデザイン"
-        description="動くプロトタイプを最短2週間で形にし、意思決定と改善を高速化する UXデザイン × AI活用の専門スタジオ。あきらめなくていい世界をつくる。"
+        title="Curaggi クラッヂ | あきらめない世界をつくる"
+        description="AI活用とUXデザインで意思決定とカイゼンを最速2週間で。自社プロダクトも展開。"
         path="/"
+        rawTitle
       />
       <Header />
       <main>
