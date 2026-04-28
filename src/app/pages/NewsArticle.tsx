@@ -66,6 +66,14 @@ export function NewsArticle() {
     }
   }, [copied]);
 
+  // External-link articles (e.g. category "Note") forward straight to
+  // the source URL — they don't have on-site content to render.
+  useEffect(() => {
+    if (article?.externalUrl) {
+      window.location.replace(article.externalUrl);
+    }
+  }, [article]);
+
   // ── 関連記事（同カテゴリ、自分以外、最大3件） ──
   const relatedArticles = article
     ? articles
@@ -103,6 +111,28 @@ export function NewsArticle() {
               </p>
             </div>
           </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // While redirecting an external article, render a minimal shell so
+  // we don't try to call a missing content function.
+  if (article.externalUrl || !article.content) {
+    return (
+      <div>
+        <Header />
+        <main
+          style={{
+            paddingTop: "80px",
+            minHeight: "60vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <p style={{ color: "#0A0A0B" }}>外部リンクへ移動しています…</p>
         </main>
         <Footer />
       </div>

@@ -27,7 +27,8 @@
       "Bash(pdftotext -layout -f 6 -l 9 \"/c/Users/yoj92/OneDrive/05_Curaggi/会社案内_202604.pdf\" -)",
       "Bash(pdftotext -f 6 -l 9 -enc UTF-8 \"/c/Users/yoj92/OneDrive/05_Curaggi/会社案内_202604.pdf\" -)",
       "Bash(pdftotext -f 14 -l 16 -enc UTF-8 \"/c/Users/yoj92/OneDrive/05_Curaggi/会社案内_202604.pdf\" -)",
-      "Bash(pdftotext -f 20 -l 20 -enc UTF-8 \"/c/Users/yoj92/OneDrive/05_Curaggi/会社案内_202604.pdf\" -)"
+      "Bash(pdftotext -f 20 -l 20 -enc UTF-8 \"/c/Users/yoj92/OneDrive/05_Curaggi/会社案内_202604.pdf\" -)",
+      "WebFetch(domain:note.com)"
     ]
   }
 }

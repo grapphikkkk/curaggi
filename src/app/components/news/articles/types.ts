@@ -13,14 +13,17 @@ export interface Article {
   title: string;
   /** 公開日 (YYYY-MM-DD形式) */
   date: string;
-  /** カテゴリ */
-  category: "News" | "Insight";
+  /** カテゴリ。"Note" を指定すると外部リンクカードとして扱われ、
+   *  クリック時に externalUrl に新規タブで遷移します。 */
+  category: "News" | "Insight" | "Note";
   /** タグ一覧 */
   tags: string[];
   /** 一覧に表示される要約文 */
   summary: string;
   /** URLスラッグ（ファイル名のスラッグ部分と一致させる） */
   slug: string;
-  /** 記事本文（JSX） */
-  content: () => ReactNode;
+  /** 記事本文（JSX）。externalUrl が指定されている場合は不要。 */
+  content?: () => ReactNode;
+  /** 外部リンク先URL（指定すると一覧カードがこの URL に遷移）。 */
+  externalUrl?: string;
 }

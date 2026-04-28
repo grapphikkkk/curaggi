@@ -13,16 +13,21 @@ const articleFiles = readdirSync(articlesDir).filter(
   (f) => f.endsWith(".tsx") && !f.startsWith("_") && f !== "types.ts",
 );
 
-const articleEntries = articleFiles.map((file) => {
-  const path = join(articlesDir, file);
-  const src = readFileSync(path, "utf8");
-  const dateMatch = src.match(/date:\s*"(\d{4}-\d{2}-\d{2})"/);
-  const slugMatch = src.match(/slug:\s*"([^"]+)"/);
-  return {
-    loc: `${SITE}/news/${slugMatch?.[1] ?? "unknown"}`,
-    lastmod: dateMatch?.[1] ?? new Date().toISOString().slice(0, 10),
-  };
-});
+const articleEntries = articleFiles
+  .map((file) => {
+    const path = join(articlesDir, file);
+    const src = readFileSync(path, "utf8");
+    const dateMatch = src.match(/date:\s*"(\d{4}-\d{2}-\d{2})"/);
+    const slugMatch = src.match(/slug:\s*"([^"]+)"/);
+    // Skip external-link cards (Note etc.) — they don't have an on-site
+    // page worth crawling.
+    if (/externalUrl:\s*"/.test(src)) return null;
+    return {
+      loc: `${SITE}/news/${slugMatch?.[1] ?? "unknown"}`,
+      lastmod: dateMatch?.[1] ?? new Date().toISOString().slice(0, 10),
+    };
+  })
+  .filter(Boolean);
 
 const today = new Date().toISOString().slice(0, 10);
 const urls = [

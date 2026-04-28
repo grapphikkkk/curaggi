@@ -83,6 +83,7 @@ export function News() {
                   category={item.category}
                   summary={item.summary}
                   slug={item.slug}
+                  externalUrl={item.externalUrl}
                 />
               ))}
             </div>

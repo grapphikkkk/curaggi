@@ -208,6 +208,12 @@
   background: #0A0A0B;
   border-radius: 2px;
 }
+.tag--note {
+  color: #0A0A0B;
+  background: #ffffff;
+  border: 1px solid #0A0A0B;
+  border-radius: 2px;
+}
 
 /* ── Inputs ── */
 .input {
