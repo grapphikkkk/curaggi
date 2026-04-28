@@ -1,11 +1,14 @@
 import { Link, useLocation } from "react-router";
 import { useState, useEffect } from "react";
+import { CONTACT_URL } from "../config";
 
-const navItems = [
+type NavItem = { path: string; label: string; external?: boolean };
+
+const navItems: NavItem[] = [
   { path: "/", label: "TOP" },
   { path: "/news", label: "Insight" },
   { path: "/company", label: "Company" },
-  { path: "/contact", label: "Contact" },
+  { path: CONTACT_URL, label: "Contact", external: true },
 ];
 
 export function Header() {
@@ -169,47 +172,70 @@ export function Header() {
             }}
           >
             {navItems.map((item) => {
-              const isCurrent = location.pathname === item.path;
+              const isCurrent =
+                !item.external && location.pathname === item.path;
+              const linkStyle: React.CSSProperties = {
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                padding: "6px 12px",
+                paddingLeft: "26px",
+                borderRadius: "4px",
+                fontFamily: "var(--font-display)",
+                fontSize: "24px",
+                fontWeight: 600,
+                letterSpacing: "-0.01em",
+                textDecoration: "none",
+                color: "#ffffff",
+                background: "transparent",
+                transition: "background 0.15s ease, color 0.15s ease",
+              };
+              const dot = (
+                <span
+                  aria-hidden="true"
+                  className="nav-dot"
+                  style={{
+                    position: "absolute",
+                    left: 4,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    width: "14px",
+                    height: "14px",
+                    borderRadius: "50%",
+                    background: "#ffffff",
+                    opacity: isCurrent ? 1 : 0,
+                    transition: "background 0.15s ease",
+                  }}
+                />
+              );
+
+              if (item.external) {
+                return (
+                  <a
+                    key={item.path}
+                    href={item.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={close}
+                    className="nav-link"
+                    style={linkStyle}
+                  >
+                    {dot}
+                    {item.label}
+                  </a>
+                );
+              }
+
               return (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={close}
                   className="nav-link"
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                    padding: "6px 12px",
-                    paddingLeft: "26px",
-                    borderRadius: "4px",
-                    fontFamily: "var(--font-display)",
-                    fontSize: "24px",
-                    fontWeight: 600,
-                    letterSpacing: "-0.01em",
-                    textDecoration: "none",
-                    color: "#ffffff",
-                    background: "transparent",
-                    transition: "background 0.15s ease, color 0.15s ease",
-                  }}
+                  style={linkStyle}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="nav-dot"
-                    style={{
-                      position: "absolute",
-                      left: 4,
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      width: "14px",
-                      height: "14px",
-                      borderRadius: "50%",
-                      background: "#ffffff",
-                      opacity: isCurrent ? 1 : 0,
-                      transition: "background 0.15s ease",
-                    }}
-                  />
+                  {dot}
                   {item.label}
                 </Link>
               );

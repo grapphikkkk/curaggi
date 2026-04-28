@@ -676,7 +676,9 @@ export const article: Article = {
 
       <p style={{ textAlign: "center", marginTop: "var(--space-10)" }}>
         <a
-          href="/contact"
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdNNQM71S0ZmW7yq_OdfYpV7e31Nxi5aWDFcJxOIAxkZ0DZfw/viewform?usp=header"
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             display: "inline-block",
             padding: "14px 28px",

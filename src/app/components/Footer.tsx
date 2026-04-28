@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { CONTACT_URL } from "../config";
 
 export function Footer() {
   return (
@@ -78,27 +79,47 @@ export function Footer() {
                   { path: "/", label: "Home" },
                   { path: "/news", label: "News / Insight" },
                   { path: "/company", label: "Company" },
-                  { path: "/contact", label: "Contact" },
-                ].map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    style={{
-                      fontSize: "var(--text-sm)",
-                      color: "var(--neutral-600)",
-                      textDecoration: "none",
-                      transition: "color var(--duration-fast) var(--ease-out)",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.target as HTMLElement).style.color = "var(--neutral-900)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.target as HTMLElement).style.color = "var(--neutral-600)";
-                    }}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                  { path: CONTACT_URL, label: "Contact", external: true },
+                ].map((item) => {
+                  const linkStyle: React.CSSProperties = {
+                    fontSize: "var(--text-sm)",
+                    color: "var(--neutral-600)",
+                    textDecoration: "none",
+                    transition: "color var(--duration-fast) var(--ease-out)",
+                  };
+                  const onEnter = (e: React.MouseEvent<HTMLElement>) => {
+                    (e.target as HTMLElement).style.color = "var(--neutral-900)";
+                  };
+                  const onLeave = (e: React.MouseEvent<HTMLElement>) => {
+                    (e.target as HTMLElement).style.color = "var(--neutral-600)";
+                  };
+                  if (item.external) {
+                    return (
+                      <a
+                        key={item.path}
+                        href={item.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={linkStyle}
+                        onMouseEnter={onEnter}
+                        onMouseLeave={onLeave}
+                      >
+                        {item.label}
+                      </a>
+                    );
+                  }
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      style={linkStyle}
+                      onMouseEnter={onEnter}
+                      onMouseLeave={onLeave}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
               </nav>
             </div>
 

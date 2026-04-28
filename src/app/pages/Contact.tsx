@@ -1,9 +1,17 @@
+import { useEffect } from "react";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { Seo } from "../components/Seo";
 import { ContactForm } from "../components/contact/ContactForm";
+import { CONTACT_URL } from "../config";
 
 export function Contact() {
+  // The on-site form has been retired in favor of an external Google
+  // Form. Anyone landing on /contact via an old link is forwarded.
+  useEffect(() => {
+    window.location.replace(CONTACT_URL);
+  }, []);
+
   return (
     <div>
       <Seo
