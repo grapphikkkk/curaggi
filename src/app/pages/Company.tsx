@@ -2,7 +2,7 @@ import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { Seo } from "../components/Seo";
 import { CompanyInfo } from "../components/company/CompanyInfo";
-import { ProfileSection } from "../components/company/ProfileSection";
+// import { ProfileSection } from "../components/company/ProfileSection";
 
 export function Company() {
   return (
@@ -60,7 +60,7 @@ export function Company() {
         </section>
 
         <CompanyInfo />
-        <ProfileSection />
+        {/* <ProfileSection /> */}
       </main>
       <Footer />
     </div>
