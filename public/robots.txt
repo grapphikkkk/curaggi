@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /news/host-free-community
 
 Sitemap: https://www.curaggi.jp/sitemap.xml

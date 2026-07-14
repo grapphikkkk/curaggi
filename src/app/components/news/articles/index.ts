@@ -15,6 +15,8 @@ const modules = import.meta.glob<{ article: Article }>("./*.tsx", {
 /** 全記事のリスト（公開日の新しい順） */
 export const articles: Article[] = Object.entries(modules)
   .filter(([path]) => !path.includes("_template"))
+  // 非公開: host-free-community 記事を一覧・関連記事・ルートから除外
+  .filter(([path]) => !path.includes("host-free-community"))
   .map(([, mod]) => mod.article)
   .filter(Boolean)
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

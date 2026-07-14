@@ -10,7 +10,12 @@ const staticPages = ["/", "/news", "/company", "/contact"];
 // "YYYY-MM-DD_slug.tsx" (template/types are skipped).
 const articlesDir = "src/app/components/news/articles";
 const articleFiles = readdirSync(articlesDir).filter(
-  (f) => f.endsWith(".tsx") && !f.startsWith("_") && f !== "types.ts",
+  (f) =>
+    f.endsWith(".tsx") &&
+    !f.startsWith("_") &&
+    f !== "types.ts" &&
+    // 非公開: host-free-community 記事は sitemap から除外
+    !f.includes("host-free-community"),
 );
 
 const articleEntries = articleFiles

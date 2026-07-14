@@ -470,8 +470,8 @@ export function Highlights() {
         showTopCurve
         topHeader={{ en: "Services", ja: "事業領域" }}
       />
-      <HighlightBlock h={HIGHLIGHTS[1]} />
-      <HighlightBlock h={HIGHLIGHTS[2]} />
+      {/* <HighlightBlock h={HIGHLIGHTS[1]} /> */}
+      {/* <HighlightBlock h={HIGHLIGHTS[2]} /> */}
     </>
   );
 }
